@@ -1204,7 +1204,7 @@ hr {
   position: fixed;
   z-index: 900;
   width: 32%;
-  max-width: 430;
+  max-width: 430px;
   height: 100%;
   background: url("http://of112eu7k.bkt.clouddn.com/IMG_0039.JPG") top left no-repeat #666666;
   background-size: 100% 100%; }
@@ -1218,9 +1218,9 @@ hr {
   bottom: 0;
   left: 0;
   background-color: rgba(68, 68, 68, 0.2);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, rgba(68, 68, 68, 0.6)), color-stop(100%, rgba(0, 0, 0, 0.9)));
-  background-image: -webkit-linear-gradient(-410deg, rgba(68, 68, 68, 0.6) 20%, rgba(0, 0, 0, 0.9));
-  background-image: linear-gradient(140deg,rgba(68, 68, 68, 0.6) 20%, rgba(0, 0, 0, 0.9)); }
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, rgba(68, 68, 68, 0.3)), color-stop(100%, rgba(0, 0, 0, 0.7)));
+  background-image: -webkit-linear-gradient(-410deg, rgba(68, 68, 68, 0.3) 20%, rgba(0, 0, 0, 0.7));
+  background-image: linear-gradient(140deg,rgba(68, 68, 68, 0.3) 20%, rgba(0, 0, 0, 0.7)); }
 
 .panel-cover__logo {
   margin-bottom: .2em; }
