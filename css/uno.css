@@ -1196,12 +1196,18 @@ hr {
   width: 100%;
   max-width: none;
   height: 100%;
-  background: url("http://of112eu7k.bkt.clouddn.com/IMG_0040.JPG") top left no-repeat #666666;
-  background-size: cover; }
+  background: url("http://of112eu7k.bkt.clouddn.com/IMG_0222.PNG") top left no-repeat #666666;
+  background-size: 100% 100%; }
 
 .panel-cover--collapsed {
+  display: block;
+  position: fixed;
+  z-index: 900;
   width: 32%;
-  max-width: 430px; }
+  max-width: 430;
+  height: 100%;
+  background: url("http://of112eu7k.bkt.clouddn.com/IMG_0039.JPG") top left no-repeat #666666;
+  background-size: 100% 100%; }
 
 .panel-cover--overlay {
   display: block;
