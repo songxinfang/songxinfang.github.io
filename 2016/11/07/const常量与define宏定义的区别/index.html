@@ -46,7 +46,7 @@ define宏仅仅是展开，有多少地方使用，就展开多少次，不会�
 const常量会在内存中分配(可以是堆中也可以是栈中)
 
 4. 内存空间分配不">
-<meta property="og:updated_time" content="2016-11-07T07:55:33.000Z">
+<meta property="og:updated_time" content="2016-11-07T07:57:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="const常量与define宏定义的区别 | songxinfang's blog">
 <meta name="twitter:description" content="1. 编译器处理方式不同
@@ -237,7 +237,7 @@ classes that you can use:
 <h4 id="6-宏替换只作替换，不做计算，不做表达式求解"><a href="#6-宏替换只作替换，不做计算，不做表达式求解" class="headerlink" title="6. 宏替换只作替换，不做计算，不做表达式求解"></a>6. 宏替换只作替换，不做计算，不做表达式求解</h4><ul>
 <li>宏预编译时就替换了，程序运行时，并不分配内存</li>
 </ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
 <li><p>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</p>
 </li>
 <li><p>变量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以被修改，在编译阶段会执行类型检查</p>
