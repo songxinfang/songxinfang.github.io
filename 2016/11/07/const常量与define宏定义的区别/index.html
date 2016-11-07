@@ -16,37 +16,52 @@
     
     
 
-    <meta name="description" content="Constants should be declared as static constants and not #defines unless explicitly being used as a macro.
-1. 编译器处理方式不同
+    <meta name="description" content="1. 编译器处理方式不同
 define宏是在预处理阶段展开
 const常量是编译运行阶段使用
 
 2. 类型和安全检查不同
 define宏没有类型，不做任何类型检查，仅仅是展开
-const">
+const常量有具体的类型，在编译阶段会执行类型检查
+
+3. 存储方式不同
+define宏仅仅是展开，有多少地方使用，就展开多少次，不会分配内存
+const常量会在内存中分配(可以是堆中也可以是栈中)
+
+4. 内存空间分配不">
 <meta property="og:type" content="article">
 <meta property="og:title" content="const常量与define宏定义的区别 | songxinfang's blog">
 <meta property="og:url" content="https://songxinfang.github.io/2016/11/07/const常量与define宏定义的区别/index.html">
 <meta property="og:site_name" content="songxinfang's blog">
-<meta property="og:description" content="Constants should be declared as static constants and not #defines unless explicitly being used as a macro.
-1. 编译器处理方式不同
+<meta property="og:description" content="1. 编译器处理方式不同
 define宏是在预处理阶段展开
 const常量是编译运行阶段使用
 
 2. 类型和安全检查不同
 define宏没有类型，不做任何类型检查，仅仅是展开
-const">
-<meta property="og:updated_time" content="2016-11-07T07:52:25.000Z">
+const常量有具体的类型，在编译阶段会执行类型检查
+
+3. 存储方式不同
+define宏仅仅是展开，有多少地方使用，就展开多少次，不会分配内存
+const常量会在内存中分配(可以是堆中也可以是栈中)
+
+4. 内存空间分配不">
+<meta property="og:updated_time" content="2016-11-07T07:53:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="const常量与define宏定义的区别 | songxinfang's blog">
-<meta name="twitter:description" content="Constants should be declared as static constants and not #defines unless explicitly being used as a macro.
-1. 编译器处理方式不同
+<meta name="twitter:description" content="1. 编译器处理方式不同
 define宏是在预处理阶段展开
 const常量是编译运行阶段使用
 
 2. 类型和安全检查不同
 define宏没有类型，不做任何类型检查，仅仅是展开
-const">
+const常量有具体的类型，在编译阶段会执行类型检查
+
+3. 存储方式不同
+define宏仅仅是展开，有多少地方使用，就展开多少次，不会分配内存
+const常量会在内存中分配(可以是堆中也可以是栈中)
+
+4. 内存空间分配不">
     
     
     
@@ -201,8 +216,7 @@ classes that you can use:
   </header>
 
   <section id="post-content" class="article-content post">
-    <p>Constants should be declared as <code>static</code> constants and not <code>#define</code>s unless explicitly being used as a macro.</p>
-<h4 id="1-编译器处理方式不同"><a href="#1-编译器处理方式不同" class="headerlink" title="1. 编译器处理方式不同"></a>1. 编译器处理方式不同</h4><ul>
+    <h4 id="1-编译器处理方式不同"><a href="#1-编译器处理方式不同" class="headerlink" title="1. 编译器处理方式不同"></a>1. 编译器处理方式不同</h4><ul>
 <li>define宏是在预处理阶段展开</li>
 <li>const常量是编译运行阶段使用</li>
 </ul>
@@ -229,6 +243,8 @@ classes that you can use:
 <li><p>变量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以被修改，在编译阶段会执行类型检查</p>
 </li>
 <li><p>常量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以根据const修饰的位置设定能否修改，在编译阶段会执行类型检查</p>
+</li>
+<li><p>Constants should be declared as <code>static</code> constants and not <code>#define</code>s unless explicitly being used as a macro.</p>
 </li>
 </ul>
 
