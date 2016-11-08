@@ -46,7 +46,7 @@ define宏仅仅是展开，有多少地方使用，就展开多少次，不会�
 const常量会在内存中分配(可以是堆中也可以是栈中)
 
 4. 内存空间分配不">
-<meta property="og:updated_time" content="2016-11-07T08:00:30.000Z">
+<meta property="og:updated_time" content="2016-11-08T02:38:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="const常量与define宏定义的区别 | songxinfang's blog">
 <meta name="twitter:description" content="1. 编译器处理方式不同
@@ -229,7 +229,10 @@ classes that you can use:
 <li>const常量会在内存中分配(可以是堆中也可以是栈中)</li>
 </ul>
 <h4 id="4-内存空间分配不同"><a href="#4-内存空间分配不同" class="headerlink" title="4. 内存空间分配不同"></a>4. 内存空间分配不同</h4><ul>
-<li>const可以节省空间，避免不必要的内存分配<br>#define PI 3.14159 //常量宏<br>const doulbe Pi=3.14159; //此时并未将Pi放入ROM中 ……<br>double i=Pi; //此时为Pi分配内存，以后不再分配！<br>double I=PI; //编译期间进行宏替换，分配内存<br>double j=Pi; //没有内存分配<br>double J=PI; //再进行宏替换，又一次分配内存！<br>const定义常量从汇编的角度来看，只是给出了对应的内存地址，而不是象#define一样给出的是立即数，所以，const定义的常量在程序运行过程中只有一份拷贝（因为是全局的只读变量，存在静态区），而 #define定义的常量在内存中有若干个拷贝。</li>
+<li>const可以节省空间，避免不必要的内存分配<blockquote>
+<p>#define PI 3.14159 //常量宏<br>const doulbe Pi=3.14159; //此时并未将Pi放入ROM中 ……<br>double i=Pi; //此时为Pi分配内存，以后不再分配！<br>double I=PI; //编译期间进行宏替换，分配内存<br>double j=Pi; //没有内存分配<br>double J=PI; //再进行宏替换，又一次分配内存！<br>const定义常量从汇编的角度来看，只是给出了对应的内存地址，而不是象#define一样给出的是立即数，所以，const定义的常量在程序运行过程中只有一份拷贝（因为是全局的只读变量，存在静态区），而 #define定义的常量在内存中有若干个拷贝。</p>
+</blockquote>
+</li>
 </ul>
 <h4 id="5-提高了效率"><a href="#5-提高了效率" class="headerlink" title="5. 提高了效率"></a>5. 提高了效率</h4><ul>
 <li>编译器通常不为普通const常量分配存储空间，而是将它们保存在符号表中，这使得它成为一个编译期间的常量，没有了存储与读内存的操作，使得它的效率也很高</li>
