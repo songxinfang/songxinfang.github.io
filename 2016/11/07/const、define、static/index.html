@@ -7,7 +7,7 @@
     
 
     <title>
-      const常量与define宏定义的区别 | songxinfang&#39;s blog 
+      const、define、static | songxinfang&#39;s blog 
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -16,52 +16,58 @@
     
     
 
-    <meta name="description" content="1. 编译器处理方式不同
-define宏是在预处理阶段展开
-const常量是编译运行阶段使用
+    <meta name="description" content="const
+const意味着”只读”,欲阻止一个变量被改变，可以使用const关键字
 
-2. 类型和安全检查不同
-define宏没有类型，不做任何类型检查，仅仅是展开
-const常量有具体的类型，在编译阶段会执行类型检查
 
-3. 存储方式不同
-define宏仅仅是展开，有多少地方使用，就展开多少次，不会分配内存
-const常量会在内存中分配(可以是堆中也可以是栈中)
+const修饰参数
 
-4. 内存空间分配不">
+const修饰函数返回值
+
+const+成员函数。任何不修改数据成员的函数都应该声明为const类型，如果const成员函数修改了数据成员或者调用了其他函数修改数据成员，编译器都将报错！
+
+const 修饰变量，表示该变量不能被修改
+
+
+define指令有三种用法:
+第一种是定义标识，标">
 <meta property="og:type" content="article">
-<meta property="og:title" content="const常量与define宏定义的区别 | songxinfang's blog">
-<meta property="og:url" content="https://songxinfang.github.io/2016/11/07/const常量与define宏定义的区别/index.html">
+<meta property="og:title" content="const、define、static | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/07/const、define、static/index.html">
 <meta property="og:site_name" content="songxinfang's blog">
-<meta property="og:description" content="1. 编译器处理方式不同
-define宏是在预处理阶段展开
-const常量是编译运行阶段使用
+<meta property="og:description" content="const
+const意味着”只读”,欲阻止一个变量被改变，可以使用const关键字
 
-2. 类型和安全检查不同
-define宏没有类型，不做任何类型检查，仅仅是展开
-const常量有具体的类型，在编译阶段会执行类型检查
 
-3. 存储方式不同
-define宏仅仅是展开，有多少地方使用，就展开多少次，不会分配内存
-const常量会在内存中分配(可以是堆中也可以是栈中)
+const修饰参数
 
-4. 内存空间分配不">
-<meta property="og:updated_time" content="2016-11-08T02:38:11.000Z">
+const修饰函数返回值
+
+const+成员函数。任何不修改数据成员的函数都应该声明为const类型，如果const成员函数修改了数据成员或者调用了其他函数修改数据成员，编译器都将报错！
+
+const 修饰变量，表示该变量不能被修改
+
+
+define指令有三种用法:
+第一种是定义标识，标">
+<meta property="og:updated_time" content="2016-11-09T05:30:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="const常量与define宏定义的区别 | songxinfang's blog">
-<meta name="twitter:description" content="1. 编译器处理方式不同
-define宏是在预处理阶段展开
-const常量是编译运行阶段使用
+<meta name="twitter:title" content="const、define、static | songxinfang's blog">
+<meta name="twitter:description" content="const
+const意味着”只读”,欲阻止一个变量被改变，可以使用const关键字
 
-2. 类型和安全检查不同
-define宏没有类型，不做任何类型检查，仅仅是展开
-const常量有具体的类型，在编译阶段会执行类型检查
 
-3. 存储方式不同
-define宏仅仅是展开，有多少地方使用，就展开多少次，不会分配内存
-const常量会在内存中分配(可以是堆中也可以是栈中)
+const修饰参数
 
-4. 内存空间分配不">
+const修饰函数返回值
+
+const+成员函数。任何不修改数据成员的函数都应该声明为const类型，如果const成员函数修改了数据成员或者调用了其他函数修改数据成员，编译器都将报错！
+
+const 修饰变量，表示该变量不能被修改
+
+
+define指令有三种用法:
+第一种是定义标识，标">
     
     
     
@@ -190,7 +196,7 @@ classes that you can use:
 
   <header class="post-header">
     
-    <h1 class="post-title">const常量与define宏定义的区别</h1>
+    <h1 class="post-title">const、define、static</h1>
 
     
 
@@ -204,7 +210,7 @@ classes that you can use:
           
              &#8226; 标签:
             <font class="tags">
-              <a class="tags-link" href="/tags/宏定义与const常量/">宏定义与const常量</a>
+              <a class="tags-link" href="/tags/const-define-static/">const define static</a>
             </font>
           
 
@@ -216,7 +222,29 @@ classes that you can use:
   </header>
 
   <section id="post-content" class="article-content post">
-    <h4 id="1-编译器处理方式不同"><a href="#1-编译器处理方式不同" class="headerlink" title="1. 编译器处理方式不同"></a>1. 编译器处理方式不同</h4><ul>
+    <h2 id="const"><a href="#const" class="headerlink" title="const"></a>const</h2><ol>
+<li>const意味着”只读”,欲阻止一个变量被改变，可以使用const关键字</li>
+</ol>
+<ul>
+<li><p>const修饰参数</p>
+</li>
+<li><p>const修饰函数返回值</p>
+</li>
+<li><p>const+成员函数。任何不修改数据成员的函数都应该声明为const类型，如果const成员函数修改了数据成员或者调用了其他函数修改数据成员，编译器都将报错！</p>
+</li>
+<li><p>const 修饰变量，表示该变量不能被修改</p>
+</li>
+</ul>
+<h2 id="define指令有三种用法"><a href="#define指令有三种用法" class="headerlink" title="define指令有三种用法:"></a>define指令有三种用法:</h2><ol>
+<li>第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用</li>
+</ol>
+<ul>
+<li><p>第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义常数更好，因为：const常量有数据类型，而宏常量没有数据类型。编译器可以对前者进行类型安全检查，而对后者只进行字符替换，没有类型安全检查，并且在字符替换时可能会产生意料不到的错误 ）</p>
+</li>
+<li><p>第三种是定义”函数”，如#define get_max(a, b) ((a)&gt;(b)?(a):(b)) 则以后使用get_max(x,y)就可以得到x和y中较大的数（这种方法存在一些弊病，如get_max(a++, b)时，a++会被执行多少次取决于a和b的大小！所以建议还是用内联函数而不是这种方法提高速度。虽然有这样的弊病，但这种方法的确非常灵活，因为a和b可以是各种数据类型。）。</p>
+</li>
+</ul>
+<h2 id="const常量与define宏定义的区别"><a href="#const常量与define宏定义的区别" class="headerlink" title="const常量与define宏定义的区别"></a>const常量与define宏定义的区别</h2><h4 id="1-编译器处理方式不同"><a href="#1-编译器处理方式不同" class="headerlink" title="1. 编译器处理方式不同"></a>1. 编译器处理方式不同</h4><ul>
 <li>define宏是在预处理阶段展开</li>
 <li>const常量是编译运行阶段使用</li>
 </ul>
@@ -240,14 +268,28 @@ classes that you can use:
 <h4 id="6-宏替换只作替换，不做计算，不做表达式求解"><a href="#6-宏替换只作替换，不做计算，不做表达式求解" class="headerlink" title="6. 宏替换只作替换，不做计算，不做表达式求解"></a>6. 宏替换只作替换，不做计算，不做表达式求解</h4><ul>
 <li>宏预编译时就替换了，程序运行时，并不分配内存</li>
 </ul>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
-<li><p>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</p>
-</li>
+<h4 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h4><ol>
+<li>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</li>
+</ol>
+<ul>
 <li><p>变量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以被修改，在编译阶段会执行类型检查</p>
 </li>
 <li><p>常量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以根据const修饰的位置设定能否修改，在编译阶段会执行类型检查</p>
 </li>
 <li><p>Constants should be declared as <code>static</code> constants and not <code>#define</code>s unless explicitly being used as a macro.</p>
+</li>
+</ul>
+<h2 id="static静态变量"><a href="#static静态变量" class="headerlink" title="static静态变量"></a>static静态变量</h2><ol>
+<li>函数体内 static 变量的作用范围为该函数体，不同于 auto 变量，该变量的内存只被分配一次，因此其值在下次调用时仍维持上次的值</li>
+</ol>
+<ul>
+<li><p>在模块内的 static 全局变量可以被模块内所用函数访问，但不能被模块外其它函数访问</p>
+</li>
+<li><p>在模块内的 static 函数只可被这一模块内的其它函数调用，这个函数的使用范围被限制在声明 它的模块内</p>
+</li>
+<li><p>在类中的 static 成员变量属于整个类所拥有，对类的所有对象只有一份拷贝</p>
+</li>
+<li><p>在类中的 static 成员函数属于整个类所拥有，这个函数不接收 this 指针，因而只能访问类的static 成员变量</p>
 </li>
 </ul>
 
