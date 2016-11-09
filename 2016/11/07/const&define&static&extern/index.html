@@ -7,7 +7,7 @@
     
 
     <title>
-      const、define、static | songxinfang&#39;s blog 
+      const&amp;define&amp;static&amp;extern | songxinfang&#39;s blog 
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -20,54 +20,45 @@
 const意味着”只读”,欲阻止一个变量被改变，可以使用const关键字
 
 
-const修饰参数
+const仅仅用来修饰右边的变量（基本数据变量p，指针变量*p）
 
-const修饰函数返回值
+define #define指令有三种用法:
 
-const+成员函数。任何不修改数据成员的函数都应该声明为const类型，如果const成员函数修改了数据成员或者调用了其他函数修改数据成员，编译器都将报错！
-
-const 修饰变量，表示该变量不能被修改
+第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用
 
 
-define指令有三种用法:
-第一种是定义标识，标">
+第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义">
 <meta property="og:type" content="article">
-<meta property="og:title" content="const、define、static | songxinfang's blog">
-<meta property="og:url" content="https://songxinfang.github.io/2016/11/07/const、define、static/index.html">
+<meta property="og:title" content="const&define&static&extern | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/07/const&define&static&extern/index.html">
 <meta property="og:site_name" content="songxinfang's blog">
 <meta property="og:description" content="const
 const意味着”只读”,欲阻止一个变量被改变，可以使用const关键字
 
 
-const修饰参数
+const仅仅用来修饰右边的变量（基本数据变量p，指针变量*p）
 
-const修饰函数返回值
+define #define指令有三种用法:
 
-const+成员函数。任何不修改数据成员的函数都应该声明为const类型，如果const成员函数修改了数据成员或者调用了其他函数修改数据成员，编译器都将报错！
-
-const 修饰变量，表示该变量不能被修改
+第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用
 
 
-define指令有三种用法:
-第一种是定义标识，标">
-<meta property="og:updated_time" content="2016-11-09T05:30:40.000Z">
+第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义">
+<meta property="og:updated_time" content="2016-11-09T05:53:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="const、define、static | songxinfang's blog">
+<meta name="twitter:title" content="const&define&static&extern | songxinfang's blog">
 <meta name="twitter:description" content="const
 const意味着”只读”,欲阻止一个变量被改变，可以使用const关键字
 
 
-const修饰参数
+const仅仅用来修饰右边的变量（基本数据变量p，指针变量*p）
 
-const修饰函数返回值
+define #define指令有三种用法:
 
-const+成员函数。任何不修改数据成员的函数都应该声明为const类型，如果const成员函数修改了数据成员或者调用了其他函数修改数据成员，编译器都将报错！
-
-const 修饰变量，表示该变量不能被修改
+第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用
 
 
-define指令有三种用法:
-第一种是定义标识，标">
+第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义">
     
     
     
@@ -196,7 +187,7 @@ classes that you can use:
 
   <header class="post-header">
     
-    <h1 class="post-title">const、define、static</h1>
+    <h1 class="post-title">const&amp;define&amp;static&amp;extern</h1>
 
     
 
@@ -210,7 +201,7 @@ classes that you can use:
           
              &#8226; 标签:
             <font class="tags">
-              <a class="tags-link" href="/tags/const-define-static/">const define static</a>
+              <a class="tags-link" href="/tags/const-define-static-extern/">const define static extern</a>
             </font>
           
 
@@ -226,16 +217,10 @@ classes that you can use:
 <li>const意味着”只读”,欲阻止一个变量被改变，可以使用const关键字</li>
 </ol>
 <ul>
-<li><p>const修饰参数</p>
-</li>
-<li><p>const修饰函数返回值</p>
-</li>
-<li><p>const+成员函数。任何不修改数据成员的函数都应该声明为const类型，如果const成员函数修改了数据成员或者调用了其他函数修改数据成员，编译器都将报错！</p>
-</li>
-<li><p>const 修饰变量，表示该变量不能被修改</p>
-</li>
+<li>const仅仅用来修饰右边的变量（基本数据变量p，指针变量*p）</li>
 </ul>
-<h2 id="define指令有三种用法"><a href="#define指令有三种用法" class="headerlink" title="define指令有三种用法:"></a>define指令有三种用法:</h2><ol>
+<h2 id="define"><a href="#define" class="headerlink" title="define"></a>define</h2><p> #define指令有三种用法:</p>
+<ol>
 <li>第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用</li>
 </ol>
 <ul>
@@ -279,10 +264,12 @@ classes that you can use:
 <li><p>Constants should be declared as <code>static</code> constants and not <code>#define</code>s unless explicitly being used as a macro.</p>
 </li>
 </ul>
-<h2 id="static静态变量"><a href="#static静态变量" class="headerlink" title="static静态变量"></a>static静态变量</h2><ol>
-<li>函数体内 static 变量的作用范围为该函数体，不同于 auto 变量，该变量的内存只被分配一次，因此其值在下次调用时仍维持上次的值</li>
+<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><ol>
+<li>修饰局部变量：延长局部变量的生命周期,程序结束才会销毁；局部变量只会生成一份内存,只会初始化一次</li>
 </ol>
 <ul>
+<li><p>修饰全局变量：</p>
+</li>
 <li><p>在模块内的 static 全局变量可以被模块内所用函数访问，但不能被模块外其它函数访问</p>
 </li>
 <li><p>在模块内的 static 函数只可被这一模块内的其它函数调用，这个函数的使用范围被限制在声明 它的模块内</p>
@@ -291,6 +278,18 @@ classes that you can use:
 </li>
 <li><p>在类中的 static 成员函数属于整个类所拥有，这个函数不接收 this 指针，因而只能访问类的static 成员变量</p>
 </li>
+</ul>
+<h2 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h2><ul>
+<li><p>作用: 只是用来获取全局变量(包括全局静态变量)的值，不能用于定义变量</p>
+</li>
+<li><p>工作原理: 先在当前文件查找有没有全局变量，没有找到，才会去其他文件查找。</p>
+</li>
+</ul>
+<h2 id="联合使用"><a href="#联合使用" class="headerlink" title="联合使用"></a>联合使用</h2><ol>
+<li>static与const作用:声明一个只读的静态变量；<br>开发使用场景:在一个文件中经常使用的字符串常量，可以使用static与const组合</li>
+</ol>
+<ul>
+<li>开发中使用场景:在多个文件中经常使用的同一个字符串常量，可以使用extern与const组合。<br>static与const组合：在每个文件都需要定义一份静态全局变量。<br>extern与const组合:只需要定义一份全局变量，多个文件共享。</li>
 </ul>
 
   </section>
