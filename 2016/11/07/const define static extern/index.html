@@ -26,8 +26,7 @@ define #define指令有三种用法:
 
 第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用
 
-
-第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义">
+第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义常">
 <meta property="og:type" content="article">
 <meta property="og:title" content="const define static extern | songxinfang's blog">
 <meta property="og:url" content="https://songxinfang.github.io/2016/11/07/const define static extern/index.html">
@@ -42,9 +41,8 @@ define #define指令有三种用法:
 
 第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用
 
-
-第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义">
-<meta property="og:updated_time" content="2016-11-09T05:56:06.000Z">
+第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义常">
+<meta property="og:updated_time" content="2016-11-09T05:59:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="const define static extern | songxinfang's blog">
 <meta name="twitter:description" content="const
@@ -57,8 +55,7 @@ define #define指令有三种用法:
 
 第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用
 
-
-第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义">
+第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义常">
     
     
     
@@ -221,14 +218,13 @@ classes that you can use:
 </ul>
 <h2 id="define"><a href="#define" class="headerlink" title="define"></a>define</h2><p> #define指令有三种用法:</p>
 <ol>
-<li>第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用</li>
-</ol>
-<ul>
+<li><p>第一种是定义标识，标识有效范围为整个程序，形如#define XXX，常与#if配合使用</p>
+</li>
 <li><p>第二种是定义常数，如#define max 100，则max代表100（这种情况下使用const定义常数更好，因为：const常量有数据类型，而宏常量没有数据类型。编译器可以对前者进行类型安全检查，而对后者只进行字符替换，没有类型安全检查，并且在字符替换时可能会产生意料不到的错误 ）</p>
 </li>
 <li><p>第三种是定义”函数”，如#define get_max(a, b) ((a)&gt;(b)?(a):(b)) 则以后使用get_max(x,y)就可以得到x和y中较大的数（这种方法存在一些弊病，如get_max(a++, b)时，a++会被执行多少次取决于a和b的大小！所以建议还是用内联函数而不是这种方法提高速度。虽然有这样的弊病，但这种方法的确非常灵活，因为a和b可以是各种数据类型。）。</p>
 </li>
-</ul>
+</ol>
 <h2 id="const常量与define宏定义的区别"><a href="#const常量与define宏定义的区别" class="headerlink" title="const常量与define宏定义的区别"></a>const常量与define宏定义的区别</h2><h4 id="1-编译器处理方式不同"><a href="#1-编译器处理方式不同" class="headerlink" title="1. 编译器处理方式不同"></a>1. 编译器处理方式不同</h4><ul>
 <li>define宏是在预处理阶段展开</li>
 <li>const常量是编译运行阶段使用</li>
@@ -254,21 +250,19 @@ classes that you can use:
 <li>宏预编译时就替换了，程序运行时，并不分配内存</li>
 </ul>
 <h4 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h4><ol>
-<li>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</li>
-</ol>
-<ul>
+<li><p>宏：只是在预处理器里进行文本替换，没有类型，不做任何类型检查，编译器可以对相同的字符串进行优化。只保存一份到 .rodata 段。甚至有相同后缀的字符串也可以优化，你可以用GCC 编译测试，”Hello world” 与 “world” 两个字符串，只存储前面一个。取的时候只需要给前面和中间的地址，如果是整形、浮点型会有多份拷贝，但这些数写在指令中。占的只是代码段而已，大量用宏会导致二进制文件变大</p>
+</li>
 <li><p>变量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以被修改，在编译阶段会执行类型检查</p>
 </li>
 <li><p>常量：共享一块内存空间，就算项目中N处用到，也不会分配N块内存空间，可以根据const修饰的位置设定能否修改，在编译阶段会执行类型检查</p>
 </li>
 <li><p>Constants should be declared as <code>static</code> constants and not <code>#define</code>s unless explicitly being used as a macro.</p>
 </li>
-</ul>
-<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><ol>
-<li>修饰局部变量：延长局部变量的生命周期,程序结束才会销毁；局部变量只会生成一份内存,只会初始化一次</li>
 </ol>
-<ul>
-<li><p>修饰全局变量：</p>
+<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><ol>
+<li><p>修饰局部变量：延长局部变量的生命周期,程序结束才会销毁；局部变量只会生成一份内存,只会初始化一次</p>
+</li>
+<li><p>修饰全局变量：只能在本文件中访问,修改全局变量的作用域,生命周期不会改，避免重复定义全局变量</p>
 </li>
 <li><p>在模块内的 static 全局变量可以被模块内所用函数访问，但不能被模块外其它函数访问</p>
 </li>
@@ -278,19 +272,19 @@ classes that you can use:
 </li>
 <li><p>在类中的 static 成员函数属于整个类所拥有，这个函数不接收 this 指针，因而只能访问类的static 成员变量</p>
 </li>
-</ul>
-<h2 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h2><ul>
+</ol>
+<h2 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h2><ol>
 <li><p>作用: 只是用来获取全局变量(包括全局静态变量)的值，不能用于定义变量</p>
 </li>
 <li><p>工作原理: 先在当前文件查找有没有全局变量，没有找到，才会去其他文件查找。</p>
 </li>
-</ul>
-<h2 id="联合使用"><a href="#联合使用" class="headerlink" title="联合使用"></a>联合使用</h2><ol>
-<li>static与const作用:声明一个只读的静态变量；<br>开发使用场景:在一个文件中经常使用的字符串常量，可以使用static与const组合</li>
 </ol>
-<ul>
-<li>开发中使用场景:在多个文件中经常使用的同一个字符串常量，可以使用extern与const组合。<br>static与const组合：在每个文件都需要定义一份静态全局变量。<br>extern与const组合:只需要定义一份全局变量，多个文件共享。</li>
-</ul>
+<h2 id="联合使用"><a href="#联合使用" class="headerlink" title="联合使用"></a>联合使用</h2><ol>
+<li><p>static与const作用:声明一个只读的静态变量；<br>开发使用场景:在一个文件中经常使用的字符串常量，可以使用static与const组合</p>
+</li>
+<li><p>开发中使用场景:在多个文件中经常使用的同一个字符串常量，可以使用extern与const组合。<br>static与const组合：在每个文件都需要定义一份静态全局变量。<br>extern与const组合:只需要定义一份全局变量，多个文件共享。</p>
+</li>
+</ol>
 
   </section>
 
