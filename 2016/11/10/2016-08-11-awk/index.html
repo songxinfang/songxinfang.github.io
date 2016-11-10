@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      awk | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="能偶尔用上的 awk英雄总有用武之地。
+作者：@nixzhu
+
+对于 app 内的图片，我们可用其名字获取：
+1let image = UIImage(named: &quot;test_image&quot;)
+但这样并不安全，我们可能拼错图片的名字，图片本身也可能被删除。而如果我们要在多处使用同一张图片，就更要时时小心。
+我们可以用一个 UIImage 的扩展来消除我们的担忧：
+12345extension UI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="awk | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2016-08-11-awk/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="能偶尔用上的 awk英雄总有用武之地。
+作者：@nixzhu
+
+对于 app 内的图片，我们可用其名字获取：
+1let image = UIImage(named: &quot;test_image&quot;)
+但这样并不安全，我们可能拼错图片的名字，图片本身也可能被删除。而如果我们要在多处使用同一张图片，就更要时时小心。
+我们可以用一个 UIImage 的扩展来消除我们的担忧：
+12345extension UI">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:17:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="awk | songxinfang's blog">
+<meta name="twitter:description" content="能偶尔用上的 awk英雄总有用武之地。
+作者：@nixzhu
+
+对于 app 内的图片，我们可用其名字获取：
+1let image = UIImage(named: &quot;test_image&quot;)
+但这样并不安全，我们可能拼错图片的名字，图片本身也可能被删除。而如果我们要在多处使用同一张图片，就更要时时小心。
+我们可以用一个 UIImage 的扩展来消除我们的担忧：
+12345extension UI">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">awk</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h1 id="能偶尔用上的-awk"><a href="#能偶尔用上的-awk" class="headerlink" title="能偶尔用上的 awk"></a>能偶尔用上的 awk</h1><p>英雄总有用武之地。</p>
+<p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<hr>
+<p>对于 app 内的图片，我们可用其名字获取：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> image = <span class="type">UIImage</span>(named: <span class="string">"test_image"</span>)</div></pre></td></tr></table></figure>
+<p>但这样并不安全，我们可能拼错图片的名字，图片本身也可能被删除。而如果我们要在多处使用同一张图片，就更要时时小心。</p>
+<p>我们可以用一个 UIImage 的扩展来消除我们的担忧：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UIImage</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">var</span> xxx_testImage: <span class="type">UIImage</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="type">UIImage</span>(named: <span class="string">"test_image"</span>)!</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>之后我们使用时，只需：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> image = <span class="type">UIImage</span>.xxx_testImage</div></pre></td></tr></table></figure>
+<p>这样在输入时，除了编辑器会提供自动补全外，编译器也能保证我们不会输入不存在的图片名。</p>
+<p>但我们还不能保证图片不会被从我们的 app 工程里删除，所以我们应该加一个测试，保证每次测试运行时，app 所需要的所有图片都能正常访问。</p>
+<p>这些都不是问题，问题是，我们可能并没有一开始就考虑这个问题，因此，app 已经累计了很多图片，手动生成这个 extension 实在没有乐趣，自然，轮到脚本登场。（我知道有人会推荐 <a href="https://github.com/mac-cain13/R.swift" target="_blank" rel="external">R.swift</a>，不过它做了太多事，对本地化字符串的生成还不太好，也依赖 CocoaPod，所有并不太喜欢）</p>
+<p>我们打开终端，先进入 app 的 Images.xcassets 目录里：<code>ls -l</code>，输出类似：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">total 8</div><div class="line">drwxr-xr-x  22 nix  staff  748 12 16  2015 AppIcon.appiconset</div><div class="line">-rw-r--r--   1 nix  staff   62  5  5 17:06 Contents.json</div><div class="line">drwxr-xr-x   4 nix  staff  136  4  3  2015 bubble_body.imageset</div><div class="line">drwxr-xr-x   4 nix  staff  136  4  3  2015 bubble_left_tail.imageset</div><div class="line">drwxr-xr-x   4 nix  staff  136  4  3  2015 bubble_right_tail.imageset</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>可见，只有<code>imageset</code>后缀的才是正常的图片，因此我们 grep 过滤一下：<code>ls -l | grep imageset</code>，输出类似：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">drwxr-xr-x   4 nix  staff  136  4  3  2015 bubble_body.imageset</div><div class="line">drwxr-xr-x   4 nix  staff  136  4  3  2015 bubble_left_tail.imageset</div><div class="line">drwxr-xr-x   4 nix  staff  136  4  3  2015 bubble_right_tail.imageset</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>注意上面命令中的<code>|</code>为管道，它的作用是将其左边命令的输出作为右边命令的输入。</p>
+<p>然后就轮到 awk 出场：<code>ls -l | grep imageset ｜ awk &#39;{print $9}&#39;</code>，将第 9 列切割出来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">bubble_body.imageset</div><div class="line">bubble_left_tail.imageset</div><div class="line">bubble_right_tail.imageset</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>注意 awk 默认使用空白符作为分隔符，<code>$9</code> 表示第 9 列。</p>
+<p>我们离得到图片名字列表又近了一步，继续 awk：<code>ls -l | grep imageset | awk &#39;{print $9}&#39; | awk -F&quot;.&quot; &#39;{print $1}&#39;</code>。</p>
+<p>这次我们增加了<code>awk -F&quot;.&quot; &#39;{print $1}&#39;</code>，awk 默认用空白符做分割符，但这一句里我们指定用<code>.</code>做分割符，然后输出第一列：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">bubble_body</div><div class="line">bubble_left_tail</div><div class="line">bubble_right_tail</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>这样我们就得到图片名字列表了。接下来我们想把图片名字做一个变换，️以符合 Swift 命名规范，例如将<code>bubble_body</code>变成<code>bubbleBody</code>。</p>
+<p>因此，继续追加一个 awk 命令：<code>ls -l | grep imageset | awk &#39;{print $9}&#39; | awk -F&quot;.&quot; &#39;{print $1}&#39; | awk -F&quot;_&quot; &#39;{out=&quot;&quot;;for(i=1;i&lt;=NF;i++){if(i==1){out=$i}else{out=out&quot;&quot;toupper(substr($i,1,1))substr($i,2)}};print out}&#39;</code></p>
+<p>这次比较复杂，先指定用<code>_</code>做分割符；然后定义了一个变量<code>out=&quot;&quot;</code>，看起来就是个空字符串；之后进入循环，以<code>i</code>为变量；其中<code>NF</code>是 awk 的内置变量，表示当前行的“列数”，这里我们用<code>_</code>做分割符，因此第一行有两列，NF 就为 2，第二行有三列，N F就等于 3，awk是一行一行地处理输入的，所以每一行的 NF 可以不同；在 for 循环的循环体里（注意大括号），我们先判断 i 是否为 1，是 1 的话就直接赋值给 out，否则就将其第一个字母变为大写再追加到 out 后面，这里的代码比较难看，<code>toupper(substr($i,1,1))</code>中的 substr 从第 i 列取出第一个字符然后用 toupper 变为大写，接着<code>substr($i,2)</code>表示剩下的字符串，前面的<code>out=out&quot;&quot;...</code>表示给 out 追加一个空白字符和之后的大写字母和剩下的字符串，这样就实现了首字母大写的功能。</p>
+<p>这很麻烦，但我不知道 awk 里是否有更方便的函数，但这里的代码能很工作，于是生成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">bubbleBody</div><div class="line">bubbleLeftTail</div><div class="line">bubbleRightTail</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>为了之后的代码生成，我们需要没有改变前的名字，因此再修改一下上面的命令：<br><code>ls -l | grep imageset | awk &#39;{print $9}&#39; | awk -F&quot;.&quot; &#39;{print $1}&#39; | awk -F&quot;_&quot; &#39;{out=$0&quot; &quot;;for(i=1;i&lt;=NF;i++){if(i==1){out=$i}else{out=out&quot;&quot;toupper(substr($i,1,1))substr($i,2)}};print out}&#39;</code></p>
+<p>只有一点改变，初始化 out 时用了 $0（当前行） 和一个空格，得到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">bubble_body bubbleBody</div><div class="line">bubble_left_tail bubbleLeftTail</div><div class="line">bubble_right_tail bubbleRightTail</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>最后终于轮到代码生成了，依然再加一段 awk：<code>ls -l | grep imageset | awk &#39;{print $9}&#39; | awk -F&quot;.&quot; &#39;{print $1}&#39; | awk -F&quot;_&quot; &#39;{out=$0&quot; &quot;;for(i=1;i&lt;=NF;i++){if(i==1){out=$i}else{out=out&quot;&quot;toupper(substr($i,1,1))substr($i,2)}};print out}&#39; | awk &#39;{print &quot;static var xxx_&quot;$2&quot;: UIImage {\n\treturn UIImage(named: \&quot;&quot;$1&quot;\&quot;)!\n}\n&quot;}&#39;</code></p>
+<p>可得到：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">var</span> xxx_bubbleBody: <span class="type">UIImage</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">UIImage</span>(named: <span class="string">"bubble_body"</span>)!</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">static</span> <span class="keyword">var</span> xxx_bubbleLeftTail: <span class="type">UIImage</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">UIImage</span>(named: <span class="string">"bubble_left_tail"</span>)!</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">static</span> <span class="keyword">var</span> xxx_bubbleRightTail: <span class="type">UIImage</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">UIImage</span>(named: <span class="string">"bubble_right_tail"</span>)!</div><div class="line">&#125;</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>我们的目的就基本达到。毫不夸张地说，我们只用“一句代码”就搞定了。</p>
+<p>然后就是搜索项目代码中使用 UIImage 的代码，将它们替换为更安全的用法，并写一个测试，在测试里访问所有的图片，当然，测试代码也可用类似上面的脚本去生成。</p>
+<p>我并非 awk 专家，不过我建议所有程序员都学习 grep、awk 以及本文并未提及的 sed 这三个文本处理工具。不用很熟悉，知道它们如何工作即可，用时再查手册。</p>
+<p>最终的脚本大概如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line"><span class="comment"># Generate UIImage extension for images assets</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> <span class="_">-eq</span> 0 ]; <span class="keyword">then</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Usage: ./ios_static_images.sh path_to_images_assets"</span></div><div class="line">    <span class="built_in">exit</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ ! <span class="_">-d</span> <span class="variable">$1</span> ]; <span class="keyword">then</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Usage: ./ios_static_images.sh path_to_images_assets"</span></div><div class="line">    <span class="built_in">exit</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"extension UIImage &#123;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">""</span></div><div class="line"></div><div class="line">ls <span class="_">-l</span> <span class="variable">$1</span> | \</div><div class="line">grep imageset | \</div><div class="line">awk <span class="string">'&#123; print $9; &#125;'</span> | \</div><div class="line">awk -F<span class="string">"."</span> <span class="string">'&#123; print $1; &#125;'</span> | \</div><div class="line">awk -F<span class="string">"_"</span> <span class="string">'&#123; \</span></div><div class="line">    out = $0" "; \</div><div class="line">    for (i = 1; i &lt;= NF; i++) &#123; \</div><div class="line">        if (i == 1) &#123; \</div><div class="line">            out = out $i; \</div><div class="line">        &#125; else &#123; \</div><div class="line">            out = out toupper(substr($i,1,1)) substr($i,2); \</div><div class="line">        &#125; \</div><div class="line">    &#125;; \</div><div class="line">    print out \</div><div class="line">&#125;' | \</div><div class="line">awk <span class="string">'&#123; \</span></div><div class="line">    print "    static var xxx_" $2 ": UIImage &#123;"; \</div><div class="line">    print "        return UIImage(named: \"" $1 "\")!"; \</div><div class="line">    print "    &#125;\n"; \</div><div class="line">&#125;'</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"&#125;"</span></div></pre></td></tr></table></figure>
+<p>===============</p>
+<p>欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条</p>
+<ul>
+<li>Tweet <a href="https://twitter.com/nixzhu/status/763653023595794432" target="_blank" rel="external">https://twitter.com/nixzhu/status/763653023595794432</a> 或</li>
+<li>微博 <a href="http://weibo.com/2076580237/E34xDzoXo" target="_blank" rel="external">http://weibo.com/2076580237/E34xDzoXo</a></li>
+</ul>
+<p>以分享此文或参与讨论！</p>
+<p>如果你认为这篇文章对你有所帮助，可用支付宝扫描下方二维码，以捐助慰劳作者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

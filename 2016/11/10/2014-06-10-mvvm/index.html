@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      介绍 MVVM | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自：http://www.objc.io/issue-13/mvvm.html
+原作者：Ash Furrow
+译者：@nixzhu
+=================================
+我于 2011 年在 500px 找到自己的第一份 iOS 开发工作。虽然我已经在大学里做了好几年 iOS 外包开发，但这才是我的一个真正的 iOS 开发工作。我被招聘为去实现拥有漂亮设计的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="介绍 MVVM | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-06-10-mvvm/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自：http://www.objc.io/issue-13/mvvm.html
+原作者：Ash Furrow
+译者：@nixzhu
+=================================
+我于 2011 年在 500px 找到自己的第一份 iOS 开发工作。虽然我已经在大学里做了好几年 iOS 外包开发，但这才是我的一个真正的 iOS 开发工作。我被招聘为去实现拥有漂亮设计的">
+<meta property="og:image" content="http://www.objc.io/images/issue-13/mvvm1.png">
+<meta property="og:image" content="http://www.objc.io/images/issue-13/intermediate.png">
+<meta property="og:image" content="http://www.objc.io/images/issue-13/mvvm.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:26:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="介绍 MVVM | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自：http://www.objc.io/issue-13/mvvm.html
+原作者：Ash Furrow
+译者：@nixzhu
+=================================
+我于 2011 年在 500px 找到自己的第一份 iOS 开发工作。虽然我已经在大学里做了好几年 iOS 外包开发，但这才是我的一个真正的 iOS 开发工作。我被招聘为去实现拥有漂亮设计的">
+<meta name="twitter:image" content="http://www.objc.io/images/issue-13/mvvm1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">介绍 MVVM</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自：<a href="http://www.objc.io/issue-13/mvvm.html" target="_blank" rel="external">http://www.objc.io/issue-13/mvvm.html</a></p>
+<p>原作者：<a href="https://twitter.com/ashfurrow" target="_blank" rel="external">Ash Furrow</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>我于 2011 年在 500px 找到自己的第一份 iOS 开发工作。虽然我已经在大学里做了好几年 iOS 外包开发，但这才是我的一个真正的 iOS 开发工作。我被招聘为去实现拥有漂亮设计的 iPad 应用，而且是其唯一的 iOS 开发者。在短短七周里，我们就发布了 1.0 并持续迭代，添加了更多特性，但从本质上，代码库也变得更加复杂了。</p>
+<p>有时我感觉就像我不知道在做什么。我知道自己的设计模式——就像任何好的编程人员那样——但我太接近我在做的产品以至于不能客观地衡量我的架构决策的有效性。它给我带来了另外一位开发者，我意识到我们陷入困境了。</p>
+<p>从没听过 MVC ？有人称之为 Massive View Controller（重量级视图控制器）。这就是我们那时候的感觉。我不打算介绍令人汗颜的细节，但它足以说明，如果我不得不再次重来一次，我绝对会做出不同的决策。</p>
+<p>我会修改一个关键架构，并将其带入我从那时起就在开发的各种应用，即使用一种叫做 Model-View-ViewModel 的架构替换 Model-View-Controller。</p>
+<p>所以，到底 MVVM 是什么？与其专注于说明 MVVM 的来历，不如让我们看一个典型的 iOS 是如何构建的，并从那里了解  MVVM：</p>
+<p><img src="http://www.objc.io/images/issue-13/mvvm1.png" alt="Typical Model-View-Controller setup"></p>
+<p>我们看到的是一个典型的 MVC 设置。Model 呈现数据，View 呈现用户界面，而 View Controller 调节它两者之间的交互。Cool！</p>
+<p>稍微考虑一下，虽然 View 和 View Controller 是技术上不同的组件，但它们几乎总是手牵手在一起，成对的。你什么时候看到一个 View 能够与不同 View Controller 配对？或者反过来？所以，为什么不正规化它们的连接呢？</p>
+<p><img src="http://www.objc.io/images/issue-13/intermediate.png" alt="Intermediate"></p>
+<p>这更准确地描述了你可能已经编写的 MVC 代码。但它并没有做太多事情来解决 iOS 应用中日益增长的重量级视图控制器。在典型的 MVC 应用里，<em>许多</em>逻辑被放在 View Controller 里。它们中的一些确实属于 View Controller，但更多的是所谓的“表示逻辑（presentation logic）”，以 MVVM 属术语来说——就是那些从 Model 转换数据为 View 可以呈现的东西的事情，例如将一个 <code>NSDate</code> 转换为一个格式化过的 <code>NSString</code>。</p>
+<p>我们的图解里缺少某些东西。某些使我们可以放置所有表示逻辑的东西。我们打算将其称为“View Model”——它位于 View/Controller 与 Model 之间：</p>
+<p><img src="http://www.objc.io/images/issue-13/mvvm.png" alt="Model-View-ViewModel"></p>
+<p>看起好多了！这个图解准确地描述了什么是 MVVM：一个 MVC 的增强版，我们正式连接了视图和控制器，并将表示逻辑从 Controller 移出放到一个新的对象里，即 View Model。MVVM 听起来很复杂，但它本质上就是一个精心优化的 MVC 架构，而 MVC 你早已熟悉。</p>
+<p>现在我们知道了<em>什么</em>是 MVVM，但<em>为什么</em>某个人会想要去使用它呢？在 iOS 上使用 MVVM 的动机，对我来说，无论如何，就是它能减少 View Controller 的复杂性并使得表示逻辑更易于测试。通过一些例子，我们将看到它如何达到这些目标。</p>
+<p>此处有三个重点是我希望你看完本文能带走的：</p>
+<ul>
+<li>MVVM 兼容你当下使用的 MVC 架构。</li>
+<li>MVVM 让你的应用更加可测试。</li>
+<li>MVVM 配合一个绑定机制效果最好。</li>
+</ul>
+<p>如我们之前所见，MVVM 基本上就是 MVC 的改进版，所以很容易就能看到它如何被整合到现有使用典型 MVC 架构的应用中。让我们看一个简单的 <code>Person</code> Model 以及相应的 View Controller：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@interface Person : NSObject</div><div class="line"></div><div class="line">- (instancetype)initwithSalutation:(NSString *)salutation firstName:(NSString *)firstName lastName:(NSString *)lastName birthdate:(NSDate *)birthdate;</div><div class="line"></div><div class="line">@property (nonatomic, readonly) NSString *salutation;</div><div class="line">@property (nonatomic, readonly) NSString *firstName;</div><div class="line">@property (nonatomic, readonly) NSString *lastName;</div><div class="line">@property (nonatomic, readonly) NSDate *birthdate;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>Cool！现在我们假设有了一个 <code>PersonViewController</code> ，在 <code>viewDidLoad</code> 里，只需要基于它的 <code>model</code> 属性设置一些 Label 即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line"></div><div class="line">    if (self.model.salutation.length &gt; 0) &#123;</div><div class="line">        self.nameLabel.text = [NSString stringWithFormat:@&quot;%@ %@ %@&quot;, self.model.salutation, self.model.firstName, self.model.lastName];</div><div class="line">    &#125; else &#123;</div><div class="line">        self.nameLabel.text = [NSString stringWithFormat:@&quot;%@ %@&quot;, self.model.firstName, self.model.lastName];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];</div><div class="line">    [dateFormatter setDateFormat:@&quot;EEEE MMMM d, yyyy&quot;];</div><div class="line">    self.birthdateLabel.text = [dateFormatter stringFromDate:model.birthdate];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这全都直截了当，vanilla MVC。现在来看看我们如何用一个 View Model 来增强它。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@interface PersonViewModel : NSObject</div><div class="line"></div><div class="line">- (instancetype)initWithPerson:(Person *)person;</div><div class="line"></div><div class="line">@property (nonatomic, readonly) Person *person;</div><div class="line"></div><div class="line">@property (nonatomic, readonly) NSString *nameText;</div><div class="line">@property (nonatomic, readonly) NSString *birthdateText;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>我们的 View Model 的实现大概如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">@implementation PersonViewModel</div><div class="line"></div><div class="line">- (instancetype)initWithPerson:(Person *)person &#123;</div><div class="line">    self = [super init];</div><div class="line">    if (!self) return nil;</div><div class="line"></div><div class="line">    _person = person;</div><div class="line">    if (person.salutation.length &gt; 0) &#123;</div><div class="line">        _nameText = [NSString stringWithFormat:@&quot;%@ %@ %@&quot;, self.person.salutation, self.person.firstName, self.person.lastName];</div><div class="line">    &#125; else &#123;</div><div class="line">        _nameText = [NSString stringWithFormat:@&quot;%@ %@&quot;, self.person.firstName, self.person.lastName];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];</div><div class="line">    [dateFormatter setDateFormat:@&quot;EEEE MMMM d, yyyy&quot;];</div><div class="line">    _birthdateText = [dateFormatter stringFromDate:person.birthdate];</div><div class="line"></div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>Cool！我们已经将 <code>viewDidLoad</code> 中的表示逻辑放入我们的 View Model 里了。此时，我们新的 <code>viewDidLoad</code> 就会非常轻量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line"></div><div class="line">    self.nameLabel.text = self.viewModel.nameText;</div><div class="line">    self.birthdateLabel.text = self.viewModel.birthdateText;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>所以，如你所见，并没有对我们的 MVC 架构做太多改变。还是同样的代码，只不过移动了位置。它与 MVC 兼容，带来<a href="http://objccn.io/issue-1/" target="_blank" rel="external">更轻量的 View Controllers</a>。</p>
+<p>可测试，嗯？是怎样？好吧，View Controller 是出了名的难以测试，因为它们做了太多事情。在 MVVM 里，我们试着尽可能多的将代码移入 View Model 里。测试 View Controller 就变得容易多了，因为它们不再做一大堆事情，而 View Model 非常易于测试。让我们来看看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">SpecBegin(Person)</div><div class="line">    NSString *salutation = @&quot;Dr.&quot;;</div><div class="line">    NSString *firstName = @&quot;first&quot;;</div><div class="line">    NSString *lastName = @&quot;last&quot;;</div><div class="line">    NSDate *birthdate = [NSDate dateWithTimeIntervalSince1970:0];</div><div class="line"></div><div class="line">    it (@&quot;should use the salutation available. &quot;, ^&#123;</div><div class="line">        Person *person = [[Person alloc] initWithSalutation:salutation firstName:firstName lastName:lastName birthdate:birthdate];</div><div class="line">        PersonViewModel *viewModel = [[PersonViewModel alloc] initWithPerson:person];</div><div class="line">        expect(viewModel.nameText).to.equal(@&quot;Dr. first last&quot;);</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">    it (@&quot;should not use an unavailable salutation. &quot;, ^&#123;</div><div class="line">        Person *person = [[Person alloc] initWithSalutation:nil firstName:firstName lastName:lastName birthdate:birthdate];</div><div class="line">        PersonViewModel *viewModel = [[PersonViewModel alloc] initWithPerson:person];</div><div class="line">        expect(viewModel.nameText).to.equal(@&quot;first last&quot;);</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">    it (@&quot;should use the correct date format. &quot;, ^&#123;</div><div class="line">        Person *person = [[Person alloc] initWithSalutation:nil firstName:firstName lastName:lastName birthdate:birthdate];</div><div class="line">        PersonViewModel *viewModel = [[PersonViewModel alloc] initWithPerson:person];</div><div class="line">        expect(viewModel.birthdateText).to.equal(@&quot;Thursday January 1, 1970&quot;);</div><div class="line">        &#125;);</div><div class="line">SpecEnd</div></pre></td></tr></table></figure>
+<p>如果我们没有将这个逻辑移入 View Model，我们将不得不实例化一个完整的 View Controller 并伴随 View，再比较我们 View 中 Lable 的值。这样做不只是会变成一个麻烦的间接层，而且它同样代表了一个十分脆弱的测试。现在，我们可以按意愿自由地修改视图层级而不必担心破坏我们的单元测试。使用 MVVM 带来的对于测试的好处是清晰，甚至对于这个简单的例子来说也一样，而在有更复杂的表示逻辑的情况下，这个好处会更加明显。</p>
+<p>注意到在这个简单的例子中， Model 是不可变的，所以我们可以只在初始化的时候指定我们 View Model 的属性。对于可变 Model，我们还需要使用一些绑定机制，这样 View Model 就能在背后的 Model 改变时更新自身的属性。此外，一旦 View Model 上的 Model 发生改变，那 View 的属性也需要更新。Model 的改变应该级联向下通过 View Model 进入 View。</p>
+<p>在 OS X 上，我们可以使用 Cocoa 绑定，但在 iOS 上我们并没有这样好的配置可用。我们想到了 KVO（Key-Value Observation），而且它确实做了很伟大的工作。然而，对于一个简单的绑定都需要很大的样板，更不用说有许多属性需要绑定了。作为替代，我个人喜欢使用 ReactiveCocoa，但 MVVM 并未强制我们使用 ReactiveCocoa。MVVM 是一个伟大的典范，它自身独立，只是在有一个良好的绑定框架时做得更好。</p>
+<p>我们覆盖了不少内容：从普通的 MVC 派生出 MVVM，看它们是如何相兼容的范式，从一个可测试的例子观察 MVVM，并看到 MVVM 在有一个配对的绑定机制时工作得更好。如果你有兴趣学习更多关于 MVVM 的知识，你可以看看<a href="http://www.teehanlax.com/blog/model-view-viewmodel-for-ios/" target="_blank" rel="external">这篇博客</a>，它用更多细节解释了 MVVM 的好处，或者 <a href="http://www.teehanlax.com/blog/krush-ios-architecture/" target="_blank" rel="external">这一篇</a>关于我们如何在最近的项目里使用 MVVM 获得巨大的成功。我同样还有一个经过完整测试，基于 MVVM 的应用，叫做 <a href="https://github.com/AshFurrow/C-41" target="_blank" rel="external">C-41</a> ，它是开源的。去看看吧，如果你有任何疑问，请<a href="https://twitter.com/ashfurrow" target="_blank" rel="external">告诉我</a>。</p>
+<p>=====================</p>
+<p>译者注：欢迎非商业转载，但请一定注明出处：<a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a> ！</p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B8kEN1sqr" target="_blank" rel="external">http://weibo.com/2076580237/B8kEN1sqr</a>  以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+<p>版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="external">Creative Commons BY-NC-ND 3.0</a></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

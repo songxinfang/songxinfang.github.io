@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      使用 Swift 和 Xcode 6 制作超棒的 UI 组件 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自：http://www.weheartswift.com/make-awesome-ui-components-ios-8-using-swift-xcode-6/
+原作者：Andrei Puni
+译者：@nixzhu
+=================================
+Apple 在 Xcode 6 里介绍了两个新的 Interface Buidler 声明属性：IBI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Swift 和 Xcode 6 制作超棒的 UI 组件 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-06-10-make-awesome-ui-components-ios-8-using-swift-xcode-6/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自：http://www.weheartswift.com/make-awesome-ui-components-ios-8-using-swift-xcode-6/
+原作者：Andrei Puni
+译者：@nixzhu
+=================================
+Apple 在 Xcode 6 里介绍了两个新的 Interface Buidler 声明属性：IBI">
+<meta property="og:image" content="https://camo.githubusercontent.com/d9a8cefae7ec146ce2e6fc575bc29dfa26996316/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6578706f7365642d70726f706572746965732d65313430323037313938313932312e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/bc4f397ffbf236a556d418ba00052a27da76c85d/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f776861742d68617070656e732d756e6465722d7468652d686f6f642d65313430323037313933383735332e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/0fc74c546afca078156b184c3e7d134647ac24b9/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6164642d612d6e65772d7461726765742e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/d3ef2378a48ebdd93783ef18853563cbb412f918/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6164642d612d6672616d65776f726b2e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/1ada46f333caaf3ccf9f34724529c846f59682eb/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6e65772d66696c652e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/fe228443d227fd537f6ec6236cb7aef7bb30dc6d/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f636f636f612d746f7563682d66696c652e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/61a7bd9719427414edc039822d12b6d25e631ca0/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f7365742d7468652d6e616d652d616e642d636c6173732e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/3a125ff58e68321c960096bd2a1c9e9ce63ada5a/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6368616e67652d7468652d636c6173732d65313430323037353234313133352e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/8fbf3ff5ebc871872c7bfd9761d248345b03a384/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f636c69636b2d647261672e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/b90513835b05059f64fd4b90e0663f8b95a9f919/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f64657369676e61626c652d766965772d65313430323038373838333435352e706e67">
+<meta property="og:image" content="http://img.youtube.com/vi/9Jb7X0GiRv4/0.jpg">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:26:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 Swift 和 Xcode 6 制作超棒的 UI 组件 | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自：http://www.weheartswift.com/make-awesome-ui-components-ios-8-using-swift-xcode-6/
+原作者：Andrei Puni
+译者：@nixzhu
+=================================
+Apple 在 Xcode 6 里介绍了两个新的 Interface Buidler 声明属性：IBI">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/d9a8cefae7ec146ce2e6fc575bc29dfa26996316/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6578706f7365642d70726f706572746965732d65313430323037313938313932312e706e67">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">使用 Swift 和 Xcode 6 制作超棒的 UI 组件</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自：<a href="http://www.weheartswift.com/make-awesome-ui-components-ios-8-using-swift-xcode-6/" target="_blank" rel="external">http://www.weheartswift.com/make-awesome-ui-components-ios-8-using-swift-xcode-6/</a></p>
+<p>原作者：<a href="http://www.weheartswift.com/author/andrei512/" target="_blank" rel="external">Andrei Puni</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>Apple 在 Xcode 6 里介绍了两个新的 Interface Buidler 声明属性：<code>IBInspectable</code> 和 <code>IBDesignable</code>；<code>IBInspectable</code> 将类的属性暴露在 Interface Buidler 的 Attribute Inspector 里，而用了 <code>IBDesignable</code> 后就可以<strong>实时更新视图</strong>了！这简直就像魔法！</p>
+<p>我实在等不及看到你会做出怎样炫酷的东西来。</p>
+<p>我们也制作了一个简短的<a href="https://www.youtube.com/watch?v=9Jb7X0GiRv4" target="_blank" rel="external">视频（需翻墙）</a>来介绍 <code>IBInspectable</code> 和 <code>IBDesignable</code>，大概只需要 10 分钟你就可以走完所有的步骤。而<a href="https://github.com/WeHeartSwift/IBDesignable-Demo" target="_blank" rel="external">代码在 GitHub 上</a>。</p>
+<h2 id="IBInspectable"><a href="#IBInspectable" class="headerlink" title="IBInspectable"></a>IBInspectable</h2><p>我目前找到的，<code>IBInspectable</code> 可以处理的类型如下：</p>
+<ul>
+<li><code>Int</code></li>
+<li><code>CGFloat</code></li>
+<li><code>Double</code></li>
+<li><code>String</code></li>
+<li><code>Bool</code></li>
+<li><code>CGPoint</code></li>
+<li><code>CGSize</code></li>
+<li><code>CGRect</code></li>
+<li><code>UIColor</code></li>
+<li><code>UIImage</code></li>
+</ul>
+<p>例子：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">OverCustomizableView</span> : <span class="title">UIView</span> </span>&#123;</div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> integer: <span class="type">Int</span> = <span class="number">0</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> float: <span class="type">CGFloat</span> = <span class="number">0</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> double: <span class="type">Double</span> = <span class="number">0</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> point: <span class="type">CGPoint</span> = <span class="type">CGPointZero</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> size: <span class="type">CGSize</span> = <span class="type">CGSizeZero</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> customFrame: <span class="type">CGRect</span> = <span class="type">CGRectZero</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> color: <span class="type">UIColor</span> = <span class="type">UIColor</span>.clearColor()</div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> string: <span class="type">String</span> = <span class="string">"We ❤ Swift"</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> bool: <span class="type">Bool</span> = <span class="literal">false</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在对应 View 的 Attribute Inspector 的顶部，你将看到：</p>
+<p><img src="https://camo.githubusercontent.com/d9a8cefae7ec146ce2e6fc575bc29dfa26996316/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6578706f7365642d70726f706572746965732d65313430323037313938313932312e706e67" alt="exposed properties"></p>
+<p>做完这些就添加了一些用户定义的运行时属性，这样就可以在 IB 里设置的它们的初始值，之后视图加载时就可以使用了。</p>
+<p>创建好的运行时属性：</p>
+<p><img src="https://camo.githubusercontent.com/bc4f397ffbf236a556d418ba00052a27da76c85d/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f776861742d68617070656e732d756e6465722d7468652d686f6f642d65313430323037313933383735332e706e67" alt="user define runtime attributes in xcode 6"></p>
+<h2 id="IBDesignable"><a href="#IBDesignable" class="headerlink" title="IBDesignable"></a>IBDesignable</h2><p>现在到了有趣的的部分了。<code>IBDesignable</code> 告诉 Interface Builder 它可以加载视图并渲染视图；而要这个功能正常工作，<strong>视图类必须位于一个框架（framework）内</strong>。但这并不会带来很大的不便，我们马上就会看到。我认为在后面，Interface Builder 将 UIView 代码转换为 NSView 代码，这样它就能动态加载框架并渲染其组件了。</p>
+<blockquote>
+<p>译者注：估计不久我们就会看到大量的第三方 UI 组件，都可以直接在 IB 里显示和修改，更加直观。</p>
+</blockquote>
+<h2 id="创建一个新项目"><a href="#创建一个新项目" class="headerlink" title="创建一个新项目"></a>创建一个新项目</h2><p>打开 Xcode 6，创建一个新的“Single Page Application”并选择 Swift 作为编程语言。</p>
+<h2 id="添加一个新的-target-到项目中"><a href="#添加一个新的-target-到项目中" class="headerlink" title="添加一个新的 target 到项目中"></a>添加一个新的 target 到项目中</h2><p>从导航栏选择你的项目文件并通过点击 <code>+</code> 添加一个新的 target：</p>
+<p><img src="https://camo.githubusercontent.com/0fc74c546afca078156b184c3e7d134647ac24b9/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6164642d612d6e65772d7461726765742e706e67" alt="add a new target in xcode"></p>
+<p>选择 <code>Framework &amp; Application Library</code> 并选中 <code>Cocoa Touch Framework</code>：</p>
+<p><img src="https://camo.githubusercontent.com/d3ef2378a48ebdd93783ef18853563cbb412f918/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6164642d612d6672616d65776f726b2e706e67" alt="creating a cococa touch framework"></p>
+<p>将其命名为 <code>MyCustomView</code>。Xcode 会自动链接 <code>MyCustomView.framework</code> 到你的项目中。</p>
+<h2 id="创建一个自定义个视图类"><a href="#创建一个自定义个视图类" class="headerlink" title="创建一个自定义个视图类"></a>创建一个自定义个视图类</h2><p>创建一个新的 Swift 文件并将其添加到 <code>MyCustomView</code> 框架。</p>
+<p>在框架文件夹上右键单击：</p>
+<p><img src="https://camo.githubusercontent.com/1ada46f333caaf3ccf9f34724529c846f59682eb/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6e65772d66696c652e706e67" alt="create new file"></p>
+<p>选择 Cocoa Touch 文件：</p>
+<p><img src="https://camo.githubusercontent.com/fe228443d227fd537f6ec6236cb7aef7bb30dc6d/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f636f636f612d746f7563682d66696c652e706e67" alt=""></p>
+<p>将其命名为 <code>CustomView</code>，且为 <code>UIView</code> 的子类：</p>
+<p><img src="https://camo.githubusercontent.com/61a7bd9719427414edc039822d12b6d25e631ca0/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f7365742d7468652d6e616d652d616e642d636c6173732e706e67" alt=""></p>
+<p>在上面的视图控制器类里<a href="https://github.com/andrei512/writing/blob/master/weheartswift/www.weheartswift.com/swift-classes-part-1" target="_blank" rel="external">编写一个类定义</a>。</p>
+<p>使用 <code>@IBDesignable</code> 关键字来告诉 Xcode 渲染你的视图。</p>
+<p>添加三个属性：<code>borderColor: UIColor</code>、<code>borderWidth: CGFloat</code> 以及 <code>cornerRadius: CGFloat</code>。</p>
+<p>设置它们的默认值并让它们可视察（Inspectable）：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@IBDesignable</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomView</span> : <span class="title">UIView</span> </span>&#123;</div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> borderColor: <span class="type">UIColor</span> = <span class="type">UIColor</span>.clearColor()</div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> borderWidth: <span class="type">CGFloat</span> = <span class="number">0</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> cornerRadius: <span class="type">CGFloat</span> = <span class="number">0</span></div><div class="line">&#125;</div><div class="line">`</div></pre></td></tr></table></figure>
+<h2 id="为-Layer-属性添加逻辑"><a href="#为-Layer-属性添加逻辑" class="headerlink" title="为 Layer 属性添加逻辑"></a>为 Layer 属性添加逻辑</h2><p>为每个属性都添加一个<a href="https://developer.apple.com/library/prerelease/ios/documentation/swift/conceptual/swift_programming_language/Properties.html#//apple_ref/doc/uid/TP40014097-CH14-XID_333" target="_blank" rel="external">属性观察者（Property Observer）</a>从而更新 <code>layer</code>：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomView</span> : <span class="title">UIView</span> </span>&#123;</div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> borderColor: <span class="type">UIColor</span> = <span class="type">UIColor</span>.clearColor() &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            layer.borderColor = borderColor.<span class="type">CGColor</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> borderWidth: <span class="type">CGFloat</span> = <span class="number">0</span> &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            layer.borderWidth = borderWidth</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> cornerRadius: <span class="type">CGFloat</span> = <span class="number">0</span> &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            layer.cornerRadius = cornerRadius</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用快捷键 <code>⌘ Cmd</code>+<code>B</code> 构建框架。</p>
+<h2 id="测试自定义视图"><a href="#测试自定义视图" class="headerlink" title="测试自定义视图"></a>测试自定义视图</h2><p>打开 <code>Main.storyboard</code> 并从组件库里添加一个视图。</p>
+<p>使用 Identity Inspector 修改其视图类为 <code>CustomView</code>：</p>
+<p><img src="https://camo.githubusercontent.com/3a125ff58e68321c960096bd2a1c9e9ce63ada5a/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f6368616e67652d7468652d636c6173732d65313430323037353234313133352e706e67" alt="chande the class"></p>
+<p>安排好视图的位置并添加所需的 AutoLayout 约束：</p>
+<blockquote>
+<p>Tip：按住 <code>Crtl</code> 然后点击视图并拖拽鼠标指针以添加其相对于另外一个视图的约束。</p>
+</blockquote>
+<p><img src="https://camo.githubusercontent.com/8fbf3ff5ebc871872c7bfd9761d248345b03a384/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f636c69636b2d647261672e706e67" alt="adding autolayout contraints without headaches"></p>
+<p>玩耍了一阵 <code>cornerRadius</code> 之后，我发现在使用较大的值时，它创造了一种有趣的的模式：</p>
+<p><img src="https://camo.githubusercontent.com/b90513835b05059f64fd4b90e0663f8b95a9f919/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f30362f64657369676e61626c652d766965772d65313430323038373838333435352e706e67" alt="interesting pattern"></p>
+<p>你可以在 <a href="https://github.com/WeHeartSwift/IBDesignable-Demo" target="_blank" rel="external">GitHub</a> 上获取代码。</p>
+<p>祝你玩得愉快 😄</p>
+<p>一个快速演示（“需翻墙”，我希望在不远的将来我不需要写这一句）：</p>
+<p><a href="https://www.youtube.com/watch?v=9Jb7X0GiRv4" target="_blank"><img src="http://img.youtube.com/vi/9Jb7X0GiRv4/0.jpg" alt="IBDesignable - IBInspectable Demo" width="480" height="360" border="1"></a></p>
+<h2 id="挑战"><a href="#挑战" class="headerlink" title="挑战"></a>挑战</h2><ul>
+<li>制作一个复选框（Checkbox）组件</li>
+<li>制作一个有 <code>angle: CGFloat</code> 属性的组件，可以旋转视图。</li>
+<li>在 Interface Builder 里渲染一个分形图 😄</li>
+</ul>
+<p>如果你发现这篇文章很有用，记得和你的朋友分享哦 😄</p>
+<p>=====================</p>
+<p>译者注：欢迎非商业转载，但请一定注明出处：<a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a> ！</p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B8nNYAEV4" target="_blank" rel="external">http://weibo.com/2076580237/B8nNYAEV4</a>  以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+<p>版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="external">Creative Commons BY-NC-ND 3.0</a></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

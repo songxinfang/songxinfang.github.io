@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      Flipboard 在 iOS 上怎样播放 GIF 动画 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自：http://engineering.flipboard.com/2014/05/animated-gif/
+原作者：Raphael Schaad
+译者：@nixzhu
+=================================
+Flipboard 一直谋求的是“烹饪原始Web”并将其转化为如杂志般优雅的东西。我们考虑到许多细节——从文章的排版到相片的布局——以尽可能忠实地展现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flipboard 在 iOS 上怎样播放 GIF 动画 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-06-01-animated-gif/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自：http://engineering.flipboard.com/2014/05/animated-gif/
+原作者：Raphael Schaad
+译者：@nixzhu
+=================================
+Flipboard 一直谋求的是“烹饪原始Web”并将其转化为如杂志般优雅的东西。我们考虑到许多细节——从文章的排版到相片的布局——以尽可能忠实地展现">
+<meta property="og:image" content="http://engineering.flipboard.com/assets/animatedgif/flanimatedimage-flipboard.gif">
+<meta property="og:image" content="http://engineering.flipboard.com/assets/animatedgif/frame-delays1.png">
+<meta property="og:image" content="http://engineering.flipboard.com/assets/animatedgif/frame-delays2.png">
+<meta property="og:image" content="http://engineering.flipboard.com/assets/animatedgif/frame-delays3.png">
+<meta property="og:image" content="http://engineering.flipboard.com/assets/animatedgif/frame-delays4.png">
+<meta property="og:image" content="http://engineering.flipboard.com/assets/animatedgif/uml.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:26:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flipboard 在 iOS 上怎样播放 GIF 动画 | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自：http://engineering.flipboard.com/2014/05/animated-gif/
+原作者：Raphael Schaad
+译者：@nixzhu
+=================================
+Flipboard 一直谋求的是“烹饪原始Web”并将其转化为如杂志般优雅的东西。我们考虑到许多细节——从文章的排版到相片的布局——以尽可能忠实地展现">
+<meta name="twitter:image" content="http://engineering.flipboard.com/assets/animatedgif/flanimatedimage-flipboard.gif">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">Flipboard 在 iOS 上怎样播放 GIF 动画</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自：<a href="http://engineering.flipboard.com/2014/05/animated-gif/" target="_blank" rel="external">http://engineering.flipboard.com/2014/05/animated-gif/</a></p>
+<p>原作者：<a href="https://twitter.com/raphaelschaad" target="_blank" rel="external">Raphael Schaad</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>Flipboard 一直谋求的是“烹饪原始Web”并将其转化为如杂志般优雅的东西。我们考虑到许多细节——从文章的排版到相片的布局——以尽可能忠实地展现内容的本质。</p>
+<p>而对于 GIF 来说，我们想让它们在我们的应用里自动播放。自动播放是动态 GIF 的主要诉求。然而，iOS 上的许多应用仅仅只是渲染 GIF 的静态帧——一个由在真机上实时地流畅播放多个 GIF 所导致的复杂性而带来的不幸结果。</p>
+<p>某些人可能会想，这么<a href="http://en.wikipedia.org/wiki/Graphics_Interchange_Format#Animated_GIF" title="Wikipedia: Animated GIF format description" target="_blank" rel="external">古老的图片格式</a>对于在现代的 iOS 设备上工作的开发者来说应该是开箱即用的吧。但甚至是 Apple 自家的一些应用都不支持播放它们。当用移动浏览器查看过它们后，系统经常会变慢到像在爬行。在定时重放并保证保真度的同时，保持较小的内存占用和 CPU 使用率实在是一个挑战。</p>
+<p>我们关于支持动态 GIF 的需求如下：</p>
+<ul>
+<li>以堪比桌面浏览器的播放速度同时播放多个 GIF</li>
+<li>保证可变帧延迟</li>
+<li>在内存压力下依然表现优雅</li>
+<li>在第一次播放时消除延迟或卡顿</li>
+<li>如同现代浏览器那样解译 fast GIF 的帧延迟（注解1）</li>
+</ul>
+<p>因为没有内置的方法或开源库能够满足所有这些需求，所以我们创建了一个引擎并从<a href="http://inside.flipboard.com/2013/08/14/new-flipboard-update-is-out-with-gifs-for-all-and-top-stories/" title="Inside Flipboard: New Flipboard Update Is Out, With GIFs For All and Top Stories" target="_blank" rel="external">去年发布</a>开始起就一直磨练它。我们认为与社区分享它是我们目前最好的选择。</p>
+<p>如果你想增加对动态 GIF 的支持以增强你的 iOS 应用，请前往 GitHub <a href="https://github.com/Flipboard/FLAnimatedImage" title="FLAnimatedImage open source on GitHub" target="_blank" rel="external">按照简单的指示来使用我们的开源组件</a>。</p>
+<p><img src="http://engineering.flipboard.com/assets/animatedgif/flanimatedimage-flipboard.gif" alt=""></p>
+<h2 id="iOS-为动态图像提供了什么"><a href="#iOS-为动态图像提供了什么" class="headerlink" title="iOS 为动态图像提供了什么"></a>iOS 为动态图像提供了什么</h2><p>iOS 上显示图片的典型方式是用图像数据创建一个 <a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/Reference/Reference.html" title="Apple Doc: UIImage" target="_blank" rel="external"><code>UIImage</code></a> 并将其展现在屏幕上的某个 <a href="https://developer.apple.com/library/ios/documentation/uikit/reference/UIImageView_Class/Reference/Reference.html" title="Apple Doc: UIImageView" target="_blank" rel="external"><code>UIImageView</code></a> 中。然而，虽然有超过一打的初始化方法，但没有一个可以从单个的多帧图像（注解2）里创建一个动态图像。Image View 仅仅显示第一个静态帧，所以屏幕上没有动画。程序员必须用 Apple 的 <a href="https://developer.apple.com/library/ios/documentation/graphicsimaging/conceptual/ImageIOGuide/imageio_intro/ikpg_intro.html" title="Apple Doc: ImageIO" target="_blank" rel="external"><code>ImageIO</code></a> 框架将每一帧加载为一个单独的图像并使用 <code>UIImageView</code> 的 API： <code>animatedImages</code> 、<code>animationDuration</code> 以及 <code>animationRepeatCount</code> 来完成动画。</p>
+<p>这种方法的缺点是无法保证 GIF 的可变帧延迟。</p>
+<p><img src="http://engineering.flipboard.com/assets/animatedgif/frame-delays1.png" alt=""></p>
+<p>具有可变帧延迟的五个帧。</p>
+<p>让我们假设帧和元数据的加载代码在 <code>UIImage+animatedImage</code>  类别里并考虑如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">imageView.animationDuration = image.delayTimes[0] * animatedImage.frameCount;</div></pre></td></tr></table></figure>
+<p><img src="http://engineering.flipboard.com/assets/animatedgif/frame-delays2.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">imageView.animationDuration = image.totalDelayTimes;</div></pre></td></tr></table></figure>
+<p><img src="http://engineering.flipboard.com/assets/animatedgif/frame-delays3.png" alt=""></p>
+<p>很明显代码使用第一帧的延迟作为每一帧的延迟或预先假设全部帧延迟的长度，但这两种方式都不会带来很好的效果。</p>
+<p>另一种选择是使用 <code>UIWebView</code> ，这样 GIF 就由 WebKit 负责解码和显示，就如同桌面浏览器那样。</p>
+<p>然而，Web View 没有为在移动设备上播放 GIF 而做优化，经常会降低播放速度。同时也不能很好地控制回放过程或内存占用。</p>
+<h2 id="实现你的自定义播放"><a href="#实现你的自定义播放" class="headerlink" title="实现你的自定义播放"></a>实现你的自定义播放</h2><p>一个用 <code>UIImageView</code> 显示并支持可变帧延迟的方式是找到所有帧延迟的<a href="http://en.wikipedia.org/wiki/Greatest_common_divisor" title="Wikipedia: Greatest common divisor" target="_blank" rel="external">最大公约数</a>并将延迟稍长的帧多放入几个到对应的 <code>animatedImages</code> 数组里。</p>
+<blockquote>
+<p>译者注：就是说，尽管每一帧的延迟都一样，但因为原本延迟长的那些帧因为相应的多放了几个进去，这样播放时，整个动画的感觉就不会变。</p>
+</blockquote>
+<p><img src="http://engineering.flipboard.com/assets/animatedgif/frame-delays4.png" alt=""><br>槽的持续时间（Slot Duration）由 GCD 决定，是 1 秒。</p>
+<p>某个帧第一次显示在屏幕上时，压缩的图像数据会被解码为未压缩的位图形式。这是一个较为消耗 CPU 的操作，因此第一次播放时会变慢。</p>
+<p>更棘手的是内存占用；一旦图像被解码，位图就附加到图像对象上并会一直在它的整个生命周期里存在。这将使得我们的 Image View 缓存着所有这些巨大的（注解3）位图数据——这几乎是最糟糕的消耗内存的方式（注解4）。</p>
+<p>当 Apple 给 <code>UIImage</code> 和 <code>UIImageView</code> 添加动画属性时，他们实际上是将其设计为用于小型的 UI 动画，例如转动的加载指示器，而不是用于大型的动态图像。也许某些应用可以摆脱这种方法，但在我们的情况里，这样做会使得我们要为每一个 GIF 添加一个播放按钮而且一次只允许播放一个。这就将 GIF 的乐趣剥除了，对于我们的用户体验来说完全不可接受。</p>
+<h2 id="帧的按需产出和消费"><a href="#帧的按需产出和消费" class="headerlink" title="帧的按需产出和消费"></a>帧的按需产出和消费</h2><p>在内存有限的情况下，若不能存储问题的结果那就只能每次都重新计算。在我们的情况里，我需要在帧被显示之前加载并解码它，并将不在屏幕上的那些帧清除。这就是所谓的<a href="https://en.wikipedia.org/wiki/Producer–consumer_problem" title="Wikipedia: Producer-consumer problem" target="_blank" rel="external">生产者-消费者问题</a>；一个线程生产数据，另一个线程消耗它。我们需要一个生产者产出一个用于视图的帧流，以按需消费它们。生产者在可用内存变少时会节流，而消费者将相应改变帧定时。译者注：大概是说，内存紧张时，动画就会变慢。</p>
+<p><img src="http://engineering.flipboard.com/assets/animatedgif/uml.png" alt=""><br>重要组件的概述已在 UML 中高亮显示</p>
+<h3 id="FLAnimatedImage"><a href="#FLAnimatedImage" class="headerlink" title="FLAnimatedImage"></a>FLAnimatedImage</h3><p><a href="https://github.com/Flipboard/FLAnimatedImage/blob/master/FLAnimatedImageDemo/FLAnimatedImage/FLAnimatedImage.h" title="Source code: FLAnimatedImage class" target="_blank" rel="external"><code>FLAnimatedImage</code></a> 用 GIF 数据初始化，之后它的工作就是在被通过 <code>- (UIImage *)imageLazilyCachedAtIndex:(NSUInteger)index</code> 请求时尽可能快地递发那一帧，而且仅使用小部分内存。</p>
+<p>它试着智能地根据图像尺寸和内存情况选择帧缓存的大小：如果是小的 GIF ，我们会试着将所有帧都放在内存里，减轻 CPU 的负担。如果是很大的 GIF，我们会试着通过只缓存足够用于实时回放的帧来降低内存占用。</p>
+<p>当系统发出内存警告时，所有的动态图像实例都丢弃所有位于离屏缓存（off-screen buffer）内的帧并倒回到按需解码。过一段时间，它们会再次建立起缓存。如果发生了多次内存警告，它们将会保持在每一帧都按需解码。设计这种行为时，避免最糟糕的用户体验（即应用崩溃）是非常重要的，为此我们宁愿降低播放速度。</p>
+<h3 id="FLAnimatedImageView"><a href="#FLAnimatedImageView" class="headerlink" title="FLAnimatedImageView"></a>FLAnimatedImageView</h3><p><a href="https://github.com/Flipboard/FLAnimatedImage/blob/master/FLAnimatedImageDemo/FLAnimatedImage/FLAnimatedImageView.h" title="Source code: FLAnimatedImageView class" target="_blank" rel="external"><code>FLAnimatedImageView</code></a> 可接受一个 <code>FLAnimatedImage</code> 并在内部使用一个 <code>CADisplayLink</code> 实时播放它。</p>
+<p>为了避免处理复杂的锁获取（Lock Acquisition），我们将在没有准备好消费者所需数据的情况下让生产者返回 <code>nil</code>，并保持显示前一帧。这简化了多线程代码并稍慢一点得到所期望的结果（译者注：大概指返回nil的那一帧），而且能正确地播放动画。</p>
+<h3 id="设计一个封装良好的插入式组件"><a href="#设计一个封装良好的插入式组件" class="headerlink" title="设计一个封装良好的插入式组件"></a>设计一个封装良好的插入式组件</h3><p><code>FLAnimatedImage</code> 直接继承自 <code>NSObject</code> ，因为它若继承于 <code>UIImage</code> 能获得收益其实很少。另一方面说来，<code>FLAnimatedImageView</code> 完全兼容 <code>UIImageView</code> 子类并可立即投入使用以取代其位置；设置一个 <code>UIImage</code> 或一个 <code>FLAnimatedImage</code> 在其上都可以以我们所期望的方式正常工作。所以无论何处我们要显示一个图像，我们就使用 <code>FLAnimatedImageView</code> ，然后它就自动正确地处理剩下的事情。</p>
+<p>当考虑架构时，创建一个自包含、可重用的组件是非常重要的。多个 <code>FLAnimatedImage</code>-<code>FLAnimatedImageView</code> 对依然可在没有中央缓存时被使用。它们都尊重系统并且独立地尝试做到最好以成为里面的伟大公民（They’re all aware of the system and independently try to do the best to be great citizens.）。</p>
+<p>这个模块有大约1000行的代码并试图坚持“做一件事并做好”的<a href="http://en.wikipedia.org/wiki/Unix_philosophy#McIlroy:_A_Quarter_Century_of_Unix" title="Wikipedia: Unix philosophy" target="_blank" rel="external">Unix哲学</a>。目前，它已经经过良好测试，可用于生产环境。它依然还有<a href="https://github.com/Flipboard/FLAnimatedImage" title="FLAnimatedImage open source on GitHub" target="_blank" rel="external">改进空间</a>，我们欢迎社区的贡献者。</p>
+<h2 id="gif"><a href="#gif" class="headerlink" title=".gif"></a>.gif</h2><p>Flipboard 的读者已创造了许多动态杂志，例如“<a href="https://flipboard.com/section/gif-me-a-break-bcG3Lj" title="Flipboard magazine: GIF Me A Break" target="_blank" rel="external">GIF Me A Break</a>”、“<a href="https://flipboard.com/section/goals-goals-goals!-b7DfXm" title="Flipboard magazine: Goals goals goals!" target="_blank" rel="external">Goals goals goals!</a>” 或 “<a href="https://flipboard.com/section/cat-gifs-%F0%9F%98%B9-b49Y6v" title="Flipboard magazine: Cat GIFs" target="_blank" rel="external">Cat GIFs 😹</a>” 。GIF 不只是一个文件格式，它是一种文化，可以说是<a href="https://medium.com/message/af8673796c44" title="JIF is the format, GIF is the culture" target="_blank" rel="external"> Internet 的原生艺术形式</a>。通过分享此工程挑战以及<a href="https://github.com/Flipboard/FLAnimatedImage" title="FLAnimatedImage open source on GitHub" target="_blank" rel="external">源代码</a>，我们希望能贡献它更长久的生命。</p>
+<p>==============</p>
+<ol>
+<li>这里有个<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=440882" target="_blank" rel="external">很长的历史</a>介绍，关于如何限制太快的 GIF。</li>
+<li>iOS 5 为 <code>UIImage</code> 添加了新的初始化方法以便创建一个“动态图像”（由私有类 <code>_UIAnimatedImage</code> 支持），但它依然期望其图像还是独立的图像。</li>
+<li>一个 1MB 的 GIF 可变成 55MB 的未压缩数据！（800x600 像素 <em> RGBA 4 字节每像素 </em> 30 帧）</li>
+<li>WWDC 2011 session “iOS Performance In Depth” 描述了堆对象只是冰山的一角。这可以用虚拟机跟踪仪进行测量。“脏内存” 是需要监视的数据，它的内存没有映射到文件，因此无法被清除。我们预绘制的图像将在此类别里。注意到“Memory Tag 70”同样来自图像（ImageIO）。</li>
+</ol>
+<p>特别感谢 Ryan、Evan、Troy、Eugene、Josh、Charles 以及 Chris 提供想法和改进建议。</p>
+<p>=====================</p>
+<p>有许多事情我们都没有亲眼所见，但并不能表示我们可以有意或无意地忽略它们。请耐心了解一段历史：<a href="http://zh.wikipedia.org/wiki/%E5%85%AD%E5%9B%9B%E4%BA%8B%E4%BB%B6" target="_blank" rel="external">六四事件</a>。</p>
+<p>=====================</p>
+<p>译者注：欢迎非商业转载，但请一定注明出处：<a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a> ！</p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B71QTszAh" target="_blank" rel="external">http://weibo.com/2076580237/B71QTszAh</a>  以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦（译者前两天都在腹泻，快挂了，要买补品？）：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+<p>版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="external">Creative Commons BY-NC-ND 3.0</a></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

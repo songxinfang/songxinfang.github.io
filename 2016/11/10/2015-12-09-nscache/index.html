@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      NSCache 源码分析 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="读代码是一种修行，也是一种乐趣。读好代码尤其如此。
+作者：@nixzhu
+引用：Foundation/NSCache.swift
+
+因为 NSCache 的代码并不多，所以先从其下手。顺便体会一下 Foundation 的编程风格。
+首先要明确 NSCache 是什么：一个类似集合的容器，内里放置“键值对”，感觉上类似 NSDictionary 或者 Swift 的内置字典类型。
+我们之所以用缓存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NSCache 源码分析 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2015-12-09-nscache/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="读代码是一种修行，也是一种乐趣。读好代码尤其如此。
+作者：@nixzhu
+引用：Foundation/NSCache.swift
+
+因为 NSCache 的代码并不多，所以先从其下手。顺便体会一下 Foundation 的编程风格。
+首先要明确 NSCache 是什么：一个类似集合的容器，内里放置“键值对”，感觉上类似 NSDictionary 或者 Swift 的内置字典类型。
+我们之所以用缓存">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:29:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NSCache 源码分析 | songxinfang's blog">
+<meta name="twitter:description" content="读代码是一种修行，也是一种乐趣。读好代码尤其如此。
+作者：@nixzhu
+引用：Foundation/NSCache.swift
+
+因为 NSCache 的代码并不多，所以先从其下手。顺便体会一下 Foundation 的编程风格。
+首先要明确 NSCache 是什么：一个类似集合的容器，内里放置“键值对”，感觉上类似 NSDictionary 或者 Swift 的内置字典类型。
+我们之所以用缓存">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">NSCache 源码分析</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>读代码是一种修行，也是一种乐趣。读好代码尤其如此。</p>
+<p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>引用：<a href="https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/NSCache.swift" target="_blank" rel="external">Foundation/NSCache.swift</a></p>
+<hr>
+<p>因为 NSCache 的代码并不多，所以先从其下手。顺便体会一下 Foundation 的编程风格。</p>
+<p>首先要明确 NSCache 是什么：一个类似集合的容器，内里放置“键值对”，感觉上类似 NSDictionary 或者 Swift 的内置字典类型。</p>
+<p>我们之所以用缓存，是为了以空间换时间（占用访问速度更快的内存，节省IO时间），自然是期望其带来性能提升，这就要求用“键”访问缓存得到“值”的速度非常快。不过受限于系统资源，NSCache 会自动管理缓存里的内容（通常是移除一些键值），这就和字典不一样了。</p>
+<p>我们使用 NSCache 的方式就是以“键”为名，往里面添加、移除以及查询“值”。</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>NSCache 的 init 方法里没有内容，也就是说，以</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> cache = <span class="type">NSCache</span>()</div></pre></td></tr></table></figure>
+<p>即可创建一个缓存。但随之就可以设置几个公开属性：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> name: <span class="type">String</span> = <span class="string">""</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> totalCostLimit: <span class="type">Int</span> = -<span class="number">1</span> <span class="comment">// limits are imprecise/not strict</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> countLimit: <span class="type">Int</span> = -<span class="number">1</span> <span class="comment">// limits are imprecise/not strict</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> evictsObjectsWithDiscardedContent: <span class="type">Bool</span> = <span class="literal">false</span></div></pre></td></tr></table></figure>
+<p>其中，<code>totalCostLimit</code> 和 <code>countLimit</code> 都是为了限制缓存里数据的多少，但并不严格，系统仍然会考虑可调整性。<br><code>evictsObjectsWithDiscardedContent</code>不知何意，似乎没有被使用。</p>
+<p>还有几个私有属性，比较重要：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> _entries = <span class="type">Dictionary</span>&lt;<span class="type">UnsafePointer</span>&lt;<span class="type">Void</span>&gt;, <span class="type">NSCacheEntry</span>&gt;()</div><div class="line"><span class="keyword">private</span> <span class="keyword">let</span> _lock = <span class="type">NSLock</span>()</div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> _totalCost = <span class="number">0</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> _byCost: <span class="type">NSCacheEntry</span>?</div></pre></td></tr></table></figure>
+<p><code>_entries</code> 是一个字典，它的 key 为指针（之后会看到用法），value 为私有类 NSCacheEntry：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">NSCacheEntry</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> key: <span class="type">AnyObject</span></div><div class="line">    <span class="keyword">var</span> value: <span class="type">AnyObject</span></div><div class="line">    <span class="keyword">var</span> cost: <span class="type">Int</span></div><div class="line">    <span class="keyword">var</span> prevByCost: <span class="type">NSCacheEntry</span>?</div><div class="line">    <span class="keyword">var</span> nextByCost: <span class="type">NSCacheEntry</span>?</div><div class="line">    <span class="keyword">init</span>(key: <span class="type">AnyObject</span>, value: <span class="type">AnyObject</span>, cost: <span class="type">Int</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.key = key</div><div class="line">        <span class="keyword">self</span>.value = value</div><div class="line">        <span class="keyword">self</span>.cost = cost</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可见 NSCacheEntry 就是对“键值对”的封装，因为缓存对象有重要性的分别，自然有 cost 作为表示。</p>
+<p><code>_lock</code> 作为锁，是为了防止多线程访问时出现不一致的问题，后面分析代码会看到其用法。</p>
+<p><code>_totalCost</code> 为缓存里所有对象的价值。</p>
+<p><code>_byCost</code> 会指向一个 NSCacheEntry，即一个“键值对”，但它用于何处后面再看。</p>
+<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><p>NSCache 提供的 API 是 <code>setObject(:forKey:)</code> 和 <code>setObject(:forKey:cost:)</code>，实际上前者会调用后者，只不过 cost 默认为 0。下面随我一起来阅读并注释其代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">setObject</span><span class="params">(obj: AnyObject, forKey key: AnyObject, cost g: Int)</span></span> &#123;</div><div class="line">    <span class="keyword">let</span> keyRef = <span class="built_in">unsafeBitCast</span>(key, <span class="type">UnsafePointer</span>&lt;<span class="type">Void</span>&gt;.<span class="keyword">self</span>) <span class="comment">// 生成 key 指针（这样应该会少占用一些内存）</span></div><div class="line"></div><div class="line">    _lock.lock()  <span class="comment">// 因为是添加（即修改），先锁起来，防止其他线程改动</span></div><div class="line">    _totalCost += g   <span class="comment">// 整体价值自然增加了</span></div><div class="line"></div><div class="line">    <span class="keyword">var</span> purgeAmount = <span class="number">0</span>   <span class="comment">// 计算应该被清除的“价值”（因为缓存容量有限，现在要添加新的进来，很可能超过限制，需要移除一些旧的）</span></div><div class="line">    <span class="keyword">if</span> totalCostLimit &gt; <span class="number">0</span> &#123;</div><div class="line">        purgeAmount = (_totalCost + g) - totalCostLimit <span class="comment">// 前面刚加过 g，这里再加有些难解</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> purgeCount = <span class="number">0</span>  <span class="comment">// 计算应该被清除的数量，理由同上</span></div><div class="line">    <span class="keyword">if</span> countLimit &gt; <span class="number">0</span> &#123;</div><div class="line">        purgeCount = (_entries.<span class="built_in">count</span> + <span class="number">1</span>) - countLimit <span class="comment">// 这里加 1 好理解，毕竟还没有正式放进去，但也可能同样的 key 已存在，难解</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 用前面生成的 keyRef 来做查询，看看是否已有此 key 的值，有的话就要更新 value 了，顺便修改其“价值”</span></div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> entry = _entries[keyRef] &#123;</div><div class="line">        entry.value = obj</div><div class="line">        <span class="keyword">if</span> entry.cost != g &#123;</div><div class="line">            entry.cost = g</div><div class="line">            remove(entry) <span class="comment">// 之所以要 remove 又 insert，是为了修改 entry 的 prevByCost 和 nextByCost</span></div><div class="line">            insert(entry) <span class="comment">// 由此可见，所有的 entry 会组成一个链表，以 cost 排序（但这要建立在每个 entry 的 cost 不相同的前提下）</span></div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        _entries[keyRef] = <span class="type">NSCacheEntry</span>(key: key, value: obj, cost: g) <span class="comment">// 初次设置此 key 的 value</span></div><div class="line">    &#125;</div><div class="line">    _lock.unlock() <span class="comment">// 这时候写入已经结束，就尽快打开锁，其它线程可能嗷嗷待哺呢</span></div><div class="line"></div><div class="line">    <span class="comment">// 上面算了 purgeAmount 和 purgeCount，此时自然该做一做处理</span></div><div class="line">    <span class="comment">// 但如果用户没有设置 totalCostLimit 和 countLimit，下面的代码其实不会工作（而通常我们都不会设置它们，但系统本身也会使用 NSCache，需要更好地控制）</span></div><div class="line"></div><div class="line">    <span class="keyword">var</span> toRemove = [<span class="type">NSCacheEntry</span>]()</div><div class="line"></div><div class="line">    <span class="keyword">if</span> purgeAmount &gt; <span class="number">0</span> &#123; <span class="comment">// 删除一些对象以便满足 totalCostLimit</span></div><div class="line">        _lock.lock()</div><div class="line">        <span class="keyword">while</span> _totalCost - totalCostLimit &gt; <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">if</span> <span class="keyword">let</span> entry = _byCost &#123;</div><div class="line">                _totalCost -= entry.cost</div><div class="line">                toRemove.append(entry)</div><div class="line">                remove(entry)</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">break</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> countLimit &gt; <span class="number">0</span> &#123;</div><div class="line">            purgeCount = (_entries.<span class="built_in">count</span> - toRemove.<span class="built_in">count</span>) - countLimit <span class="comment">// 因为删除了一些，重新计算 purgeCount</span></div><div class="line">        &#125;</div><div class="line">        _lock.unlock()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> purgeCount &gt; <span class="number">0</span> &#123; <span class="comment">// 同样的道理，整体数量可能仍然过多，再删除一些以满足 countLimit</span></div><div class="line">        _lock.lock()</div><div class="line">        <span class="keyword">while</span> (_entries.<span class="built_in">count</span> - toRemove.<span class="built_in">count</span>) - countLimit &gt; <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">if</span> <span class="keyword">let</span> entry = _byCost &#123;</div><div class="line">                _totalCost -= entry.cost</div><div class="line">                toRemove.append(entry)</div><div class="line">                remove(entry)</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">break</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        _lock.unlock()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 告诉 delegate 要删除的对象</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> del = delegate &#123;</div><div class="line">        <span class="keyword">for</span> entry <span class="keyword">in</span> toRemove &#123;</div><div class="line">            del.cache(<span class="keyword">self</span>, willEvictObject: entry.value)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 真正做移除工作</span></div><div class="line"></div><div class="line">    _lock.lock()</div><div class="line">    <span class="keyword">for</span> entry <span class="keyword">in</span> toRemove &#123;</div><div class="line">        _entries.removeValueForKey(<span class="built_in">unsafeBitCast</span>(entry.key, <span class="type">UnsafePointer</span>&lt;<span class="type">Void</span>&gt;.<span class="keyword">self</span>)) <span class="comment">// the cost list is already fixed up in the purge routines</span></div><div class="line">    &#125;</div><div class="line">    _lock.unlock()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由此可见，作为程序员，我们使用 NSCache 时基本是不需要操心管理的问题，只管往里面添加即可。</p>
+<h2 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h2><p>而访问极其简单：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">objectForKey</span><span class="params">(key: AnyObject)</span></span> -&gt; <span class="type">AnyObject</span>? &#123;</div><div class="line">    <span class="keyword">var</span> object: <span class="type">AnyObject</span>?</div><div class="line"></div><div class="line">    <span class="keyword">let</span> keyRef = <span class="built_in">unsafeBitCast</span>(key, <span class="type">UnsafePointer</span>&lt;<span class="type">Void</span>&gt;.<span class="keyword">self</span>) <span class="comment">// 一样生成 key 指针</span></div><div class="line"></div><div class="line">    _lock.lock()</div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> entry = _entries[keyRef] &#123; <span class="comment">// 查找</span></div><div class="line">        object = entry.value  <span class="comment">// 找到“值”即可</span></div><div class="line">    &#125;</div><div class="line">    _lock.unlock()</div><div class="line"></div><div class="line">    <span class="keyword">return</span> object</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意上面仍然用了锁，按理说，查询（读）是不需要锁的，但这里的代码是要先找到 entry 再取出其 value，这个过程不能被打断，所以加锁保护。</p>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>最后是删除，以便程序员需要更仔细地控制缓存里的内容：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">removeObjectForKey</span><span class="params">(key: AnyObject)</span></span> &#123;</div><div class="line">    <span class="keyword">let</span> keyRef = <span class="built_in">unsafeBitCast</span>(key, <span class="type">UnsafePointer</span>&lt;<span class="type">Void</span>&gt;.<span class="keyword">self</span>)</div><div class="line"></div><div class="line">    _lock.lock()</div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> entry = _entries.removeValueForKey(keyRef) &#123; <span class="comment">// 找到 entry 的时候就已经移除了其 value</span></div><div class="line">        _totalCost -= entry.cost</div><div class="line">        remove(entry)</div><div class="line">    &#125;</div><div class="line">    _lock.unlock()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>还有一个 removeAllObjects：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">removeAllObjects</span><span class="params">()</span></span> &#123;</div><div class="line">    _lock.lock()</div><div class="line">    _entries.removeAll()</div><div class="line">    _byCost = <span class="literal">nil</span></div><div class="line">    _totalCost = <span class="number">0</span></div><div class="line">    _lock.unlock()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为是全删，自然更容易（破坏比建立容易）。</p>
+<p>上面的分析的三个方法里，用了两个私有方法：remove 和 insert，也稍微看看它们的实现：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">remove</span><span class="params">(entry: NSCacheEntry)</span></span> &#123;</div><div class="line">    <span class="keyword">let</span> oldPrev = entry.prevByCost</div><div class="line">    <span class="keyword">let</span> oldNext = entry.nextByCost</div><div class="line">    oldPrev?.nextByCost = oldNext</div><div class="line">    oldNext?.prevByCost = oldPrev</div><div class="line">    <span class="keyword">if</span> entry === _byCost &#123;</div><div class="line">        _byCost = entry.nextByCost</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为要被移除的是 entry，其前驱节点（如果有的话）的后续节点就要改为当前 entry 的后续节点了，很好理解。同理处理其后续节点的前驱节点。这就像将链条里的一个环节去除，旁边两个再连起来，以便维持为一条链子。</p>
+<p>同时更新 _byCost 这个全局变量。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">insert</span><span class="params">(entry: NSCacheEntry)</span></span> &#123;</div><div class="line">    <span class="keyword">if</span> _byCost == <span class="literal">nil</span> &#123;</div><div class="line">        _byCost = entry</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">var</span> element = _byCost</div><div class="line">        <span class="keyword">while</span> <span class="keyword">let</span> e = element &#123;</div><div class="line">            <span class="keyword">if</span> e.cost &gt; entry.cost &#123;</div><div class="line">                <span class="keyword">let</span> newPrev = e.prevByCost</div><div class="line">                entry.prevByCost = newPrev</div><div class="line">                entry.nextByCost = e</div><div class="line">                <span class="keyword">break</span></div><div class="line">            &#125;</div><div class="line">            element = e.nextByCost</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>插入的代码类似。如果 _byCost 没有指向任何值，就指向本次插入的 entry（说明第一个 entry 会由 _byCost 指向）。否则：</p>
+<p>以 _byCost 所代表的 entry 开始，寻找第一个“价值”大于本次将插入的 entry 的元素，找到了就好放置 entry 了，设置好它的 prevByCost 和 nextByCost。注意这里并没有修改 e 的 prevByCost，这说明价值越小的排越前。（但似乎链表被破坏了，也许该在 break 前加一句 <code>e.prevByCost = entry</code>。）</p>
+<p>但平常我们使用 NSCache 时，并不管“价值”，上面的 insert 其实不会被调用。这说明，链表只在我们很关心 entry 的价值时才会建立起来，且 _byCost 指向当前价值最小的一个，便于实现删除逻辑。</p>
+<p>以上是个人的粗浅理解，如有错漏，欢迎指正！</p>
+<hr>
+<p>欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条</p>
+<ul>
+<li>Tweet <a href="https://twitter.com/nixzhu/status/674421007252230144" target="_blank" rel="external">https://twitter.com/nixzhu/status/674421007252230144</a> 或</li>
+<li>微博 <a href="http://weibo.com/2076580237/D7AFjEO8W" target="_blank" rel="external">http://weibo.com/2076580237/D7AFjEO8W</a>  </li>
+</ul>
+<p>以分享此文或参与讨论！</p>
+<p>作者很辛苦，读者可捐助：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

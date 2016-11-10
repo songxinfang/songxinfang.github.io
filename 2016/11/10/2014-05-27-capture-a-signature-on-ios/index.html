@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      在 iOS 上捕捉签名 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="绘制像 Paper 应用那样的真正平滑的曲线
+
+本文翻译自：https://www.altamiracorp.com/blog/employee-posts/capture-a-signature-on-ios
+原作者：JASON HARWIG
+译者：@nixzhu
+=================================
+Square Engineering Blog 上有一篇很棒的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 iOS 上捕捉签名 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-05-27-capture-a-signature-on-ios/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="绘制像 Paper 应用那样的真正平滑的曲线
+
+本文翻译自：https://www.altamiracorp.com/blog/employee-posts/capture-a-signature-on-ios
+原作者：JASON HARWIG
+译者：@nixzhu
+=================================
+Square Engineering Blog 上有一篇很棒的">
+<meta property="og:image" content="https://www.altamiracorp.com/blog/118/files/signature-diagram-lines.png">
+<meta property="og:image" content="https://www.altamiracorp.com/blog/118/files/signature-letter-j.png">
+<meta property="og:image" content="https://www.altamiracorp.com/blog/118/files/signature-diagram-quadratic.png">
+<meta property="og:image" content="https://www.altamiracorp.com/blog/118/files/signature-letter-j-quadratic.png">
+<meta property="og:image" content="https://www.altamiracorp.com/blog/118/files/signature-triangle-strip.png">
+<meta property="og:image" content="https://www.altamiracorp.com/blog/118/files/signature-letter-j-opengl.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:26:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在 iOS 上捕捉签名 | songxinfang's blog">
+<meta name="twitter:description" content="绘制像 Paper 应用那样的真正平滑的曲线
+
+本文翻译自：https://www.altamiracorp.com/blog/employee-posts/capture-a-signature-on-ios
+原作者：JASON HARWIG
+译者：@nixzhu
+=================================
+Square Engineering Blog 上有一篇很棒的">
+<meta name="twitter:image" content="https://www.altamiracorp.com/blog/118/files/signature-diagram-lines.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">在 iOS 上捕捉签名</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p>绘制像 Paper 应用那样的真正平滑的曲线</p>
+</blockquote>
+<p>本文翻译自：<a href="https://www.altamiracorp.com/blog/employee-posts/capture-a-signature-on-ios" target="_blank" rel="external">https://www.altamiracorp.com/blog/employee-posts/capture-a-signature-on-ios</a></p>
+<p>原作者：<a href="https://www.altamiracorp.com/profiles/jharwig" target="_blank" rel="external">JASON HARWIG</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>Square Engineering Blog 上有一篇很棒的文章，为 Android 带来了<a href="http://corner.squareup.com/2012/07/smoother-signatures.html" target="_blank" rel="external">更流畅的签名</a>，但我没有找到任何与 iOS 相关的介绍。所以，在 iOS 设备上捕捉用户签名的最好方式是什么呢？</p>
+<p>虽然我没有找到关于签名捕捉的文章，但 App Store 上已有一些应用很好地实现了签名捕捉。我的目标用户体验是达到 iPad 应用 <a href="http://fiftythree.com/paper" target="_blank" rel="external">Paper by 53</a> 那样的效果（它是一个绘图应用，有着漂亮且极具响应性的笔刷）。</p>
+<p>本文所有的代码都可以在 Github 仓库 <a href="https://www.github.com/jharwig/SignatureDemo" target="_blank" rel="external">SignatureDemo</a> 里找到。</p>
+<h2 id="点点相连"><a href="#点点相连" class="headerlink" title="点点相连"></a>点点相连</h2><p><img src="https://www.altamiracorp.com/blog/118/files/signature-diagram-lines.png" alt="线段签名"></p>
+<p>最简单的方式是捕捉用户的触摸点并用直线将它们连接在一起。</p>
+<p>在 <code>UIView</code> 子类的初始化方法中，创建一个 path ，以及用于捕捉触摸事件的手势识别器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// 创建一个 path 以连接各点</div><div class="line">path = [UIBezierPath bezierPath];</div><div class="line"></div><div class="line">// 捕捉触摸</div><div class="line">UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];</div><div class="line">pan.maximumNumberOfTouches = pan.minimumNumberOfTouches = 1;</div><div class="line">[self addGestureRecognizer:pan];</div></pre></td></tr></table></figure>
+<p>捕捉 pan 手势的触摸点，并通过连线将其放入 bézier path 里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (void)pan:(UIPanGestureRecognizer *)pan &#123;</div><div class="line">    CGPoint currentPoint = [pan locationInView:self];</div><div class="line"></div><div class="line">    if (pan.state == UIGestureRecognizerStateBegan) &#123;</div><div class="line">        [path moveToPoint:currentPoint];</div><div class="line">    &#125; else if (pan.state == UIGestureRecognizerStateChanged)</div><div class="line">        [path addLineToPoint:currentPoint];</div><div class="line"></div><div class="line">    [self setNeedsDisplay];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>画出 path：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (void)drawRect:(CGRect)rect</div><div class="line">&#123;</div><div class="line">    [[UIColor blackColor] setStroke];</div><div class="line">    [path stroke];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://www.altamiracorp.com/blog/118/files/signature-letter-j.png" alt="签名字母J"></p>
+<p>上图是用这种技术画出的字母 “J” ，它也揭示了一些问题：在较慢的速度下， iOS 可以捕捉到足够多的触摸点，因此看起来较平滑，但稍快的移动就会导致触摸点之间较大的间距，签名看起来就是一些直线段相连。</p>
+<p>2012 年的 Apple 开发者大会有一个 session 叫做 <a href="https://developer.apple.com/videos/wwdc/2012/?id=233" target="_blank" rel="external">创建高级手势识别器</a>，它用了一点数学来解决此问题。</p>
+<h2 id="二次贝塞尔曲线"><a href="#二次贝塞尔曲线" class="headerlink" title="二次贝塞尔曲线"></a>二次贝塞尔曲线</h2><p><img src="https://www.altamiracorp.com/blog/118/files/signature-diagram-quadratic.png" alt="二次曲线签名"></p>
+<p>作为用线段连接各触摸点的代替，我们改用二次贝塞尔曲线来连接这些点，使用前述的 WWDC session 上讨论的技术（定位到 42 分 15 秒）。用二次贝塞尔曲线来连接触摸点，使用触摸点作为控制点以及中间点作为起点和终点。</p>
+<p>添加二次曲线到之前的代码里要求存储前一个触摸点，所以要添加一个实例变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CGPoint previousPoint;</div></pre></td></tr></table></figure>
+<p>并创建一个函数来计算两点的中间点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">static CGPoint midpoint(CGPoint p0, CGPoint p1) &#123;</div><div class="line">    return (CGPoint) &#123;</div><div class="line">        (p0.x + p1.x) / 2.0,</div><div class="line">        (p0.y + p1.y) / 2.0</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再更新 pan 手势处理器，用二次曲线替换直线：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">- (void)pan:(UIPanGestureRecognizer *)pan &#123;</div><div class="line">    CGPoint currentPoint = [pan locationInView:self];</div><div class="line">    CGPoint midPoint = midpoint(previousPoint, currentPoint);</div><div class="line"></div><div class="line">    if (pan.state == UIGestureRecognizerStateBegan) &#123;</div><div class="line">        [path moveToPoint:currentPoint];</div><div class="line">    &#125; else if (pan.state == UIGestureRecognizerStateChanged) &#123;</div><div class="line">        [path addQuadCurveToPoint:midPoint controlPoint:previousPoint];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    previousPoint = currentPoint;</div><div class="line"></div><div class="line">    [self setNeedsDisplay];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://www.altamiracorp.com/blog/118/files/signature-letter-j-quadratic.png" alt="二次曲线签名字母J"></p>
+<p>并没有改写太多代码，但我们已经看到了巨大的不同。触摸点不再可见，但对于捕捉签名来说，它依然有些乏味。每个曲线都是同样的宽度，这不符合实际用钢笔签名的感觉。</p>
+<h2 id="可变的线宽"><a href="#可变的线宽" class="headerlink" title="可变的线宽"></a>可变的线宽</h2><p>基于触摸速度，宽度可变，这样就能创建出更加自然的笔画。 <code>UIPanGestureRecognizer</code> 已经包含有一个叫做 <code>velocityInView:</code> 的方法，它用一个 <code>CGPoint</code> 返回当前触摸的速度。</p>
+<p>为了渲染出一个可变宽度的笔画，我切换到 OpenGL ES 和一个能转换笔画为三角形（具体说来，是三角带（triangle strip））的叫做镶嵌（tesselation）的技术（OpenGL 支持画线，但 iOS 不支持平滑过渡的可变宽度）。沿曲线的二次分点同样需要被计算，但这超出了本文讨论的范畴。还请看看<a href="https://www.github.com/jharwig/SignatureDemo" target="_blank" rel="external"> Github 上的源代码</a>了解细节吧。</p>
+<p>给定两个点，计算出一个垂直的向量，它的大小设置为当前厚度的一半。基于 GL_TRIANGLE_STRIP 的自然特性，只需要两个点就能用两个三角形去创建下一个矩形。</p>
+<p><img src="https://www.altamiracorp.com/blog/118/files/signature-triangle-strip.png" alt="三角带"></p>
+<p>下面是使用二次贝塞尔曲线，并根据速度调节笔画粗细而创造出的一个具有视觉吸引力且非常自然的签名。</p>
+<p><img src="https://www.altamiracorp.com/blog/118/files/signature-letter-j-opengl.png" alt="可变宽度签名字母J"></p>
+<blockquote>
+<p>译者注：<a href="https://www.altamiracorp.com/blog/employee-posts/capture-a-signature-on-ios" target="_blank" rel="external">原文</a>后的评论也值得一看哦！</p>
+</blockquote>
+<p>=====================</p>
+<p>译者注：欢迎非商业转载，但请一定注明出处：<a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a> ！</p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B6ff98eWs" target="_blank" rel="external">http://weibo.com/2076580237/B6ff98eWs</a>  以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+<p>版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="external">Creative Commons BY-NC-ND 3.0</a></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

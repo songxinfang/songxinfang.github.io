@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      使用 Swift 构建自定义（且“可设计”的）控件 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自 http://www.thinkandbuild.it/building-a-custom-and-designabl-control-in-swift/
+原作者：Yari D’areglia
+译者：@nixzhu
+=================================
+大约两年前，我写了一篇关于在 iOS 上构件自定义控件的教程。那篇教程获得了社区的高度赞赏，所以我决定将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Swift 构建自定义（且“可设计”的）控件 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-11-20-build-custom-control-in-swift/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自 http://www.thinkandbuild.it/building-a-custom-and-designabl-control-in-swift/
+原作者：Yari D’areglia
+译者：@nixzhu
+=================================
+大约两年前，我写了一篇关于在 iOS 上构件自定义控件的教程。那篇教程获得了社区的高度赞赏，所以我决定将">
+<meta property="og:image" content="http://www.thinkandbuild.it/wp-content/uploads/2013/02/slider_bg-150x150.png">
+<meta property="og:image" content="http://www.thinkandbuild.it/wp-content/uploads/2014/11/slider_active-150x150.png">
+<meta property="og:image" content="http://www.thinkandbuild.it/wp-content/uploads/2013/02/slider_handle.png">
+<meta property="og:image" content="http://www.thinkandbuild.it/wp-content/uploads/2014/11/Screen-Shot-2014-11-14-at-23.09.24.png">
+<meta property="og:image" content="http://www.thinkandbuild.it/wp-content/uploads/2014/11/slider_maskaction-300x112.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:26:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 Swift 构建自定义（且“可设计”的）控件 | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自 http://www.thinkandbuild.it/building-a-custom-and-designabl-control-in-swift/
+原作者：Yari D’areglia
+译者：@nixzhu
+=================================
+大约两年前，我写了一篇关于在 iOS 上构件自定义控件的教程。那篇教程获得了社区的高度赞赏，所以我决定将">
+<meta name="twitter:image" content="http://www.thinkandbuild.it/wp-content/uploads/2013/02/slider_bg-150x150.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">使用 Swift 构建自定义（且“可设计”的）控件</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自 <a href="http://www.thinkandbuild.it/building-a-custom-and-designabl-control-in-swift/" title="Permalink to How to build a custom (and “designable”) control in Swift" target="_blank" rel="external">http://www.thinkandbuild.it/building-a-custom-and-designabl-control-in-swift/</a></p>
+<p>原作者：<a href="https://twitter.com/bitwaker" target="_blank" rel="external">Yari D’areglia</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>大约两年前，我写了一篇关于在 iOS 上构件自定义控件的教程。那篇教程获得了社区的高度赞赏，所以我决定将其用 Swift 更新并加入 Designable/Inspectable 属性以支持直接在 Interface Builder 里调整控件的外观。</p>
+<p>在开始之前，你可以先稍微看看<a href="http://vimeo.com/111882383" target="_blank" rel="external">最终的效果</a>。</p>
+<h3 id="那就开始吧！"><a href="#那就开始吧！" class="headerlink" title="那就开始吧！"></a>那就开始吧！</h3><p>无论你是自己设计自定义用户界面，还是有专职的设计师帮你做，UIKit 的标准控件实在不能完全满足你的需求。</p>
+<p>例如，如若你想制作一个控件来帮助用户从 0 到 360 度之间选择一个角度？一个解决办法是创建一个圆形的滑块，并让用户拖动把手来选择一个角度值。你很可能在许多其他界面里看过这样的设计，但 UIKit 里并没有直接提供类似的东西。</p>
+<p>那么这就是一个绝佳的例子，能让我们暂时搁置 UIKit，并构建出特别的东西来。</p>
+<h3 id="子类化-UIControl"><a href="#子类化-UIControl" class="headerlink" title="子类化 UIControl"></a>子类化 UIControl</h3><p><strong>UIControl</strong> 类是 UIView 的子类，而且它是所有 UIKit 控件（例如 UIButton，UISlider，UISwitch 等）的父类。UIControl 实例的主要作用是创建一个逻辑以便将操作（action）引导到它们的目标（target）上，对于一个特别的用户界面，大部分时候都是根据它状态来画出不同的控件形态（例如高亮，选中，使不能……）</p>
+<p>使用 UIControl 时我们要管理三个重要的任务：</p>
+<ul>
+<li>画出用户界面</li>
+<li>追踪用户的交互</li>
+<li>管理 目标－操作（Target-Action） 模式</li>
+</ul>
+<p>在这个圆形滑块（Circular Slider）中，我们将要定义一个<strong>用户界面</strong>（就是圆形滑块本身），然后用户可以与之<strong>交互</strong>（移动把手）。用户的决定会被转化成<strong>操作（action）</strong>对应到控件的<strong>目标（target）</strong></p>
+<p>我们准备好打开 Xcode。我建议你下载本文的<a href="https://github.com/ariok/BWCircularSlider" target="_blank" rel="external">完整项目</a>，以便跟着本教程来阅读代码。</p>
+<p>我们将走一遍上面列出的三个步骤。这些步骤是完全模块化的，也就是说，如果你对我如何画出组件不感兴趣，那可以直接跳到第二步和第三步。</p>
+<p>打开 <strong>BWCircluarSlider.swift</strong> 跟着下面的小节走：</p>
+<h3 id="1-绘制用户界面"><a href="#1-绘制用户界面" class="headerlink" title="1) 绘制用户界面"></a>1) 绘制用户界面</h3><p>我爱 Core Graphics 而且我想要创建的东西你还可以在你自己试验时再修改。我唯一想用 UIKit 绘制的部分是 textfield，它用于呈现滑块的值。</p>
+<p>警告：需要一些 <strong>Core Graphics</strong> 知识，至少你要能看懂这些代码，一路上我会尽量解释它们。</p>
+<p>让我们先分析一下这个控件的不同部分，以便对我们要绘制的东西有更好的体会。</p>
+<p>首先是一个<strong>黑色圆圈</strong>，它用作滑块的背景。</p>
+<p><img src="http://www.thinkandbuild.it/wp-content/uploads/2013/02/slider_bg-150x150.png" alt="" title="slider_bg"></p>
+<p>然后是<strong>操作区域</strong>，用一个从蓝色到紫色的梯度值填充。</p>
+<p><img src="http://www.thinkandbuild.it/wp-content/uploads/2014/11/slider_active-150x150.png" alt="" title="slider_active"></p>
+<p>再之后是<strong>把手</strong>，用户会拖动它以选择不同的角度值。</p>
+<p><img src="http://www.thinkandbuild.it/wp-content/uploads/2013/02/slider_handle.png" alt="" title="slider_handle"></p>
+<p>最后，用一个 <strong>TextField</strong> 来显示选择的角度值。在下一个版本里，它同样会接受从键盘输入的值。</p>
+<p><img src="http://www.thinkandbuild.it/wp-content/uploads/2014/11/Screen-Shot-2014-11-14-at-23.09.24.png" alt="" title="Screen Shot 2014-11-14 at 23.09.24"></p>
+<p>我们主要使用 <code>drawRect</code> 函数绘制界面，那第一步就是得到当前的绘图上下文。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> ctx = <span class="type">UIGraphicsGetCurrentContext</span>()</div></pre></td></tr></table></figure>
+<h4 id="绘制背景"><a href="#绘制背景" class="headerlink" title="绘制背景"></a>绘制背景</h4><p>背景被定义为一个360°的圆弧。这很容易通过 <code>CGContextAddArc</code> 来定义出合适的路径再将其画出。</p>
+<p>下面的代码即可完成这个简单的任务：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 构建圆圈</span></div><div class="line"><span class="type">CGContextAddArc</span>(ctx, <span class="type">CGFloat</span>(<span class="keyword">self</span>.frame.size.width / <span class="number">2.0</span>), <span class="type">CGFloat</span>(<span class="keyword">self</span>.frame.size.height / <span class="number">2.0</span>), radius, <span class="number">0</span>, <span class="type">CGFloat</span>(<span class="type">M_PI</span> * <span class="number">2</span>), <span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="comment">// 设置填充/笔画颜色</span></div><div class="line"><span class="type">UIColor</span>(red: <span class="number">0.0</span>, green: <span class="number">0.0</span>, blue: <span class="number">0.0</span>, alpha: <span class="number">1.0</span>).<span class="keyword">set</span>()</div><div class="line"></div><div class="line"><span class="comment">// 设置线段信息</span></div><div class="line"><span class="type">CGContextSetLineWidth</span>(ctx, <span class="number">72</span>)</div><div class="line"><span class="type">CGContextSetLineCap</span>(ctx, kCGLineCapButt)</div><div class="line"></div><div class="line"><span class="comment">// 绘制！</span></div><div class="line"><span class="type">CGContextDrawPath</span>(ctx, kCGPathStroke)</div></pre></td></tr></table></figure>
+<p>函数 <strong>CGContextArc</strong> 接受圆弧的中心坐标以及半径（一个私有的整型变量）。然后它需要以弧度表示的开始角度和结束角度（你可以在 BWCircularSlider.swift 文件的顶部找到一个数学帮助方法的列表），最后一个参数是绘制方向，0表示逆时针方向。</p>
+<p>其他代码是一些设置，例如颜色和线宽。最后我们使用 <strong>CGContextDrawPath</strong> 画出我们的圆弧路径。</p>
+<h4 id="绘制操作区域"><a href="#绘制操作区域" class="headerlink" title="绘制操作区域"></a>绘制操作区域</h4><p>这个部分就稍微要些技巧。我们要绘制一个被图像遮盖的线性梯度图。来看看这是怎样的过程。</p>
+<p><img src="http://www.thinkandbuild.it/wp-content/uploads/2014/11/slider_maskaction-300x112.png" alt="" title="slider_maskaction"></p>
+<p>掩模图像就像一个洞，通过它我们只能看见原始梯度方块的一部分。</p>
+<p>稍微有趣的不同是这一次的圆弧将有一个阴影，以创建一个有着虚化效果的掩模图像。</p>
+<h4 id="创建掩模图像"><a href="#创建掩模图像" class="headerlink" title="创建掩模图像"></a>创建掩模图像</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="type">UIGraphicsBeginImageContext</span>(<span class="type">CGSizeMake</span>(<span class="keyword">self</span>.bounds.size.width,<span class="keyword">self</span>.bounds.size.height));</div><div class="line"><span class="keyword">let</span> imageCtx = <span class="type">UIGraphicsGetCurrentContext</span>()</div><div class="line"><span class="type">CGContextAddArc</span>(imageCtx, <span class="type">CGFloat</span>(<span class="keyword">self</span>.frame.size.width/<span class="number">2</span>)  , <span class="type">CGFloat</span>(<span class="keyword">self</span>.frame.size.height/<span class="number">2</span>), radius, <span class="number">0</span>, <span class="type">CGFloat</span>(<span class="type">DegreesToRadians</span>(<span class="type">Double</span>(angle))) , <span class="number">0</span>);</div><div class="line"><span class="type">UIColor</span>.redColor().<span class="keyword">set</span>()</div><div class="line"></div><div class="line"><span class="comment">// 使用阴影创建模糊效果</span></div><div class="line"><span class="type">CGContextSetShadowWithColor</span>(imageCtx, <span class="type">CGSizeMake</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="type">CGFloat</span>(<span class="keyword">self</span>.angle/<span class="number">15</span>), <span class="type">UIColor</span>.blackColor().<span class="type">CGColor</span>);</div><div class="line"></div><div class="line"><span class="comment">// 定义路径</span></div><div class="line"><span class="type">CGContextSetLineWidth</span>(imageCtx, <span class="type">Config</span>.<span class="type">TB_LINE_WIDTH</span>)</div><div class="line"><span class="type">CGContextDrawPath</span>(imageCtx, kCGPathStroke)</div><div class="line"></div><div class="line"><span class="comment">// 保存上下文内容为 mask</span></div><div class="line"><span class="keyword">var</span> mask:<span class="type">CGImageRef</span> = <span class="type">CGBitmapContextCreateImage</span>(<span class="type">UIGraphicsGetCurrentContext</span>());</div><div class="line"><span class="type">UIGraphicsEndImageContext</span>();</div></pre></td></tr></table></figure>
+<p>首先，我们创建一个图像上下文，然后激活阴影。函数 <strong>CGContextSetShadowWithColor</strong> 帮助我们选择：</p>
+<ul>
+<li>上下文</li>
+<li>偏移值（这里并不需要）</li>
+<li>虚化值（我们通过当前角度处以15来参数化这个值以便当用户操作时在模糊区域获得一个简单的动画）</li>
+<li>颜色</li>
+</ul>
+<p>我们再次绘制一个圆弧，这一次取决于<strong>当前角度</strong>。</p>
+<p>例如，角度是 360° 时我们绘制一个满圆，如果是 90° 我们就绘制它的一部分。最后我们使用函数 <strong>CGBitmapContextCreateImage</strong> 从当前的绘制上得到一个图像。这个图像就是我们的掩模图像。</p>
+<h4 id="裁减上下文"><a href="#裁减上下文" class="headerlink" title="裁减上下文"></a>裁减上下文</h4><p>现在我们有了一个掩模图像，我们就能定义一个“洞”以通过它来看到梯度图像。</p>
+<p>我们使用函数 <strong>CGContextClipToMask</strong> 来裁剪上下文，并传递我们刚才创建的掩模图像。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="type">CGContextClipToMask</span>(ctx, <span class="keyword">self</span>.bounds, mask);</div></pre></td></tr></table></figure>
+<p>最后我们绘制梯度图像：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 将颜色分成不同部分(rgba)</span></div><div class="line"><span class="keyword">let</span> startColorComps:<span class="type">UnsafePointer</span> = <span class="type">CGColorGetComponents</span>(startColor.<span class="type">CGColor</span>);</div><div class="line"><span class="keyword">let</span> endColorComps:<span class="type">UnsafePointer</span> = <span class="type">CGColorGetComponents</span>(endColor.<span class="type">CGColor</span>);</div><div class="line"></div><div class="line"><span class="keyword">let</span> components : [<span class="type">CGFloat</span>] = [</div><div class="line">    startColorComps[<span class="number">0</span>], startColorComps[<span class="number">1</span>], startColorComps[<span class="number">2</span>], <span class="number">1.0</span>,     <span class="comment">// 起始颜色 color</span></div><div class="line">    endColorComps[<span class="number">0</span>], endColorComps[<span class="number">1</span>], endColorComps[<span class="number">2</span>], <span class="number">1.0</span>      <span class="comment">// 结束颜色</span></div><div class="line">]</div><div class="line"></div><div class="line"><span class="comment">// 设置梯度</span></div><div class="line"><span class="keyword">let</span> baseSpace = <span class="type">CGColorSpaceCreateDeviceRGB</span>()</div><div class="line"><span class="keyword">let</span> gradient = <span class="type">CGGradientCreateWithColorComponents</span>(baseSpace, components, <span class="literal">nil</span>, <span class="number">2</span>)</div><div class="line"></div><div class="line"><span class="comment">// 梯度方向</span></div><div class="line"><span class="keyword">let</span> startPoint = <span class="type">CGPointMake</span>(<span class="type">CGRectGetMidX</span>(rect), <span class="type">CGRectGetMinY</span>(rect))</div><div class="line"><span class="keyword">let</span> endPoint = <span class="type">CGPointMake</span>(<span class="type">CGRectGetMidX</span>(rect), <span class="type">CGRectGetMaxY</span>(rect))</div><div class="line"></div><div class="line"><span class="comment">// 绘制梯度图</span></div><div class="line"><span class="type">CGContextDrawLinearGradient</span>(ctx, gradient, startPoint, endPoint, <span class="number">0</span>);</div><div class="line"><span class="type">CGContextRestoreGState</span>(ctx);</div></pre></td></tr></table></figure>
+<p>绘制梯度的过程比较长，但基本上分成4个部分（如代码中的注释所示）：</p>
+<ul>
+<li>定义颜色</li>
+<li>定义梯度方向</li>
+<li>选择颜色空间</li>
+<li>创建并绘制梯度</li>
+</ul>
+<p>感谢掩模图像，梯度矩形只有一部分是可见的了。</p>
+<h4 id="绘制把手"><a href="#绘制把手" class="headerlink" title="绘制把手"></a>绘制把手</h4><p>现在我们要根据当前角度在正确的位置绘制把手。这一步在绘制方面很简单（就是画出一个白色圆盘），但它需要一些计算才能得到把手的正确位置。</p>
+<p>我们使用三角学转换一个<strong>标量数字</strong>为一个 <strong>CGPoint</strong>。别害怕，只不过是使用预定义的 Sin 和 Cos 函数罢了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">pointFromAngle</span><span class="params">(angleInt: Int)</span></span> -&gt; <span class="type">CGPoint</span> &#123;</div><div class="line">    <span class="comment">// 圆形中心</span></div><div class="line">    <span class="keyword">let</span> centerPoint = <span class="type">CGPointMake</span>(<span class="keyword">self</span>.frame.size.width/<span class="number">2.0</span> - <span class="type">Config</span>.<span class="type">TB_LINE_WIDTH</span>/<span class="number">2.0</span>, <span class="keyword">self</span>.frame.size.height/<span class="number">2.0</span> - <span class="type">Config</span>.<span class="type">TB_LINE_WIDTH</span>/<span class="number">2.0</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 圆圈上点的位置</span></div><div class="line">    <span class="keyword">var</span> result:<span class="type">CGPoint</span> = <span class="type">CGPointZero</span></div><div class="line">    <span class="keyword">let</span> y = round(<span class="type">Double</span>(radius) * sin(<span class="type">DegreesToRadians</span>(<span class="type">Double</span>(-angleInt)))) + <span class="type">Double</span>(centerPoint.y)</div><div class="line">    <span class="keyword">let</span> x = round(<span class="type">Double</span>(radius) * cos(<span class="type">DegreesToRadians</span>(<span class="type">Double</span>(-angleInt)))) + <span class="type">Double</span>(centerPoint.x)</div><div class="line">    result.y = <span class="type">CGFloat</span>(y)</div><div class="line">    result.x = <span class="type">CGFloat</span>(x)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>给定一个角度，找到圆周上的合适位置，我们同时也需要圆周的中心和半径。</p>
+<p>使用 sin 函数我们得到 Y 轴的值，使用 cos 函数我们得到 X 轴的值。</p>
+<p>记住每个函数的返回值都以1为假想半径。我们只需将结果乘以我们的半径然后相对于圆周中心移动即可。</p>
+<p>我希望下面的公式会帮助你更好地理解：</p>
+<pre><code>point.y = center.y + (radius * sin(angle));
+point.x = center.x + (radius * cos(angle));
+</code></pre><p>现在我们知道如何得到把手的位置，那就使用我们刚创建的函数来绘制它：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">drawTheHandle</span><span class="params">(ctx: CGContextRef)</span></span> &#123;</div><div class="line">    <span class="type">CGContextSaveGState</span>(ctx);</div><div class="line"></div><div class="line">    <span class="comment">// 我爱阴影</span></div><div class="line">    <span class="type">CGContextSetShadowWithColor</span>(ctx, <span class="type">CGSizeMake</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="number">3</span>, <span class="type">UIColor</span>.blackColor().<span class="type">CGColor</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 获取把手位置</span></div><div class="line">    <span class="keyword">var</span> handleCenter = pointFromAngle(angle)</div><div class="line"></div><div class="line">    <span class="comment">// 绘制！</span></div><div class="line">    <span class="type">UIColor</span>(white:<span class="number">1.0</span>, alpha:<span class="number">0.7</span>).<span class="keyword">set</span>();</div><div class="line">    <span class="type">CGContextFillEllipseInRect</span>(ctx, <span class="type">CGRectMake</span>(handleCenter.x, handleCenter.y, <span class="type">Config</span>.<span class="type">TB_LINE_WIDTH</span>, <span class="type">Config</span>.<span class="type">TB_LINE_WIDTH</span>));</div><div class="line"></div><div class="line">    <span class="type">CGContextRestoreGState</span>(ctx);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>步骤是：</p>
+<ul>
+<li>保存当前上下文（当你要在不同的函数做绘制时，保存当前上下文状态是一个最佳实践）</li>
+<li>为把手设置阴影</li>
+<li>定义把手颜色并使用函数 <strong>CGContextFillEllipseInRect</strong> 绘制</li>
+</ul>
+<p>我们可以在 drawRect 的最后调用这个函数。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">drawTheHandle(ctx)</div></pre></td></tr></table></figure>
+<p>现在我们做完了绘制的部分。</p>
+<h3 id="2-跟踪用户的交互"><a href="#2-跟踪用户的交互" class="headerlink" title="2) 跟踪用户的交互"></a>2) 跟踪用户的交互</h3><p>通过子类化 UIControl，我们能覆写三个特殊方法来提供自定义的跟踪行为。</p>
+<h4 id="开始跟踪"><a href="#开始跟踪" class="headerlink" title="开始跟踪"></a>开始跟踪</h4><p>当一个触摸事件发生于控件范围时，方法 <strong>beginTrackingWithTouch</strong> 就会被控件调用。</p>
+<p>来看看如何覆写它：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">beginTrackingWithTouch</span><span class="params">(touch: UITouch, withEvent event: UIEvent)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">super</span>.beginTrackingWithTouch(touch, withEvent: event)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它返回一个 <strong>Bool</strong> 值，这决定了控件是否需要在触摸变为拖动时依然响应。在我们情况里，我们需要跟踪拖动，所以我们返回 <strong>true</strong>。这个方法接受两个参数，触摸对象和事件。</p>
+<h4 id="持续跟踪"><a href="#持续跟踪" class="headerlink" title="持续跟踪"></a>持续跟踪</h4><p>前一个方法里我们指明要持续跟踪，所以一个特别的方法 <strong>continueTrackingWithTouch</strong> 就会在用户拖动时执行：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">continueTrackingWithTouch</span><span class="params">(touch: UITouch, withEvent event: UIEvent)</span></span> -&gt; <span class="type">Bool</span></div></pre></td></tr></table></figure>
+<p>这个方法返回一个 <strong>Bool</strong> 值表示触摸跟踪是否该持续下去。</p>
+<p>我们使用这个方法根据触摸的位置来过滤用户的操作。例如，我们可以选择只在触摸位置与把手相交时才激活控件。当然，我们的控件不需要这样做，因为我们想移动把手以响应任意触摸位置。</p>
+<p>本教程中，这个方法负责改变把手的位置（以及我们接下来一节要做的发送操作到目标）。</p>
+<p>使用如下代码覆写它：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">continueTrackingWithTouch</span><span class="params">(touch: UITouch, withEvent event: UIEvent)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">super</span>.continueTrackingWithTouch(touch, withEvent: event)</div><div class="line"></div><div class="line">    <span class="keyword">let</span> lastPoint = touch.locationInView(<span class="keyword">self</span>)</div><div class="line"></div><div class="line">    <span class="keyword">self</span>.moveHandle(lastPoint)</div><div class="line"></div><div class="line">    <span class="keyword">self</span>.sendActionsForControlEvents(<span class="type">UIControlEvents</span>.<span class="type">ValueChanged</span>)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先我们使用 <strong>locationInView</strong> 获取触摸位置。然后将其传递给函数 <strong>moveHandle</strong>，它会将触摸位置转换为把手的合适的位置。</p>
+<p>我所说的“合适的位置”是什么意思呢？</p>
+<p>把手应该只能在由背景圆弧定义的圆圈的范围内移动。但我们不想要强制用户在这个狭小的空间内移动他的手指才能控制把手，因为这种体验是非常令人沮丧的。所以我们将接受任何触摸位置并将其转换为把手的合适的位置。</p>
+<p>函数 <strong>moveHandle</strong> 负责完成这个工作，而且，在这个函数里，我们会执行转换，它会显示我们滑块的角度值。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">moveHandle</span><span class="params">(lastPoint: CGPoint)</span></span> &#123;</div><div class="line">    <span class="comment">// 获得中心</span></div><div class="line">    <span class="keyword">let</span> centerPoint:<span class="type">CGPoint</span>  = <span class="type">CGPointMake</span>(<span class="keyword">self</span>.frame.size.width/<span class="number">2</span>, <span class="keyword">self</span>.frame.size.height/<span class="number">2</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 计算从中心到方向随意位置的方向</span></div><div class="line">    <span class="keyword">let</span> currentAngle:<span class="type">Double</span> = <span class="type">AngleFromNorth</span>(centerPoint, p2: lastPoint, flipped: <span class="literal">false</span>);</div><div class="line">    <span class="keyword">let</span> angleInt = <span class="type">Int</span>(floor(currentAngle))</div><div class="line"></div><div class="line">    <span class="comment">// 存储新的角度</span></div><div class="line">    angle = <span class="type">Int</span>(<span class="number">360</span> - angleInt)</div><div class="line"></div><div class="line">    <span class="comment">// 更新 textfiled</span></div><div class="line">    textField!.text = <span class="string">"(angle)"</span></div><div class="line"></div><div class="line">    <span class="comment">// 重绘</span></div><div class="line">    setNeedsDisplay()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>大部分工作由 <strong>AngleFromNorth</strong> 完成。给定 2 个点，它返回一个连接它们的假想线的角度。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">AngleFromNorth</span><span class="params">(p1:CGPoint , p2:CGPoint , flipped:Bool)</span></span> -&gt; <span class="type">Double</span> &#123;</div><div class="line">    <span class="keyword">var</span> v:<span class="type">CGPoint</span>  = <span class="type">CGPointMake</span>(p2.x - p1.x, p2.y - p1.y)</div><div class="line">    <span class="keyword">let</span> vmag:<span class="type">CGFloat</span> = <span class="type">Square</span>(<span class="type">Square</span>(v.x) + <span class="type">Square</span>(v.y))</div><div class="line">    <span class="keyword">var</span> result:<span class="type">Double</span> = <span class="number">0.0</span></div><div class="line">    v.x /= vmag;</div><div class="line">    v.y /= vmag;</div><div class="line">    <span class="keyword">let</span> radians = <span class="type">Double</span>(atan2(v.y,v.x))</div><div class="line">    result = <span class="type">RadiansToDegrees</span>(radians)</div><div class="line">    <span class="keyword">return</span> (result &gt;= <span class="number">0</span>  ? result : result + <span class="number">360.0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>（注意：我不是 AngleFromNorth 的作者，我直接从 Apple 的例子程序 clockControl 里拿来了它）</p>
+<p>现在我们有了用角度表示的值，我们将其存储在属性 <strong>angle</strong> 里，并更新 textfield 的值。</p>
+<p>函数 setNeedDisplay 确保方法 drawRect 会被尽快调用，以使用新的角度值进行绘制。</p>
+<h4 id="结束跟踪"><a href="#结束跟踪" class="headerlink" title="结束跟踪"></a>结束跟踪</h4><p>下面的函数会在跟踪结束后调用：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">endTrackingWithTouch</span><span class="params">(touch: UITouch, withEvent event: UIEvent)</span></span> &#123;</div><div class="line">    <span class="keyword">super</span>.endTrackingWithTouch(touch, withEvent: event)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这里例子里，我们不需要覆写这个函数，但如果你需要在用户与控件完成交互后执行一些额外的操作的话，这个函数就会很有用。</p>
+<h3 id="3-Target-Action-模式"><a href="#3-Target-Action-模式" class="headerlink" title="3) Target-Action 模式"></a>3) Target-Action 模式</h3><p>到了这里后圆形滑块应该可以正常工作了。你现在可以拖动把手并看到 textfield 里值的改变。</p>
+<h4 id="为控件事件发送操作"><a href="#为控件事件发送操作" class="headerlink" title="为控件事件发送操作"></a>为控件事件发送操作</h4><p>如果我们想要保证 UIControl 的行为的连贯性，那我们就要在值改变时发出通知。我们可以使用函数 <strong>sendActionsForControlEvents</strong> 指定特定的事件类型来做到这一点。此例中，事件类型是 <strong>UIControlEventValueChanged</strong>。</p>
+<p>事件类型的可能值相当多（按住cmd并单击 Xcode 里显示的 UIControlEventValueChanged 就能看到这个列表）。例如，如果你的控件是 UITextField 的子类，你可能会对 <strong>UIControlEventEdigitingDidBegin</strong> 感兴趣，或者，如果你想在松开触摸时发出通知，那么可以使用 UIControlTouchUpInside。</p>
+<p>如果你回过头看第二节，你会看到我们在函数 continueTrackingWithTouch 返回前调用了 <strong>sendActionsForControlEvents</strong>。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.sendActionsForControlEvents(<span class="type">UIControlEvents</span>.<span class="type">ValueChanged</span>)</div></pre></td></tr></table></figure>
+<p>感谢这一句，当用户移动把手改变滑块值时，每个被注册的对象都会收到这个改变的通知。</p>
+<h3 id="如何使用控件"><a href="#如何使用控件" class="headerlink" title="如何使用控件"></a>如何使用控件</h3><p>我们有了一个自定义控件，那就在我们的应用中使用它吧。</p>
+<p>由于我们的控件是 UIControl 的子类，所以它不能直接在 Interface Builder 中使用。但不要担心，我们可以使用一个 UIView 作为桥梁来将 UIControl 作为桥接视图的子视图。</p>
+<p>打开文件 <strong>BWCircularSliderView.swift</strong> 查看 <strong>awakeFromNib</strong> 方法：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">awakeFromNib</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">super</span>.awakeFromNib()</div><div class="line"></div><div class="line">    <span class="comment">// 构建滑块</span></div><div class="line">    <span class="keyword">let</span> slider:<span class="type">BWCircularSlider</span> = <span class="type">BWCircularSlider</span>(startColor:<span class="keyword">self</span>.startColor, endColor:<span class="keyword">self</span>.endColor, frame: <span class="keyword">self</span>.bounds)</div><div class="line"></div><div class="line">    <span class="comment">// 关联 Action/Target 到滑块</span></div><div class="line">    slider.addTarget(<span class="keyword">self</span>, action: <span class="string">"valueChanged:"</span>, forControlEvents: <span class="type">UIControlEvents</span>.<span class="type">ValueChanged</span>)</div><div class="line"></div><div class="line">    <span class="comment">// 将滑块作为子视图</span></div><div class="line">    <span class="keyword">self</span>.addSubview(slider)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们初始化了一个圆形滑块对象，并通过 <strong>init:startColor:endColor:frame</strong> 为其添加了颜色和 frame 信息。这个自定义的初始化器保存了梯度颜色以及设置控件的 frame 等同于“桥接”视图的边界。这就意味着控件将继承视图的尺寸（你可以使用AutoLayout得到同样的效果）。</p>
+<p>我们现在可以定义如何与控件交互，感谢方法 <strong>addTarget:action:forControlEvent:</strong>。</p>
+<p>这个方法只是为控件的一个特定的事件设置了一个 target-action 模式。如果你记得，圆形控件会在每次用户移动把手时发送一个 UIControlEventValueChanged。所以我们能够使用如下代码注册一个操作到这个事件上：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">slider.addTarget(<span class="keyword">self</span>, action: <span class="string">"valueChanged:"</span>, forControlEvents: <span class="type">UIControlEvents</span>.<span class="type">ValueChanged</span>)</div></pre></td></tr></table></figure>
+<p>然后我们编写函数 <strong>valueChanged</strong> ，以便在值改变时做些事情：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">valueChanged</span><span class="params">(slider:BWCircularSlider)</span></span>&#123;</div><div class="line">    <span class="comment">// 根据新值做些事情……</span></div><div class="line">    <span class="built_in">println</span>(<span class="string">"Value changed (slider.angle)"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们使用了 Target-Action 模式，所以收到发送者（这里就是滑块）对应事件时就会调用这个操作。此例中，我们直接访问角度值，并简单地打印它。</p>
+<p>现在看看覆写方法 <strong>willMoveToSuperview</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#<span class="keyword">if</span> <span class="type">TARGET_INTERFACE_BUILDER</span></div><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">willMoveToSuperview</span><span class="params">(newSuperview: UIView?)</span></span> &#123;</div><div class="line">    <span class="keyword">let</span> slider:<span class="type">BWCircularSlider</span> = <span class="type">BWCircularSlider</span>(startColor:<span class="keyword">self</span>.startColor, endColor:<span class="keyword">self</span>.endColor, frame: <span class="keyword">self</span>.bounds)</div><div class="line">    <span class="keyword">self</span>.addSubview(slider)</div><div class="line">&#125;</div><div class="line">#<span class="keyword">else</span></div></pre></td></tr></table></figure>
+<p>这个代码，与 <strong>@IBInspectable</strong> 和 <strong>@IBDesignable</strong> 关键字一道，都是直接在 Interface Builder 查看视图的必要条件（查看<a href="http://www.thinkandbuild.it/building-custom-ui-element-with-ibdesignable/" target="_blank" rel="external">这个教程</a>获取更多与 IBDesignable 相关的信息）。</p>
+<p>（TARGET_INTERFACE_BUILDER 表示我们只想在 Interface Builder 里执行这个代码，App 运行时就不用了）</p>
+<p>现在我们就可以通过 Storyboard 添加一个 BWCircularSliderView 实例，并能在 Interface Builder 里直接修改 startColor 和 endColor 属性，控件的预览将立即更新在屏幕上。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>照本教程展示的步骤，你可以创建 <strong>任何你想要的东西</strong>。</p>
+<p>可能还有其他的方式能够做到类似这样的事情，但我尽量遵守了 Apple 的建议，展示给你的是 100% 的文档推荐方式。</p>
+<p>如有任何疑问、建议或者你想要分享的关于自定义控件的好点子，你可以在 <a href="https://twitter.com/bitwaker" title="Twitter" target="_blank" rel="external">twitter</a> 上找我。</p>
+<p>Ciao!</p>
+<p><a href="https://github.com/ariok/BWCircularSlider" target="_blank" rel="external">下载源代码</a> ，<a href="https://twitter.com/bitwaker" target="_blank" rel="external">关注 @bitwaker</a></p>
+<p>===============</p>
+<p>译者注：最近我所在公司开发的<a href="http://catchchat.me/" target="_blank" rel="external">秒视 CatchChat</a> 推出了1.6版，它是一个可以发送与接收图片以及限定时长视频的社交应用，具有设计精美，操作快速的特点，欢迎使用！我的秒视ID是 nixzhu，也欢迎来扰！</p>
+<p>译者注：欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/Bx8x1DKMD" target="_blank" rel="external">http://weibo.com/2076580237/Bx8x1DKMD</a> 或 Tweet <a href="https://twitter.com/nixzhu/status/535304706990415872" target="_blank" rel="external">https://twitter.com/nixzhu/status/535304706990415872</a> 以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝扫描下方二维码随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

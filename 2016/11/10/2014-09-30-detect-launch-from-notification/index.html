@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      检测是否通过点击通知来启动App | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="作者：@nixzhu
+=================================
+最近做的一个需求：我们的App 会收到不同类型的远程推送通知，在某些推送到达时，若用户是通过点击通知（从通知栏、通知中心或锁屏通知）进入应用，那需要做一些额外的操作（例如执行一些后台请求、显示某个界面等）。当然，若是从 SpringBoard 启动应用，就不做这些额外的操作。
+在这篇文章里，作者比较详细的说明">
+<meta property="og:type" content="article">
+<meta property="og:title" content="检测是否通过点击通知来启动App | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-09-30-detect-launch-from-notification/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="作者：@nixzhu
+=================================
+最近做的一个需求：我们的App 会收到不同类型的远程推送通知，在某些推送到达时，若用户是通过点击通知（从通知栏、通知中心或锁屏通知）进入应用，那需要做一些额外的操作（例如执行一些后台请求、显示某个界面等）。当然，若是从 SpringBoard 启动应用，就不做这些额外的操作。
+在这篇文章里，作者比较详细的说明">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:26:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="检测是否通过点击通知来启动App | songxinfang's blog">
+<meta name="twitter:description" content="作者：@nixzhu
+=================================
+最近做的一个需求：我们的App 会收到不同类型的远程推送通知，在某些推送到达时，若用户是通过点击通知（从通知栏、通知中心或锁屏通知）进入应用，那需要做一些额外的操作（例如执行一些后台请求、显示某个界面等）。当然，若是从 SpringBoard 启动应用，就不做这些额外的操作。
+在这篇文章里，作者比较详细的说明">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">检测是否通过点击通知来启动App</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>最近做的一个需求：<a href="http://catchchat.me/" target="_blank" rel="external">我们的App</a> 会收到不同类型的远程推送通知，在某些推送到达时，若用户是通过点击通知（从通知栏、通知中心或锁屏通知）进入应用，那需要做一些额外的操作（例如执行一些后台请求、显示某个界面等）。当然，若是从 SpringBoard 启动应用，就不做这些额外的操作。</p>
+<p>在<a href="http://www.abdus.me/ios-programming-tips/handle-push-notifications-when-arrived-ios/" target="_blank" rel="external">这篇文章</a>里，作者比较详细的说明了一般方法。我现在简要介绍如下：</p>
+<p>首先是应用状态：</p>
+<ul>
+<li>关闭状态（应用被用户手动杀掉、被系统杀掉或者手机刚刚重启）</li>
+<li>运行状态（应用位于前台，当前用户很可能在使用它）</li>
+<li>暂停状态（用户按下 Home 键，锁屏键，或者通过多任务切换到其他应用，那我们的应用就暂停了）</li>
+</ul>
+<p>对于关闭状态，我们能很好地确定是通过点击通知而不是从SpringBoard点击应用图标来进入应用的。只需要检查 appDelegate 的<code>didFinishLaunchingWithOptions:</code> 方法的参数 launchOptions 是否存在即可。当然，<code>willFinishLaunchingWithOptions:</code> 也可以。</p>
+<p>更进一步，我们可以通过 <code>[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]</code> 来取出这个通知，以便再对通知的类型等做一些判断，以便后续操作。</p>
+<p>但上面这篇文章的介绍并不全面。</p>
+<p>因为，若应用处于暂停状态，无论是从点击通知还是从 SpringBoard 进入应用，<code>willFinishLaunchingWithOptions:</code> 和 <code>didFinishLaunchingWithOptions:</code> 都是不会执行的。也就是说，上面的方式无效了。</p>
+<p>但天无绝人之路，Apple 早已考虑好这种情况，你可以在你所使用的接收通知的 appDelegate 方法，例如 <code>didReceiveRemoteNotification:</code> 里，来判断通知类型，进而做出其他操作。</p>
+<p>需要注意的是，这些方法在运行状态和暂停状态都会执行（不同的是是否会听到通知声以及看到通知）。所以该如何区别呢？</p>
+<p>答案是，在你做特别的操作之前，先判断 <code>application.applicationState == UIApplicationStateInactive</code> ，这样就能保证，当应用是在暂停状态下点击通知进入的，就会执行你的特别操作，而从 SpringBoard 进入时就不会。当然，应用在运行状态时也不会（不然当用户正在使用时，而突然进入某个特别的界面不是很奇怪吗？）。</p>
+<p>这也是我新学的一招，因为以前做应用很少处理通知。特别感谢网易“老汉”的指导，他还特别指明：</p>
+<blockquote>
+<p>在实际的代码中，需要注意当应用在前台时，若用户下拉通知中心（或上拉控制中心），app 也是处于 inactive 状态的。要和真正的 background -&gt; inactive -&gt; active 区分，不然就可能会判断不准确。</p>
+</blockquote>
+<p>=====================</p>
+<p>作者注：欢迎非商业转载，但请一定注明出处：<a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a> ！</p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/BppoGzTKb" target="_blank" rel="external">http://weibo.com/2076580237/BppoGzTKb</a>  以分享给更多人！</p>
+<p>如果你认为这篇原创文章不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳作者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+<p>版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="external">Creative Commons BY-NC-ND 3.0</a></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

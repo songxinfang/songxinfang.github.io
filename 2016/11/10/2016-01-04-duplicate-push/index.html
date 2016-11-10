@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      防止点击 Cell 时 ViewController 被重复 Push | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="寻找疑难问题的解决办法，再做合理分析以便确定可使用
+作者：@nixzhu
+
+不少 iOS 开发者都遇到过：在 tableView(:didSelectRowAtIndexPath:) 里做 push 到其它界面的操作，但某些用户点击一个 cell 后，可能会触发两次 push。这种情况出现的概率较小，而检查代码也很难发现问题，实在让人烦恼！
+因为毕竟做了两次 push，那么 tableView(:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="防止点击 Cell 时 ViewController 被重复 Push | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2016-01-04-duplicate-push/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="寻找疑难问题的解决办法，再做合理分析以便确定可使用
+作者：@nixzhu
+
+不少 iOS 开发者都遇到过：在 tableView(:didSelectRowAtIndexPath:) 里做 push 到其它界面的操作，但某些用户点击一个 cell 后，可能会触发两次 push。这种情况出现的概率较小，而检查代码也很难发现问题，实在让人烦恼！
+因为毕竟做了两次 push，那么 tableView(:">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:29:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="防止点击 Cell 时 ViewController 被重复 Push | songxinfang's blog">
+<meta name="twitter:description" content="寻找疑难问题的解决办法，再做合理分析以便确定可使用
+作者：@nixzhu
+
+不少 iOS 开发者都遇到过：在 tableView(:didSelectRowAtIndexPath:) 里做 push 到其它界面的操作，但某些用户点击一个 cell 后，可能会触发两次 push。这种情况出现的概率较小，而检查代码也很难发现问题，实在让人烦恼！
+因为毕竟做了两次 push，那么 tableView(:">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">防止点击 Cell 时 ViewController 被重复 Push</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>寻找疑难问题的解决办法，再做合理分析以便确定可使用</p>
+<p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<hr>
+<p>不少 iOS 开发者都遇到过：在 <code>tableView(:didSelectRowAtIndexPath:)</code> 里做 push 到其它界面的操作，但某些用户点击一个 cell 后，可能会触发两次 push。这种情况出现的概率较小，而检查代码也很难发现问题，实在让人烦恼！</p>
+<p>因为毕竟做了两次 push，那么 <code>tableView(:didSelectRowAtIndexPath:)</code> 必然被调用了两次。但又因为这是一个 delegate 方法，是由 iOS 来调用的，所以怎样才算被“选中”实在难以猜想，何况不同的 iOS 版本还可能有差异。不过我们仍然有办法做处理，毕竟它被调用了两次，就算是用计数再判断的办法，我们也能防止同一次点击出现重复的 push。真实的问题是这种情况难以调试，因为问题很不容易出现，你怎么知道修改后的代码是工作的呢？</p>
+<p>没有关系，路都是人走出来的。<a href="https://www.google.com/search?client=safari&amp;rls=en&amp;q=ios+didselectrowatindexpath+push+twice&amp;ie=UTF-8&amp;oe=UTF-8" target="_blank" rel="external">搜索一下</a>就能看到其他开发者也遇到过此问题，我将常用的解决办法整理如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">tableView</span><span class="params">(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)</span></span> &#123;</div><div class="line">    <span class="keyword">defer</span> &#123;</div><div class="line">        tableView.deselectRowAtIndexPath(indexPath, animated: <span class="literal">true</span>)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> navigationController = navigationController &#123;</div><div class="line">        <span class="keyword">guard</span> navigationController.topViewController == <span class="keyword">self</span> <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// <span class="doctag">TODO:</span> performSegueWithIdentifier...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面代码利用的是 push 后会改变 navigationController 的 viewControllers stack，那么其 topViewController 自然就改变了。所以在 push 之前，我们先保证此时的 topViewController 是当前 ViewController，这样就可避免重复 push。</p>
+<p>我在这里还用了 defer 关键字，也就是无论如何，我们都可以取消 cell 的选中。当然，我们还应该判断 navigationController 的存在性，因为当前的 ViewController 不一定内嵌在某个 UINavigationController 里，segue 也并非只有 push(show) 一种。</p>
+<p>这样写真的有效吗？好在我能稍微比较容易地重现此问题。</p>
+<p>在我自己的实验里，若长按 cell，然后稍微减少手指的压力再立即增加压力，触发此 bug 的可能性就比较大。（这也许和具体的 app UI 逻辑的实现有关，也许你遇到的问题不是这样。另外，如果你没有观察到两次 push 间 viewControllers stack 的改变，那说明你遇到的问题更加诡异，此方法也可能不适用。）</p>
+<p>我通过打印的办法确认，在出现重复 push 的情况下，iOS 9.2 会调用两次 <code>tableView(:didSelectRowAtIndexPath:)</code>，但在此之间，当第一次 performSegue 时，UINavigationController 的 viewControllers stack 就已经被改变了，也就是说，第二次就不会再 push 了。</p>
+<p>既然只要 performSegue 就能改变 UINavigationController 的 viewControllers stack，那我们也不需要在 <code>tableView(:didSelectRowAtIndexPath:)</code> 里做处理，直接重载 ViewController 的 <code>performSegueWithIdentifier(:sender:)</code> 即可：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">performSegueWithIdentifier</span><span class="params">(identifier: String, sender: AnyObject?)</span></span> &#123;</div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> navigationController = navigationController &#123;</div><div class="line">        <span class="keyword">guard</span> navigationController.topViewController == <span class="keyword">self</span> <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">super</span>.performSegueWithIdentifier(identifier, sender: sender)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样代码逻辑会更好一点。进一步，若你的 app 里有许多 ViewController，也许它们都有可能出现重复 push。那为了避免重复代码，可以写一个基类让其他 ViewController 继承。</p>
+<p>注意，你可能会想说，怎么不在 <code>shouldPerformSegueWithIdentifier(:sender:)</code> 里做处理呢？不是更合理吗？</p>
+<p>这个方法看起来挺像这么回事，但可惜，它只会作用于直接在 IB 里连线的 segue，如果你手动 performSegue，它并不会被调用。这样的逻辑也说得通，毕竟你都手动调用了，哪还有该不该的问题呢？</p>
+<hr>
+<p>欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条</p>
+<ul>
+<li>Tweet <a href="https://twitter.com/nixzhu/status/683855985752932353" target="_blank" rel="external">https://twitter.com/nixzhu/status/683855985752932353</a> 或</li>
+<li>微博 <a href="http://weibo.com/2076580237/Dby78hFrM" target="_blank" rel="external">http://weibo.com/2076580237/Dby78hFrM</a>  </li>
+</ul>
+<p>以分享此文或参与讨论！</p>
+<p>读者开心了可请作者吃早餐：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

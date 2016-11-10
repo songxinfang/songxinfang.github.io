@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      处理键盘通知 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="自从 iOS 8 引入了第三方键盘扩展后（或更早），键盘通知就不太正常了。例如，若用户使用中文拼音键盘，弹出时UIKeyboardWillShowNotification可能发送不只一次（有可能两次，甚至三次）。
+作者：@nixzhu
+=================================
+近日在 iOS 9 beta4 上，我更观察到 UIKeyboardWillShowNotifi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="处理键盘通知 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2015-07-27-keyboard-man/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="自从 iOS 8 引入了第三方键盘扩展后（或更早），键盘通知就不太正常了。例如，若用户使用中文拼音键盘，弹出时UIKeyboardWillShowNotification可能发送不只一次（有可能两次，甚至三次）。
+作者：@nixzhu
+=================================
+近日在 iOS 9 beta4 上，我更观察到 UIKeyboardWillShowNotifi">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:24:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="处理键盘通知 | songxinfang's blog">
+<meta name="twitter:description" content="自从 iOS 8 引入了第三方键盘扩展后（或更早），键盘通知就不太正常了。例如，若用户使用中文拼音键盘，弹出时UIKeyboardWillShowNotification可能发送不只一次（有可能两次，甚至三次）。
+作者：@nixzhu
+=================================
+近日在 iOS 9 beta4 上，我更观察到 UIKeyboardWillShowNotifi">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">处理键盘通知</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>自从 iOS 8 引入了第三方键盘扩展后（或更早），键盘通知就不太正常了。例如，若用户使用中文拼音键盘，弹出时<code>UIKeyboardWillShowNotification</code>可能发送不只一次（有可能两次，甚至三次）。</p>
+<p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>近日在 iOS 9 beta4 上，我更观察到 <code>UIKeyboardWillShowNotification</code> 可能会少发，导致之前根据其发送次数做的算法不能正常工作，结果就是在使用中文拼音键盘时，本该处于键盘上方的输入框会被键盘挡住大部分。</p>
+<p>为了解决这个问题，同时也对键盘通知相关的代码做整理并重构（毕竟这些代码分散在 ViewController 里也不好维护，更难以重用），我想写一个单独的库是最好的选择。至于库的名字，“键盘侠”就很不错。虽然在中文里它不算个好词汇，不过英文念着还不错：KeyboardMan。</p>
+<p>先说一下之前对键盘通知<code>UIKeyboardWillShowNotification</code>发送多次的处理。</p>
+<p>在做键盘跟随动画时，我们需要根据键盘的高度来调整某些 View 的位置，或者要更新 UIScrollView（UITableView、UICollectionView）的 <code>contentOffset</code> 和 <code>contentInset</code>，以使某些内容不被键盘挡住。</p>
+<p>既然是键盘跟随动画，那必然要监听<code>UIKeyboardWillShowNotification</code>以获取键盘高度以及动画参数（时长和曲线类型）。因为当用户使用某些键盘时，<code>UIKeyboardWillShowNotification</code>并不止发送一次，第一次的高度并不是最后完整键盘的高度。如果我们简单地独立对待每一次通知，但由于调整<code>contentOffset</code>应该用增量的方式，将导致我们要在处理键盘通知前纪录当前的<code>contentOffset</code>并利用它实现增量的效果。很明显，“键盘弹出前的<code>contentOffset</code>”需要我们的小心维护，自然，这并不有趣。</p>
+<p>然后，上面的方式可能失效，例如当<code>UIKeyboardWillShowNotification</code>本该发送两次时却只发送了一次，那我们就不能获取到正确的键盘高度，以此，即不能正确设置<code>contentOffset</code>，也会导致键盘上的输入框会被键盘挡住（输入框的位置调整不需要考虑增量的问题，只需要正确的键盘高度）。</p>
+<p>虽说<code>UIKeyboardWillShowNotification</code>的发送次数不够很可能是 iOS 9 beta4 的 bug，但我们很难保证这样的 bug 不会在之后的正式版中出现。因此，我们还需要更好的办法。</p>
+<p>键盘通知除了我们常见的四个：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> <span class="type">UIKeyboardWillShowNotification</span>: <span class="type">String</span></div><div class="line"><span class="keyword">let</span> <span class="type">UIKeyboardDidShowNotification</span>: <span class="type">String</span></div><div class="line"><span class="keyword">let</span> <span class="type">UIKeyboardWillHideNotification</span>: <span class="type">String</span></div><div class="line"><span class="keyword">let</span> <span class="type">UIKeyboardDidHideNotification</span>: <span class="type">String</span></div></pre></td></tr></table></figure>
+<p>之外，还有两个 iOS 5 才引入的：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> <span class="type">UIKeyboardWillChangeFrameNotification</span>: <span class="type">String</span></div><div class="line"><span class="keyword">let</span> <span class="type">UIKeyboardDidChangeFrameNotification</span>: <span class="type">String</span></div></pre></td></tr></table></figure>
+<p>经我测试，在<code>UIKeyboardWillShowNotification</code>发送次数不正确时，<code>UIKeyboardWillChangeFrameNotification</code>和<code>UIKeyboardDidChangeFrameNotification</code>都能正确发送。这自然会成为解决问题的关键。</p>
+<p>因为我们要做的是键盘跟随动画，因此不考虑<code>UIKeyboardDidChangeFrameNotification</code>，因为<code>Did</code>表明它“滞后”了。那么<code>UIKeyboardWillChangeFrameNotification</code>就成为了我们唯一的希望。</p>
+<p>通过监听它，我们可以观察到它会在<code>UIKeyboardWillShowNotification</code>之前或者在<code>UIKeyboardDidHideNotification</code>之后发出。因为键盘隐藏的通知并没有不正常，所以我们不需要关心其在<code>UIKeyboardDidHideNotification</code>的发送。也就是说，我们要把<code>UIKeyboardWillChangeFrameNotification</code>当作<code>UIKeyboardWillShowNotification</code>来用，以保证获取到正确的键盘高度。但这样以来，键盘出现通知的“次数”就多了，我们还要想办法缩减到正确的次数。</p>
+<p>我们先把键盘通知分成两类：Show 和 Hide。因为<code>UIKeyboardWillChangeFrameNotification</code>会被当作 Show 来来使用，需要避免它在 Hide 时生效。</p>
+<p>于是我们定义一个结构 KeyboardInfo：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">struct</span> <span class="title">KeyboardInfo</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">let</span> animationDuration: <span class="type">NSTimeInterval</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">let</span> animationCurve: <span class="type">UInt</span></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">let</span> frameBegin: <span class="type">CGRect</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">let</span> frameEnd: <span class="type">CGRect</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> height: <span class="type">CGFloat</span> &#123;</div><div class="line">        <span class="keyword">return</span> frameEnd.height</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">let</span> heightIncrement: <span class="type">CGFloat</span></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Action</span> </span>&#123;</div><div class="line">        <span class="keyword">case</span> <span class="type">Show</span></div><div class="line">        <span class="keyword">case</span> <span class="type">Hide</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">let</span> action: <span class="type">Action</span></div><div class="line">    <span class="keyword">let</span> isSameAction: <span class="type">Bool</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>并定义一个变量：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> keyboardInfo: <span class="type">KeyboardInfo</span>?</div></pre></td></tr></table></figure>
+<p>每次收到键盘通知时，我们就更新此变量，其中<code>action</code>能表示当前是 Show 还是 Hide，而<code>isSameAction</code>需要计算，表示当前的<code>action</code>是否与之前的一样，可用于区别键盘通知类型的转换。</p>
+<p>那么我们的通知处理逻辑如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">keyboardWillShow</span><span class="params">(notification: NSNotification)</span></span> &#123;</div><div class="line"></div><div class="line">    handleKeyboard(notification, .<span class="type">Show</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">keyboardWillChangeFrame</span><span class="params">(notification: NSNotification)</span></span> &#123;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> keyboardInfo = keyboardInfo &#123;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> keyboardInfo.action == .<span class="type">Show</span> &#123;</div><div class="line">            handleKeyboard(notification, .<span class="type">Show</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">keyboardWillHide</span><span class="params">(notification: NSNotification)</span></span> &#123;</div><div class="line"></div><div class="line">    handleKeyboard(notification, .<span class="type">Hide</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">keyboardDidHide</span><span class="params">(notification: NSNotification)</span></span> &#123;</div><div class="line"></div><div class="line">    keyboardInfo = <span class="literal">nil</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中，私有函数<code>handleKeyboard(_, _)</code> 将通知里的信息取出生成 KeyboardInfo 并赋值给<code>keyboardInfo</code>。</p>
+<p>然后注意<code>keyboardWillChangeFrame</code>函数，它处理<code>UIKeyboardWillChangeFrameNotification</code>。因为此通知会在<code>UIKeyboardWillShowNotification</code>之前发送，要将它当作<code>UIKeyboardWillShowNotification</code>来用的前提是：</p>
+<ol>
+<li><code>keyboardInfo</code> 不存在，表示键盘还未弹出过，（因为 <code>UIKeyboardWillShowNotification</code> 至少会发送一次，故不处理 <code>UIKeyboardWillChangeFrameNotification</code>）</li>
+<li><code>keyboardInfo</code>已存在，只要保证前一次是 Show 再处理即可。</li>
+</ol>
+<p>最后，键盘通知的次数处理，在设置 <code>keyboardInfo</code> 时，我们增加一个 willSet</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> keyboardInfo: <span class="type">KeyboardInfo</span>? &#123;</div><div class="line">    <span class="keyword">willSet</span> &#123;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> info = newValue &#123;</div><div class="line">            <span class="keyword">if</span> !info.isSameAction || info.heightIncrement != <span class="number">0</span> &#123;</div><div class="line">                <span class="comment">//TODO</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出，我们只会在键盘Action改变时，或键盘高度增量不等于 0 时才进行真正的处理。由此，就可以避免因为将<code>UIKeyboardWillChangeFrameNotification</code>当作<code>UIKeyboardWillShowNotification</code>用而导致“次数”反而增加了。</p>
+<p>不过还有一个新情况：当键盘出现后，若用户按下 Home 进入后台，然后回到本应用，那么 iOS 还会再发送<code>UIKeyboardWillShowNotification</code>和<code>UIKeyboardWillChangeFrameNotification</code>，而我们并不需要它们。好在这样的情况很好处理，只需在 willSet 的顶部先判断一下应用的状态即可：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> keyboardInfo: <span class="type">KeyboardInfo</span>? &#123;</div><div class="line">    <span class="keyword">willSet</span> &#123;</div><div class="line">        <span class="keyword">if</span> <span class="type">UIApplication</span>.sharedApplication().applicationState != .<span class="type">Active</span> &#123;</div><div class="line">            <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> info = newValue &#123;</div><div class="line">            <span class="keyword">if</span> !info.isSameAction || info.heightIncrement != <span class="number">0</span> &#123;</div><div class="line">                <span class="comment">//TODO</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此外，iOS 的键盘在某些设备上还可以拆分（Split）和浮动（Undock），这时系统会发送两个 Hide 通知，若之后再 dismiss 时，系统会发送 <code>UIKeyboardWillChangeFrameNotification</code>，不过这个时候就不能将其当做 Show 来处理了。好在上面的<code>keyboardWillChangeFrame</code>函数已经避免了这样的情况。</p>
+<p>有了这些代码和考量后，我们就可以暴露“闭包”给外部，闭包的执行就放在上面代码 TODO 的位置。</p>
+<p>出于方便的考虑，KeyboardMan 共暴露三个闭包：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> animateWhenKeyboardAppear: ((appearPostIndex: <span class="type">Int</span>, keyboardHeight: <span class="type">CGFloat</span>, keyboardHeightIncrement: <span class="type">CGFloat</span>) -&gt; <span class="type">Void</span>)?</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> animateWhenKeyboardDisappear: ((keyboardHeight: <span class="type">CGFloat</span>) -&gt; <span class="type">Void</span>)?</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> postKeyboardInfo: ((keyboardMan: <span class="type">KeyboardMan</span>, keyboardInfo: <span class="type">KeyboardInfo</span>) -&gt; <span class="type">Void</span>)?</div></pre></td></tr></table></figure>
+<p>其中前两个闭包比较方便，放在其中的代码会被自动“动画”，易于使用。第三个将每次刷新的 KeyboardInfo 发送出去，使用的逻辑就交给程序员了。另外，稍微注意一下 animateWhenKeyboardAppear 闭包的<code>appearPostIndex</code>参数，它表示“本次”键盘出现时，通知发送到第几次了（每次都从0开始，有可能你的代码里用得到）。如果你用 postKeyboardInfo 闭包那么可用<code>keyboardMan</code>参数取到它。</p>
+<p>还有一些细节，包括通知监听开启或关闭的实现（注意 deinit 里设置属性并不会触发对应的 willSet 或 didSet），通知内容解析的实现，具体请看 KeyboardMan 的代码。另外，Demo 里有三个闭包的基本用法。</p>
+<p>项目地址：<a href="https://github.com/nixzhu/KeyboardMan" target="_blank" rel="external">https://github.com/nixzhu/KeyboardMan</a></p>
+<p>最后是个预告，我最近在写一本关于算法的书（代码用 Swift 2），不会是系统的算法讲解，而是从具体例子实现一些“综合性”的算法，重点在于分析的过程。但只刚开了个头，希望能在 Swift 2 正式版发布前完成，似乎时间不多了，不敢保证。</p>
+<p>===============</p>
+<p>欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条 Tweet <a href="https://twitter.com/nixzhu/status/625544225908637696" target="_blank" rel="external">https://twitter.com/nixzhu/status/625544225908637696</a> 或微博 <a href="http://weibo.com/2076580237/Ct2C8ouJh" target="_blank" rel="external">http://weibo.com/2076580237/Ct2C8ouJh</a>  以分享此文！</p>
+<p>如果你认为这篇文章不错，也有闲钱，那你可以用支付宝扫描下方二维码随便捐助一点，以慰劳作者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

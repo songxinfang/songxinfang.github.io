@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      生成自适应图表图片的秘密 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="细节是什么？边界条件就是细节。请做一个会解方程的程序员！
+作者：@nixzhu
+=================================
+因为一个开发中 WATCH App，我需要一个图表生成工具，即，它可以根据输入的一串形如 (String: Double) 的数据（也就是一串 name 和 value，例如 [(&amp;quot;Hello&amp;quot;: 50), (&amp;quot;Worl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="生成自适应图表图片的秘密 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2015-04-08-adaptive-chart/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="细节是什么？边界条件就是细节。请做一个会解方程的程序员！
+作者：@nixzhu
+=================================
+因为一个开发中 WATCH App，我需要一个图表生成工具，即，它可以根据输入的一串形如 (String: Double) 的数据（也就是一串 name 和 value，例如 [(&amp;quot;Hello&amp;quot;: 50), (&amp;quot;Worl">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/adaptive_chart_intro.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/adaptive_chart_example.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:25:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="生成自适应图表图片的秘密 | songxinfang's blog">
+<meta name="twitter:description" content="细节是什么？边界条件就是细节。请做一个会解方程的程序员！
+作者：@nixzhu
+=================================
+因为一个开发中 WATCH App，我需要一个图表生成工具，即，它可以根据输入的一串形如 (String: Double) 的数据（也就是一串 name 和 value，例如 [(&amp;quot;Hello&amp;quot;: 50), (&amp;quot;Worl">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/adaptive_chart_intro.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">生成自适应图表图片的秘密</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>细节是什么？边界条件就是细节。请做一个会解方程的程序员！</p>
+<p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>因为一个开发中 WATCH App，我需要一个图表生成工具，即，它可以根据输入的一串形如 <code>(String: Double)</code> 的数据（也就是一串 name 和 value，例如 <code>[(&quot;Hello&quot;: 50), (&quot;World&quot;: 150), (&quot;NIX ZHU&quot;: 100)]</code>），在给定的图片尺寸和 name 字体时，生成一张柱状图。</p>
+<p>其中，name 的最大长度很可能超过通过简单计算的 barWidth（即，barWidth = fullWidth / count），所以默认情况下将 name 旋转一个角度放置，使各名字不互相覆盖。如图所示：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/adaptive_chart_intro.png" alt="Adaptive Chart Intro"></p>
+<p>图中的红色是我要求得的变量，以便根据它们“画出”柱状图。让我来解释一下这里遇到的困难。乍一看，<code>bestNameWidth?</code> 可以根据 “NIX ZHU” 的宽度 * cos(angle) 来得到，似乎算不上变量。但图中只是示意，我要特别说明一下。例如第二个 name 可能会很长，比如叫做 “WORLD VERY VERY LARGE…”，那么它就会超过 “NIX ZHU” 的右边界。所以 <code>bestNameWidth?</code> 的定义如下（带问号的为变量）：</p>
+<p> (1) bestNameWidth? = index in 0..&lt;count: max(nameWidth[index] <em> cos(angle) - ((count-1) - index)</em>barWidth?)</p>
+<p>什么意思？很简单，就是所有 name 中，根据每个 name 的 index，也就是位置，那 nameWidth * cos(angle) 就是它的实际宽度，再减去它所处位置相关的那么多的 barWidth? ，我们就得到它实际“超出”最后一个 bar 右边界的距离。当然，在本图中，只有最后一个超出而已。但如上面所说，在实际情况里计算下来，很可能中间某些 name 最终“超出”的距离大于最后一个 name 超出的距离，所以我们要取 max 。</p>
+<p>我们共有三个变量，所以还需要两个方程，很容易有：</p>
+<p>(2) leftMargin + barWidth? * count + rightMargin? = fullWidth</p>
+<p>(3) rightMargin? = max(bestNameWidth? - barWidth? * 0.5 + minRightMargin, minRightMargin)</p>
+<p>方程 (2) 很好理解。方程 (3) 是说我们至少要保证 rightMargin? 有 minRightMargin 那么大，因为很可能 bestNameWidth? 并没有超过 barWidth? 的一半，例如都是单个字符的 Name，请想象一下。</p>
+<p>三个方程解三个未知数，看起来并不难，那就先来约化。</p>
+<p>把 (1) 带入 (3)，有：</p>
+<p>(4) rightMargin? = max(     index in 0..&lt;count: max(nameWidth[index] <em> cos(angle) + minRightMargin - ((count-1) - index)</em>barWidth?)     - barWidth? * 0.5,     minRightMargin)</p>
+<p>根据 (2) 有：</p>
+<p>(5) barWidth? ＝ (fullWidth - leftMargin - rightMargin?) / count, 再代入 (4)，得到：</p>
+<p>(6)  max(    index in 0..&lt;count: max(nameWidth[index] <em> cos(angle) - ((count-1) - index)  </em>      (fullWidth - leftMargin - rightMargin?) / count       )     -      (fullWidth - leftMargin - rightMargin?) / count        * 0.5,     minRightMargin)    -    rightMargin?   = 0</p>
+<p>在方程 (6) 中，只有一个变量 rightMargin? 了（别被它的外表吓着了），我们只需要解出它即可。但是这个方程因为有循环求最大值等，太繁琐了，反正最后我是不能将 rightMargin? 移项到一边。</p>
+<p>似乎陷入困境了，怎么办呢？</p>
+<p>在工程中，我们并不需要精确解，我们只需要足够近似的解。假设最好的 rightMargin? 的值为 n，那我们只需要一个 m 使得 abs(m - n) 足够小，例如小于 0.1 ，这比 iPhone 上一个像素要窄得多，足够了。而求近似解，自然该“<a href="http://zh.wikipedia.org/zh/%E7%89%9B%E9%A1%BF%E6%B3%95" target="_blank" rel="external">牛顿迭代法</a>”出场了。</p>
+<p>我们将方程 (6) 看成是函数</p>
+<p>f(rightMargin?) = max(    index in 0..&lt;count: max(nameWidth[index] <em> cos(angle) - ((count-1) - index)  </em>      (fullWidth - leftMargin - rightMargin?) / count       )     -      (fullWidth - leftMargin - rightMargin?) / count        * 0.5,     minRightMargin)    -    rightMargin?</p>
+<p>的根，即求取 <code>f(rightMargin?)  = 0</code> 时的 <code>rightMargin?</code>。</p>
+<p>根据<a href="http://zh.wikipedia.org/zh/%E7%89%9B%E9%A1%BF%E6%B3%95" target="_blank" rel="external">牛顿迭代法</a>，我们先猜测一个 <code>rightMargin?</code>，例如 1，然后由公式：</p>
+<p><code>x_(n+1) = x_(n) - f(x_(n)) / f&#39;(x_(n))</code>，其中 <code>f&#39;</code> 为 <code>f</code> 的导数，<code>x_(n)</code> 为 第 n 个 <code>rightMargin?</code></p>
+<p>我们可以得出一个更好的 rightMargin?，它更加接近最终解。最后，如果 <code>x_(n+1)</code> 与 <code>x_(n)</code> 之差的绝对值小于 0.1 ，我们就认为已找到合适的 rightMargin? 了。关键代码如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> currentTryRightMargin: <span class="type">CGFloat</span> = <span class="number">1</span></div><div class="line"><span class="keyword">var</span> nextTryRightMargin: <span class="type">CGFloat</span> = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="literal">true</span> &#123;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> currentBarWidth = (size.width - barLeftMargin - currentTryRightMargin) / <span class="type">CGFloat</span>(nameWidths.<span class="built_in">count</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">nMax</span><span class="params">()</span></span> -&gt; <span class="type">CGFloat</span> &#123;</div><div class="line">        <span class="keyword">var</span> _max: <span class="type">CGFloat</span> = <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..&lt;nameWidths.<span class="built_in">count</span> &#123;</div><div class="line">            <span class="keyword">let</span> newValue = nameWidths[i] * ratio + minBarRightMargin - <span class="type">CGFloat</span>((nameWidths.<span class="built_in">count</span> - <span class="number">1</span>) - i) * currentBarWidth</div><div class="line">            <span class="keyword">if</span> newValue &gt; _max &#123;</div><div class="line">                _max = newValue</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> _max</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">let</span> fN = <span class="built_in">max</span>(nMax() -  currentBarWidth * <span class="number">0.5</span>, minBarRightMargin) - currentTryRightMargin</div><div class="line">    <span class="keyword">let</span> fpN = <span class="number">1</span> / <span class="type">CGFloat</span>(nameWidths.<span class="built_in">count</span>) * <span class="number">0.5</span> - <span class="number">1</span></div><div class="line"></div><div class="line">    nextTryRightMargin = currentTryRightMargin - fN / fpN</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="built_in">abs</span>(nextTryRightMargin - currentTryRightMargin) &lt; <span class="number">0.01</span> &#123;</div><div class="line">        <span class="keyword">break</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    currentTryRightMargin = nextTryRightMargin</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> barRightMargin = currentTryRightMargin</div></pre></td></tr></table></figure>
+<p>其中 <code>fpN</code> 是 f 的导数，它是个常量且不为0，那么牛顿迭代法将具有平方收敛的性能，因此可以快速逼近最优解。</p>
+<p>注意 <code>nMax()</code> 是计算方程 (6) 中里面的 max 的，<code>currentBarWidth</code> 其实就是方程 (5)。</p>
+<p>最后我们有了一个足够近似的 barRightMargin ，再计算出其他两个变量是分分钟的事情，不再赘述。实际效果如下：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/adaptive_chart_example.png" alt="Adaptive Chart Example"></p>
+<p>我打算根据上面的工作做出一个小巧的图表图片库，专门用于 WATCH。目前已有代码放在 <a href="https://github.com/nixzhu/AdaptiveChartDemo" target="_blank" rel="external">https://github.com/nixzhu/AdaptiveChartDemo</a> ，可以画出柱状图和折线图，待增添更多样式。</p>
+<p>===============</p>
+<p>欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条 Tweet <a href="https://twitter.com/nixzhu/status/585622265154428928" target="_blank" rel="external">https://twitter.com/nixzhu/status/585622265154428928</a> 或微博 <a href="http://weibo.com/2076580237/Cci3ReTIf" target="_blank" rel="external">http://weibo.com/2076580237/Cci3ReTIf</a>  以分享此文！</p>
+<p>如果你认为这篇文章不错，也有闲钱，那你可以用支付宝扫描下方二维码随便捐助一点，以慰劳作者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

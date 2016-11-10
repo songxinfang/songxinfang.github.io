@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      制作一个可以滑动操作的 Table View Cell | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自 http://www.raywenderlich.com/62435/make-swipeable-table-view-cell-actions-without-going-nuts-scroll-views
+原作者：Ellen Shapiro
+译者：@nixzhu
+==========================================
+Apple 通过 iOS 7 的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="制作一个可以滑动操作的 Table View Cell | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-04-26-make-swipeable-table-view-cell-actions-without-going-nuts-scroll-views/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自 http://www.raywenderlich.com/62435/make-swipeable-table-view-cell-actions-without-going-nuts-scroll-views
+原作者：Ellen Shapiro
+译者：@nixzhu
+==========================================
+Apple 通过 iOS 7 的">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/IMG_3743-180x320.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-11-28-at-6.42.47-AM-475x320.jpg">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/Screen_Shot_2013-11-28_at_1.02.38_PM-472x320.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Nov-28-2013-6.55.07-AM-213x320.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Nov-28-2013-1.06.41-PM-213x320.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Nov-28-2013-8.08.29-PM-213x320.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Nov-28-2013-2.16.46-PM-213x320.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Dec-28-2013-8.53.52-PM-213x320.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/swipeable-demo.gif">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-3.13.23-PM-475x320.jpg">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-3.29.24-PM-367x320.jpg">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-3.29.11-PM-252x320.jpg">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-3.36.48-PM-420x320.jpg">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2014-01-05-at-5.37.22-PM-282x320.jpg">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-4.08.29-PM-480x269.jpg">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/swipeable-button1.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/swipeable-buttonClicked-480x253.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/swipeable-touchupinside.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Dec-29-2013-4.43.46-PM-213x320.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-5.55.54-PM-450x320.jpg">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Dec-30-2013-10.27.30-PM-213x320.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/swipeable-320-43-480x305.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/swipeable-constraint-286x320.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Jan-1-2014-3.44.29-PM-213x320.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Jan-1-2014-4.12.32-PM-213x320.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2014-01-01-at-5.19.25-PM-480x316.jpg">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2014-01-01-at-5.19.12-PM-480x272.jpg">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2014-01-01-at-7.08.21-PM-195x320.jpg">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/width-min-x-480x254.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/swipeable-bounce.gif">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:27:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="制作一个可以滑动操作的 Table View Cell | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自 http://www.raywenderlich.com/62435/make-swipeable-table-view-cell-actions-without-going-nuts-scroll-views
+原作者：Ellen Shapiro
+译者：@nixzhu
+==========================================
+Apple 通过 iOS 7 的">
+<meta name="twitter:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/IMG_3743-180x320.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">制作一个可以滑动操作的 Table View Cell</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自 <a href="http://www.raywenderlich.com/62435/make-swipeable-table-view-cell-actions-without-going-nuts-scroll-views" target="_blank" rel="external">http://www.raywenderlich.com/62435/make-swipeable-table-view-cell-actions-without-going-nuts-scroll-views</a></p>
+<p>原作者：<a href="http://www.raywenderlich.com/u/designatednerd" target="_blank" rel="external">Ellen Shapiro</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>==========================================</p>
+<p>Apple 通过 iOS 7 的邮件（Mail）应用介绍了一种新的用户界面方案——向左滑动以显示一个有着多个操作的菜单。本教程将会向你展示如何制作一个这样的 Table View Cell，而不用因嵌套的 Scroll View 陷入困境。如果你还不知道一个可滑动的 Table View Cell 意味着什么，那么看看 Apple 的邮件应用：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/IMG_3743-180x320.png" alt="Multiple Options"></p>
+<p>可能你会想，既然 Apple 展示了这种方案，那它应该已将其开放给开发者使用了。毕竟，这能有多难呢？但不幸的是，他们只让开发者使用 Delete 按钮——至少暂时是这样。如果你要添加其他的按钮，或者改变 Delete 按钮上的文字或颜色，那你就必须自己去实现。</p>
+<p>译者注：其实文字是可以修改的，但是颜色真的不行！</p>
+<p>在本教程中，你将先学习如何实现简单的滑动以删除操作（swipe-to-delete action），之后我们再实现滑动以执行操作（swipe-to-perform-actions）。这会要求你深入研究 iOS 7 <code>UITableViewCell</code> 的结构，以便复制出我们需要的行为。你将使用到一些我个人非常喜欢的技术用于检查视图层次结构：为视图上色以及使用 <code>recursiveDescription</code> 方法来打印出视图层次结构。</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>打开 Xcode，去往 <code>File\New\Project…</code> 并选择 <code>Master-Detail Application</code> ，如下所示：</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-11-28-at-6.42.47-AM-475x320.jpg" alt="Master-Detail Application"></p>
+<p>将项目命名为 <code>SwipeableCell</code> 并填好你自己的 Organization Name 和  Company Identifier 。选择 <code>iPhone</code> 为目标设备并确保 <code>Use Core Data</code> 没有被选中，如所示：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/Screen_Shot_2013-11-28_at_1.02.38_PM-472x320.png" alt="Set Up Project"></p>
+<p>对于这样的概念项目的证明，你最好保证数据模型尽量简单。</p>
+<p>打开 <code>MasterViewController.m</code> 并找到 <code>viewDidLoad</code> 。将默认设置 Navigation Bar  Items 的方法替换为如下实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">  [super viewDidLoad];</div><div class="line"></div><div class="line">  //1</div><div class="line">  _objects = [NSMutableArray array];</div><div class="line"></div><div class="line">  //2</div><div class="line">  NSInteger numberOfItems = 30;</div><div class="line">  for (NSInteger i = 1; i &lt;= numberOfItems; i++) &#123;</div><div class="line">    NSString *item = [NSString stringWithFormat:@&quot;Item #%d&quot;, i];</div><div class="line">    [_objects addObject:item];</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法做了两件事：</p>
+<ol>
+<li>这一行创建并初始化一个 <code>NSMutableArray</code> 实例，以后你就可以添加对象到它里面了。如果你的数组没有被初始化，那不论你调用 <code>addObject:</code> 多少次，你的那些对象都不会被存储起来。译者注：读者还是尽量用 Lazy Load 来实现吧！</li>
+<li>这个循环添加了一些字符串到 <code>_objects</code> 数组，应用运行时，这些字符串将用于显示在 Table View 里。你可以修改 numberOfItems 的值，以存储适合你的更多或更少的字符串。</li>
+</ol>
+<p>下一步。找到 <code>tableView:cellForRowAtIndexPath:</code> 并替换其实现为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath &#123;</div><div class="line">    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@&quot;Cell&quot; forIndexPath:indexPath];</div><div class="line"></div><div class="line">    NSString *item = _objects[indexPath.row];</div><div class="line">    cell.textLabel.text = item;</div><div class="line">    return cell;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>原本 <code>tableView:cellForRowAtIndexPath:</code> 的样板使用日期字符串作为简单数据；而你的实现使用你的数组里的 <code>NSString</code> 对象去填充 <code>UITableViewCell</code> 的 <code>textLabel</code> 。</p>
+<p>往下滚动到 <code>tableView:canEditRowAtIndexPath:</code> ；你会看到这个方法已经设置为返回 <code>YES</code> ，也就是说， Table View 的每一行都支持编辑。</p>
+<p>就在这个方法下边，<code>tableView:commitEditingStyle:forRowAtIndexPath:</code> 处理对象的删除。然而，因为你还不能添加任何东西到这个应用里，那就先稍微修改它一下以适应你的需求。</p>
+<p>用下面的代码替换 <code>tableView:commitEditingStyle:forRowAtIndexPath:</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath &#123;</div><div class="line">  if (editingStyle == UITableViewCellEditingStyleDelete) &#123;</div><div class="line">    [_objects removeObjectAtIndex:indexPath.row];</div><div class="line">    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];</div><div class="line">  &#125; else &#123;</div><div class="line">    NSLog(@&quot;Unhandled editing style! %d&quot;, editingStyle);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当用户删除某行时，你就用传入的 Index 将那一行的对象从后面的数组中移除，并告知 Table View 它需要移除同一个 <code>indexPath</code> 所表示的那一行 Cell，一确保模型和视图的匹配。</p>
+<p>你的应用只允许“delete”这一种编辑方式，但在 else 分支里用 log 记录你没有在处理什么也不错。如果有某个诡异的事情发生，你将会在控制台得到一个提示消息，这比方法静悄悄地返回要好。</p>
+<p>最后，还有一些清理要做。依然在 <code>MasterViewController.m</code> 里，删除 <code>insertNewObject</code> 。这个方法现在不正确，因为插入已经不再被支持了。</p>
+<p>编译并运行应用；你会看到一个简单列表，如下所示：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Nov-28-2013-6.55.07-AM-213x320.png" alt="Closed Easy"></p>
+<p>滑动某一行到左边，你就会看到一个 “Delete” 按钮，如下所示：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Nov-28-2013-1.06.41-PM-213x320.png" alt="Easy delete button"></p>
+<p>喔～——这很简单。但现在是时候弄脏双手，深挖进视图层次结构，看看里面到底发了什么。</p>
+<h2 id="深入视图层次结构（View-Hierarchy）"><a href="#深入视图层次结构（View-Hierarchy）" class="headerlink" title="深入视图层次结构（View Hierarchy）"></a>深入视图层次结构（View Hierarchy）</h2><p>首先：你要找到 Delete 按钮在视图层次结构里的位置，然后你才能决定是否可以将其用于你自定义的 Cell 。</p>
+<p>最容易做到这一点的方式是将 View 的各个部分分别染色，以便清楚地看到它们地位置和范围。</p>
+<p>继续在 <code>MasterViewController.m</code> 里工作，添加如下两行到 <code>tableView:cellForRowAtIndexPath:</code> 里，就在最后的 <code>return</code> 语句之上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cell.backgroundColor = [UIColor purpleColor];</div><div class="line">cell.contentView.backgroundColor = [UIColor blueColor];</div></pre></td></tr></table></figure>
+<p>这些颜色足够让我们看清这些视图在 Cell 中的位置。</p>
+<p>再次编译并运行，你会看到着色后的元素，如下面的截图所示：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Nov-28-2013-8.08.29-PM-213x320.png" alt="Colored Cells"></p>
+<p>你会清楚地看到蓝色的 <code>contentView</code> 停止在 Accessory Indicator 之前，但整个 Cell 自身以紫色高亮，填满了到 <code>UITableView</code> 的边缘。</p>
+<p>往左边拖动 Cell ，你会看到类似下面的的界面：</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Nov-28-2013-2.16.46-PM-213x320.png" alt="Start to drag cell"></p>
+<p>看起来 Delete 按钮实际上隐藏在 Cell 的<em>下面</em>。唯一能 100% 确保的方式是在视图层次结构中再挖深一点。</p>
+<p>为了辅助你的视图考古，你可以用一个只能用于调试的方法，叫做 <code>recursiveDescription</code> ，它能打印出任意视图的视图层次结构。注意这是一个私有方法， ｀不应该被包含在任何会被放到 App Store 的代码里｀，但它对与视图层次结构实在非常有用。</p>
+<blockquote>
+<p>Note：目前有两个付费应用能让你用可视化的方式检查视图层次结构：<a href="http://revealapp.com/" target="_blank" rel="external">Reveal</a> 和 <a href="http://sites.fastspring.com/foundry376/instant/sparkinspector" target="_blank" rel="external">Spark Inspector</a>。另外，还有一个开源项目也可以很好地做到这件事：<a href="https://github.com/glock45/iOS-Hierarchy-Viewer" target="_blank" rel="external">iOS-Hierarchy-Viewer</a> 。<br>这些应用的价格和质量各有不同，但它们全都要求在你的项目中添加一个库以便支持它们的产品。但如果你不想在项目里安装任何库的话，那 <code>recursiveDescription</code> 绝对是得到这些信息的最好的方式。</p>
+</blockquote>
+<p>添加如下打印语句到 <code>tableView:cellForRowAtIndexPath:</code> 中，放在 return 语句之前：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#ifdef DEBUG</div><div class="line">  NSLog(@&quot;Cell recursive description:\n\n%@\n\n&quot;, [cell performSelector:@selector(recursiveDescription)]);</div><div class="line">#endif</div></pre></td></tr></table></figure>
+<p>一旦添加了这一行代码，你就会得到一个警告，也就是 <code>recursiveDescription</code> 未被申明；因为它是一个私有方法，编译器并不知道它的存在，<code>ifdef / endif</code> 包装器将会额外确保这行代码不会被编译进最终的 release 版里。</p>
+<p>编译并运行；你会看到控制台全都是 log 语句，类似下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">2014-02-01 09:56:15.587 SwipeableCell[46989:70b] Cell recursive description:</div><div class="line"></div><div class="line">&lt;UITableViewCell: 0x8e25350; frame = (0 396; 320 44); text = &apos;Item #10&apos;; autoresize = W; layer = &lt;CALayer: 0x8e254e0&gt;&gt;</div><div class="line">   | &lt;UITableViewCellScrollView: 0x8e636e0; frame = (0 0; 320 44); clipsToBounds = YES; autoresize = W+H; gestureRecognizers = &lt;NSArray: 0x8e1d7d0&gt;; layer = &lt;CALayer: 0x8e1d960&gt;; contentOffset: &#123;0, 0&#125;&gt;</div><div class="line">   |    | &lt;UIButton: 0x8e22a70; frame = (302 16; 8 12.5); opaque = NO; userInteractionEnabled = NO; layer = &lt;CALayer: 0x8e22d10&gt;&gt;</div><div class="line">   |    |    | &lt;UIImageView: 0x8e20ac0; frame = (0 0; 8 12.5); clipsToBounds = YES; opaque = NO; userInteractionEnabled = NO; layer = &lt;CALayer: 0x8e5efc0&gt;&gt;</div><div class="line">   |    | &lt;UITableViewCellContentView: 0x8e23aa0; frame = (0 0; 287 44); opaque = NO; gestureRecognizers = &lt;NSArray: 0x8e29c20&gt;; layer = &lt;CALayer: 0x8e62220&gt;&gt;</div><div class="line">   |    |    | &lt;UILabel: 0x8e23d70; frame = (15 0; 270 43); text = &apos;Item #10&apos;; clipsToBounds = YES; opaque = NO; layer = &lt;CALayer: 0x8e617d0&gt;&gt;</div></pre></td></tr></table></figure>
+<p>又要哇～——信息真不少。你所看到的是递归的描述log语句，在每次 Cell 被创建或回收时都会打印。所以你会看到好几个这种消息，因为初始的屏幕上有好几个 Cell 。<code>recursiveDescription</code> 会走遍特定视图的每个子视图，输出子视图的描述，并按照视图层次结构排列。它会递归地做这件事，所以对于每个子视图，它也会再去寻找它们的子视图。</p>
+<p>虽然信息很多，但它是根据视图层次结构在每个视图上都调用了 <code>recursiveDescription</code> 。因此如果你单独打印每个子视图的描述，你会看到同样的信息，但这个方法在子视图的输出前加了一个 <code>|</code> 符号和一些空格，以便反映出视图的结构。</p>
+<p>为了更加易读，下面光拿出类名和 Frame 来看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;UITableViewCell; frame = (0 396; 320 44);&gt; //1</div><div class="line">   | &lt;UITableViewCellScrollView; frame = (0 0; 320 44); &gt; //2</div><div class="line">   |    | &lt;UIButton; frame = (302 16; 8 12.5)&gt; //3</div><div class="line">   |    |    | &lt;UIImageView; frame = (0 0; 8 12.5);&gt; //4</div><div class="line">   |    | &lt;UITableViewCellContentView; frame = (0 0; 287 44);&gt; //5</div><div class="line">   |    |    | &lt;UILabel; frame = (15 0; 270 43);&gt; //6</div></pre></td></tr></table></figure>
+<p>目前 Cell 里有六个视图：</p>
+<ol>
+<li><code>UITableViewCell</code> 这是最高层的视图。 Frame 显示它有 320 点宽和 44 点高——宽度和高度都喝预期的一致，因为它和屏幕一样宽，而高度就是 44 点。</li>
+<li><code>UITableViewCellScrollView</code> 虽然你不能直接使用这个私有类，但它的名字很好地暗示了它的功能。它的 Size 和 Cell 的一样。据此我们推断它的作用是在 Delete 按钮之上装载滑动出来的内容。</li>
+<li><code>UIButton</code> 它在 Cell 的最右边，就是 Disclosure Indicator 按钮。注意这不是 Delete 按钮。</li>
+<li><code>UIImageView</code> 是上面 <code>UIButton</code> 的子视图，装载着 Disclosure Indicator 的图像。</li>
+<li><code>UITableViewCellContentView</code> 另外一个私有类，它包含 Cell 的内容。这个类对于开发者来说就是 <code>UITableViewCell</code> 的 <code>contentView</code> 属性。但它只作为一个 <code>UIView</code> 来暴露在外，这就意味着你只在其上调用使用公开的 <code>UIView</code> 方法；而不能使用任何与这个类关联的任何私有方法。</li>
+<li><code>UILabel</code> 显示  “Item #” 文本。</li>
+</ol>
+<p>你会注意到 Delete 按钮并没有显示在上面的视图层次结构排列里。嗯～。可能它只在滑动开始时才被添加到层次结构里。对于优化来说这样做很合理。在不需要 Delete 按钮的时候实在没有必要将其放在那里。要验证这个猜想，就添加如下代码到 <code>tableView:commitEditingStyle:forRowAtIndexPath:</code> ，就在处理 delete editing style 的 if 语句中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#ifdef DEBUG</div><div class="line">    NSLog(@&quot;Cell recursive description:\n\n%@\n\n&quot;, [[tableView cellForRowAtIndexPath:indexPath] performSelector:@selector(recursiveDescription)]);</div><div class="line">#endif</div></pre></td></tr></table></figure>
+<p>这和之前添加的一样，除了这次我们需要滑动 Cell 以便调用 <code>tableView:commitEditingStyle:forRowAtIndexPath:</code> ：</p>
+<p>译者注：上面这一段的原文是“This is the same as before, except this time we need to grab the cell from the table view using cellForRowAtIndexPath:.”，按照我的理解，滑动应该调用 <code>tableView:commitEditingStyle:forRowAtIndexPath:</code> ，这样才能执行我们新添加的语句。</p>
+<p>编译并运行；滑动第一个 Cell，并点击 Delete。然后看看控制台的输出，找到最后一个递归描述，即第一个 Cell 的视图层次结构。你知道它是第一个 Cell ，因为它的 <code>text</code> 属性被设置为 <code>Item #1</code> 。你应该看到类型下面的打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;UITableViewCell: 0xa816140; frame = (0 0; 320 44); text = &apos;Item #1&apos;; autoresize = W; gestureRecognizers = &lt;NSArray: 0x8b635d0&gt;; layer = &lt;CALayer: 0xa816310&gt;&gt;</div><div class="line">   | &lt;UITableViewCellScrollView: 0xa817070; frame = (0 0; 320 44); clipsToBounds = YES; autoresize = W+H; gestureRecognizers = &lt;NSArray: 0xa8175e0&gt;; layer = &lt;CALayer: 0xa817260&gt;; contentOffset: &#123;82, 0&#125;&gt;</div><div class="line">   |    | &lt;UITableViewCellDeleteConfirmationView: 0x8b62d40; frame = (320 0; 82 44); layer = &lt;CALayer: 0x8b62e20&gt;&gt;</div><div class="line">   |    |    | &lt;UITableViewCellDeleteConfirmationButton: 0x8b61b60; frame = (0 0; 82 43.5); opaque = NO; autoresize = LM; layer = &lt;CALayer: 0x8b61c90&gt;&gt;</div><div class="line">   |    |    |    | &lt;UILabel: 0x8b61e60; frame = (15 11; 52 22); text = &apos;Delete&apos;; clipsToBounds = YES; userInteractionEnabled = NO; layer = &lt;CALayer: 0x8b61f00&gt;&gt;</div><div class="line">   |    | &lt;UITableViewCellContentView: 0xa816500; frame = (0 0; 287 43.5); opaque = NO; gestureRecognizers = &lt;NSArray: 0xa817d40&gt;; layer = &lt;CALayer: 0xa8165b0&gt;&gt;</div><div class="line">   |    |    | &lt;UILabel: 0xa8167a0; frame = (15 0; 270 43.5); text = &apos;Item #1&apos;; clipsToBounds = YES; layer = &lt;CALayer: 0xa816840&gt;&gt;</div><div class="line">   |    | &lt;_UITableViewCellSeparatorView: 0x8a2b6e0; frame = (97 43.5; 305 0.5); layer = &lt;CALayer: 0x8a2b790&gt;&gt;</div><div class="line">   |    | &lt;UIButton: 0xa8166a0; frame = (297 16; 8 12.5); opaque = NO; userInteractionEnabled = NO; layer = &lt;CALayer: 0xa8092b0&gt;&gt;</div><div class="line">   |    |    | &lt;UIImageView: 0xa812d50; frame = (0 0; 8 12.5); clipsToBounds = YES; opaque = NO; userInteractionEnabled = NO; layer = &lt;CALayer: 0xa8119c0&gt;&gt;</div></pre></td></tr></table></figure>
+<p>喔～ 看到 Delete 按钮了！在 Content View 下面， 有一个视图的类名为 <code>UITableViewCellDeleteConfirmationView</code> 。所那里就是 Delete 按钮被放置的位置。注意到它的 Frame 的 x 值是 320。这就意味着它被放置在 Scroll View 的最远端。但这个 Delete 按钮在你滑动时并没有移动。所以 Apple 必须在每次 Scroll View 滚动的同时移动这个 Delete 按钮。虽然这不是特别重要，但它很有趣！</p>
+<p>现在回到 Cell。</p>
+<p>你同样已经学了不少关于这个 Cell 如何工作的知识；亦即，那个 <code>UITableViewCellScrollView</code> ，它包含 contentView 和 Disclosure Indicator （以及 Delete 按钮，如果它被添加的话），明显是要做<em>某些事</em> 。你可能已经从它的名字以及它是 <code>UIScrollView</code> 的子类而猜到了。</p>
+<p>你可以通过在 <code>tableView:cellForRowAtIndexPath:</code> 下面添加一个简单的 <code>for</code> 循环来测试这个假设，就在 <code>recursiveDescription</code> 那一行下面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">for (UIView *view in cell.subviews) &#123;</div><div class="line">  if ([view isKindOfClass:[UIScrollView class]]) &#123;</div><div class="line">    view.backgroundColor = [UIColor greenColor];</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再次编译并允许应用；绿色高亮确认了这个私有类确实是 <code>UIScrollView</code> 的子类，因为它覆盖了 Cell 里所有的紫色。</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Dec-28-2013-8.53.52-PM-213x320.png" alt="Visible Scrollview"></p>
+<p>回想刚才 <code>recursiveDescription</code> 输出的 log， <code>UITableViewCellScrollView</code> 的 Frame 和 Cell 本身的 Size 是一致的。</p>
+<p>但是，这个视图到底有什么用？继续拖动 Cell 到左边，你就会看到 Scroll View 在你拖动 Cell 并 释放时提供了 “弹性（springy）”行为，如下所示：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/swipeable-demo.gif" alt="swipeable-demo"></p>
+<p>在你创建你自己的自定义 <code>UITableViewCell</code> 子类之前，还有一件事要注意，它出至 <a href="https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewCell_Class/Reference/Reference.html" target="_blank" rel="external">UITableViewCell Class Reference</a>：</p>
+<blockquote>
+<p>如果你想超越预定义样式，你可以添加子视图到 Cell 的 <code>contentView</code> 上。在添加子视图时，你自己要负责这些视图的位置以及设置它们的内容。</p>
+</blockquote>
+<p>直白的说，就是，任何对 <code>UITableViewCell</code> 的自定义操作只能在 <code>contentView</code> 中进行。你不能将自己的视图加在 Cell 下面——而必须将它们加在 Cell 的 <code>contentView</code> 上。</p>
+<p>这就意味着你将找出你自己的解决方案以便添加自定义按钮。但不要害怕，你可以很容易地复制出 Apple 所使用的方案。</p>
+<h2 id="可滑动-Table-View-Cell-的组成列表"><a href="#可滑动-Table-View-Cell-的组成列表" class="headerlink" title="可滑动 Table View Cell 的组成列表"></a>可滑动 Table View Cell 的组成列表</h2><p>这对你来说是什么意思？到了这里，你就有了一个组成列表来制造出一个 <code>UITableViewCell</code> 子类，以便放上你自定义的按钮。</p>
+<p>我们从 View Stack 的最底部开始列出条目，你的列表如下：</p>
+<ol>
+<li><code>contentView</code> 是你的基础视图，因为你只能将子视图添加到它上面。</li>
+<li>在用户滑动后，任何你想显示的 <code>UIButon</code>。</li>
+<li>一个位于按钮之上的容器视图来装载你所有的内容。</li>
+<li>你可以使用一个 <code>UIScrollView</code> 来作为你的容器视图，就像 Apple 使用的，或者使用一个 <code>UIPanGestureRecognizer</code> 。这同样能够处理滑动去显示/隐藏按钮。你将在项目中采用后一种方案。</li>
+<li>最后，一个装有实际内容的视图。</li>
+</ol>
+<p>还有一个可能不那么明显的成分：你必须确保系统提供的 <code>UIPanGestureRecognizer</code>  —— 它能让你滑动显示 Delete 按钮 —— 不可用。否则系统手势会和自定义手势冲突。</p>
+<p>好消息是设置默认滑动手势不可用的操作相当简单。</p>
+<p>打开 <code>MasterViewController.m</code> 修改 <code>tableView:canEditRowAtIndexPath:</code> 永远返回 <code>NO</code>，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath &#123;</div><div class="line">  return NO;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译并运行；试着滑动某个 Cell ，你会发现你不能再滑动去删除了。</p>
+<p>为了保持简单，你将使用两个按钮来走完这个教程。但同样的技术也可以再一个按钮上工作，或者超过两个按钮的情况——作为提醒，你可能需要执行一些本文没有涉及到的调整，如果你真的添加了多个按钮，你必须将整个 Cell 滑出才能看到所有的按钮。</p>
+<h2 id="创建一个自定义-Cell"><a href="#创建一个自定义-Cell" class="headerlink" title="创建一个自定义 Cell"></a>创建一个自定义 Cell</h2><p>你可以从基本视图和手势识别列表可以看到，在 Table View Cell 中有许多要做的事。你将创建一个自定义的 <code>UITableViewCell</code> 子类，以将所有的逻辑放在同一个地方。</p>
+<p>去往 <code>File\New\ File…</code> 并选择 <code>iOS\Cocoa Touch\Objective-C class</code> ，将新类命名为 <code>SwipeableCell</code> ，将它设置为 <code>UITableViewCell</code> 的子类 ，如下所示：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-3.13.23-PM-475x320.jpg" alt="Creating custom cell"></p>
+<p>在 <code>SwipeableCell.m</code> 中设置下列类扩展和 <code>IBOutlet</code> ，就在 <code>#import</code> 语句后，<code>@implementation</code> 语句前：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@interface SwipeableCell()</div><div class="line"></div><div class="line">@property (nonatomic, weak) IBOutlet UIButton *button1;</div><div class="line">@property (nonatomic, weak) IBOutlet UIButton *button2;</div><div class="line">@property (nonatomic, weak) IBOutlet UIView *myContentView;</div><div class="line">@property (nonatomic, weak) IBOutlet UILabel *myTextLabel;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>下一步，进入 Storyboard 选中  <code>UITableViewCell</code> 原型，如下所示：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-3.29.24-PM-367x320.jpg" alt="Select Table View Cell"></p>
+<p>打开 Identity Inspector ，然后修改  Custom Class 为 <code>SwipeableCell</code> ，如下所示：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-3.29.11-PM-252x320.jpg" alt="Change Custom Class"></p>
+<p>现在 <code>UITableViewCell</code> 原型的名字在左边的 Document Outline 上会显示为 “Swipeable Cell”。右键单击 <code>Swipeable Cell – Cell</code> ，你会看到一个你之前设置的 <code>IBOutlet</code> 列表：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-3.36.48-PM-420x320.jpg" alt="New Name and Outlets"></p>
+<p>首先，你要在 Attributes Inspector 里修改两个地方以便自定义视图。设置 Style 为 <code>Custom</code>， Selection 为 <code>None</code>， Accessory 也为 <code>None</code>，截图如下：</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2014-01-05-at-5.37.22-PM-282x320.jpg" alt="Reset Cell Items"></p>
+<p>然后，拖两个按钮到 Cell 的 Content View 里。在视图的 Attributes Inspector 区设置每个按钮的背景色为比较鲜艳的颜色，并设置每个按钮的文字颜色为比较易读的颜色，这样你就可以清楚地看到按钮。</p>
+<p>将第一个按钮放在右边，和 <code>contentView</code> 的上下边缘接触。将第二个按钮放在第一个按钮的左边缘处，也和 <code>contentView</code> 的上下边缘接触。当你做好后，Cell 看起来如下，可能颜色少有差异：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-4.08.29-PM-480x269.jpg" alt="Buttons Added to Prototype Cell"></p>
+<p>接下来，将每个按钮和对应的 Outlet 关联起来。右键单击到可滑动Cell上打开它的 Outlets，然后将 button1 拖动到到右边的按钮， button2 拖动到左边的按钮，如下：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/swipeable-button1.png" alt="swipeable-button1"></p>
+<p>你需要创建一个方法来处理对每个按钮的点击。</p>
+<p>打开 <code>SwipeableCell.m</code> 添加如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (IBAction)buttonClicked:(id)sender &#123;</div><div class="line">  if (sender == self.button1) &#123;</div><div class="line">    NSLog(@&quot;Clicked button 1!&quot;);</div><div class="line">  &#125; else if (sender == self.button2) &#123;</div><div class="line">    NSLog(@&quot;Clicked button 2!&quot;);</div><div class="line">  &#125; else &#123;</div><div class="line">    NSLog(@&quot;Clicked unknown button!&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法处理对两个按钮的点击，通过在控制台打印记录，你就能确定按钮被点击了。</p>
+<p>再次打开 Storyboard ，将两个按钮都连接上 Action 。右键单击 <code>Swipeable Cell – Cell</code> 出现 Outlet 和 Action 的列表。从 <code>buttonClicked:</code> Action 拖动到你的按钮，如下：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/swipeable-buttonClicked-480x253.png" alt="swipeable-buttonClicked"></p>
+<p>从事件列表中选择 <code>Touch Up Inside</code> ，如下所示：</p>
+<p> <img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/swipeable-touchupinside.png" alt="swipeable-touchupinside"></p>
+<p>重复上述步骤，用于第二个按钮。现在随便按照任何一个按钮上，都会调用 <code>buttonClicked:</code> 。</p>
+<p>打开 <code>SwipeableCell.m</code> 添加如下属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, strong) NSString *itemText;</div></pre></td></tr></table></figure>
+<p>稍后你将更多的和 <code>itemText</code> 打交道，但目前，这就是所有你要做的。</p>
+<p>打开 <code>MasterViewController.m</code> 并在顶部添加如下一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#import &quot;SwipeableCell.h&quot;</div></pre></td></tr></table></figure>
+<p>这将保证这个类知道你自定义的 Cell 子类。</p>
+<p>替换 <code>tableView:cellForRowAtIndexPath:</code> 的内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath &#123;</div><div class="line">  SwipeableCell *cell = [tableView dequeueReusableCellWithIdentifier:@&quot;Cell&quot; forIndexPath:indexPath];</div><div class="line"></div><div class="line">  NSString *item = _objects[indexPath.row];</div><div class="line">  cell.itemText = item;</div><div class="line"></div><div class="line">  return cell;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在该使用你的新 Cell 而不是标准的 <code>UITableViewCell</code>。</p>
+<p>编译并运行；你会看到如下界面：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Dec-29-2013-4.43.46-PM-213x320.png" alt="ALL THE BUTTONS!"></p>
+<h3 id="添加一个-Delegate"><a href="#添加一个-Delegate" class="headerlink" title="添加一个 Delegate"></a>添加一个 Delegate</h3><p>欧耶～ 你的按钮已经出现了！如果你点击任何一个按钮，你都会在控制台看到合适的信息输出。然而，你不能指望 Cell 本身去处理任何直接的 Action 。</p>
+<p>比如说，一个 Cell 不能 Present 其他的 View Controller 或直接将其 push 到 Navigation Stack 里。你必须要设置一个 Delegate 来传递按钮的点击事件回到 View Controller 中去处理那个事件。</p>
+<p>打开 <code>SwipeableCell.h</code> 并在 <code>@interface</code> 之上添加如下 Delegate 协议：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@protocol SwipeableCellDelegate &lt;NSObject&gt;</div><div class="line">- (void)buttonOneActionForItemText:(NSString *)itemText;</div><div class="line">- (void)buttonTwoActionForItemText:(NSString *)itemText;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>添加如下 Delegate 属性到 <code>SwipeableCell.h</code> ，就在 <code>itemText</code> 属性下面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, weak) id &lt;SwipeableCellDelegate&gt; delegate;</div></pre></td></tr></table></figure>
+<p>更新 <code>SwipeableCell.m</code> 中的 <code>buttonClicked:</code> 为如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (IBAction)buttonClicked:(id)sender &#123;</div><div class="line">  if (sender == self.button1) &#123;</div><div class="line">    [self.delegate buttonOneActionForItemText:self.itemText];</div><div class="line">  &#125; else if (sender == self.button2) &#123;</div><div class="line">    [self.delegate buttonTwoActionForItemText:self.itemText];</div><div class="line">  &#125; else &#123;</div><div class="line">    NSLog(@&quot;Clicked unknown button!&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个更新使得这个方法去调用合适的 Delegate 方法，而不仅仅是打印一句 log。</p>
+<p>现在打开 <code>MasterViewController.m</code> 并添加如下 delegate 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#pragma mark - SwipeableCellDelegate</div><div class="line">- (void)buttonOneActionForItemText:(NSString *)itemText &#123;</div><div class="line">  NSLog(@&quot;In the delegate, Clicked button one for %@&quot;, itemText);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)buttonTwoActionForItemText:(NSString *)itemText &#123;</div><div class="line">  NSLog(@&quot;In the delegate, Clicked button two for %@&quot;, itemText);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法目前还是简单的打印到控制台，以确保一切传递都工作正常。</p>
+<p>接下来，添加如下协议到 <code>MasterViewController.m</code> 顶部的类扩展上以符合协议申明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@interface MasterViewController () &lt;SwipeableCellDelegate&gt; &#123;</div><div class="line">  NSMutableArray *_objects;</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>这只是简单地确认这个类会实现 <code>SwipeableCellDelegate</code> 协议。</p>
+<p>最后，你要设置这个 View Controller 为 Cell 的 delegate。</p>
+<p>添加如下语句到 <code>tableView:cellForRowAtIndexPath:</code> ，就在最后的 return 语句之前：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cell.delegate = self;</div></pre></td></tr></table></figure>
+<p>编译并运行；当你点击按钮时，你就会看到合适的“In the delegate”消息。</p>
+<h3 id="为按钮添加-Action"><a href="#为按钮添加-Action" class="headerlink" title="为按钮添加 Action"></a>为按钮添加 Action</h3><p>如果你看到log消息很很高兴了，也可以跳过下一节。然而，如果你喜欢更加实在的东西，你可以添加一些处理，这样当 delegate 方法被调用时，你就可以显示已经引入的 <code>DetailViewController</code> 。</p>
+<p>添加如下两个方法到 <code>MasterViewController.m</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (void)showDetailWithText:(NSString *)detailText</div><div class="line">&#123;</div><div class="line">  //1</div><div class="line">  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@&quot;Main&quot; bundle:nil];</div><div class="line">  DetailViewController *detail = [storyboard instantiateViewControllerWithIdentifier:@&quot;DetailViewController&quot;];</div><div class="line">  detail.title = @&quot;In the delegate!&quot;;</div><div class="line">  detail.detailItem = detailText;</div><div class="line"></div><div class="line">  //2</div><div class="line">  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detail];</div><div class="line"></div><div class="line">  //3</div><div class="line">  UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeModal)];</div><div class="line">  [detail.navigationItem setRightBarButtonItem:done];</div><div class="line"></div><div class="line">  [self presentViewController:navController animated:YES completion:nil];</div><div class="line">&#125;</div><div class="line"></div><div class="line">//4</div><div class="line">- (void)closeModal</div><div class="line">&#123;</div><div class="line">  [self dismissViewControllerAnimated:YES completion:nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在上面的代码里，你执行了四个操作：</p>
+<ol>
+<li>从 Storyboard 里取出 Detail View Controller 并设置其 title 和 detailItem 。</li>
+<li>设置一个 <code>UINavigationController</code> 作为包含 Detail View Controller 的容器，并给你放置 close 按钮的地方。</li>
+<li>添加 close 按钮，关联 <code>MasterViewController</code> 里的一个 Action。</li>
+<li>设置这个 Action 的响应方法，它将 dismiss 任何以 Modal 方式显示 View Controller</li>
+</ol>
+<p>接下来，用下列版本替换你之前添加的两个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)buttonOneActionForItemText:(NSString *)itemText</div><div class="line">&#123;</div><div class="line">  [self showDetailWithText:[NSString stringWithFormat:@&quot;Clicked button one for %@&quot;, itemText]];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)buttonTwoActionForItemText:(NSString *)itemText</div><div class="line">&#123;</div><div class="line">  [self showDetailWithText:[NSString stringWithFormat:@&quot;Clicked button two for %@&quot;, itemText]];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后，打开 <code>Main.storyboard</code> 并选中 <code>Detail View Controller</code> 。找到 Identity Inspector 并设置 <code>Storyboard ID</code> 为 <code>DetailViewController</code> 以匹配类名，如下所示：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2013-12-29-at-5.55.54-PM-450x320.jpg" alt="Add Storyboard Identifier"></p>
+<p>如果你忘了这一步， <code>instantiateViewControllerWithIdentifier</code> 将会因为不合法的参数而 Crash，其异常表示具有这个标识符的 View Controller 并不存在。</p>
+<p>编译并运行；点击某个 Cell 中的按钮，然后看着 Modal View Controller 出现，如下面的截图所示：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Dec-30-2013-10.27.30-PM-213x320.png" alt="View Launched from Delegate"></p>
+<h2 id="添加顶层视图并添加滑动-Action"><a href="#添加顶层视图并添加滑动-Action" class="headerlink" title="添加顶层视图并添加滑动 Action"></a>添加顶层视图并添加滑动 Action</h2><p>现在你到了视图工作的后段部分，是时候让顶层部分启动并运行起来了。</p>
+<p>打开 <code>Main.storyboard</code> 并拖一个 <code>UIView</code> 到 <code>SwipeableTableCell</code> 上，这个视图将占据整个 Cell 的高和宽，并覆盖按钮，所以在Swipe手势能工作之前，你不会再看到它们了。</p>
+<p>如果你要精确地控制，打开 Size Inspector 并设置这个视图地宽和高，分别为 320 和 43：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/swipeable-320-43-480x305.png" alt="swipeable-320-43"></p>
+<p>你同样需要一个约束来将视图钉在 contentView 的边缘。选中视图并点击 <code>Pin</code> 按钮，选择所有四个间隔约束并设置它们的值为 0 ，如下所示：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/01/swipeable-constraint-286x320.png" alt="swipeable-constraint"></p>
+<p>连接好这个视图的 Outlet，按照之前介绍的步骤：在左边的导航器里右键单击这个可滑动 Cell 并拖动 <code>myContentView</code> 到这个新的视图上。</p>
+<p>下一步，拖动一个 <code>UILabel</code> 到视图里；设置其距离左边 20 点，并设置其垂直剧中。再将其连接到 <code>myTextLabel</code> Outlet 上。</p>
+<p>编译并运行；你的 Cell 看起来有正常了：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Jan-1-2014-3.44.29-PM-213x320.png" alt="Back to cells"></p>
+<h3 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h3><p>但为何实际的文本数据没有显示出来？那是因为你只是设置了 <code>itemText</code> 属性，而没有做会影响 <code>myTextLabel</code> 的事情。</p>
+<p>打开 <code>SwipeableCell.m</code> 并添加如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)setItemText:(NSString *)itemText &#123;</div><div class="line">  //Update the instance variable</div><div class="line">  _itemText = itemText;</div><div class="line"></div><div class="line">  //Set the text to the custom label.</div><div class="line">  self.myTextLabel.text = _itemText;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法覆写了 <code>itemText</code> 属性的 setter 方法。除了更新后面的实例变量，它还会更新可见的 Label。</p>
+<p>最后，为了让接下来的几步的结果更易看到，你将把 item 的 title 变长一点，以便在 Cell 滑动后依然有一些文本可见。</p>
+<p>转到 <code>MasterViewController.m</code> 并更新 <code>viewDidLoad</code> 中的这一行，这是 item title 生成的地方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">NSString *item = [NSString stringWithFormat:@&quot;Longer Title Item #%d&quot;, i];</div></pre></td></tr></table></figure>
+<p>编译并运行；你就会看到合适的 item title 显示如下：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/iOS-Simulator-Screen-shot-Jan-1-2014-4.12.32-PM-213x320.png" alt="Longer Item Titles displayed in custom label"></p>
+<h3 id="手势识别——GO！"><a href="#手势识别——GO！" class="headerlink" title="手势识别——GO！"></a>手势识别——GO！</h3><p>终于到了“有趣的”部分——将数学、约束以及手势识别搅和在一起，以方便地处理滑动操作。</p>
+<p>首先，在 <code>SwipeableCell</code> 的类扩展里添加如下这些属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;</div><div class="line">@property (nonatomic, assign) CGPoint panStartPoint;</div><div class="line">@property (nonatomic, assign) CGFloat startingRightLayoutConstraintConstant;</div><div class="line">@property (nonatomic, weak) IBOutlet NSLayoutConstraint *contentViewRightConstraint;</div><div class="line">@property (nonatomic, weak) IBOutlet NSLayoutConstraint *contentViewLeftConstraint;</div></pre></td></tr></table></figure>
+<p>关于你所要做的事情，简短版本是这样的：记录一个 Pan 手势并调整你的View的左右约束，根据 a) 用户将 Cell Pan 了多远 b) Cell 在何处以及合适开始移动。</p>
+<p>为了做到这一点，你首先要将这个 IBOutlet 连接到 <code>myContentView</code> 的左右约束上。这两个约束将视图 钉在 Cell 的 <code>contentView</code> 中。</p>
+<p>通过打开约束列表，你可以找出这两个约束。通过检查每个约束在 Cell 上的高亮你就能找到那合适的两个。在这个例子中，是 <code>contentView</code> 右边和 <code>contentView</code> 之间的约束，如下所示：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2014-01-01-at-5.19.25-PM-480x316.jpg" alt="Highlighting Constraints"></p>
+<p>一旦你定位到合适的约束，就将其连接到合适的 Outlet 上——在本例中，是 <code>contentViewRightConstraint</code> ，如下图所示：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2014-01-01-at-5.19.12-PM-480x272.jpg" alt="Hook Up Constraint to IBOutlet"></p>
+<p>遵循同样的步骤，连接好 <code>contentViewLeftConstraint</code> ，它代表 <code>contentView</code> 左边和 <code>contentView</code> 之间的约束。</p>
+<p>下一步，打开 <code>SwipeableCell.m</code> 并修改 <code>@interface</code> 语句的类扩展，添加 <code>UIGestureRecognizerDelegate</code> 协议：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@interface SwipeableCell() &lt;UIGestureRecognizerDelegate&gt;</div></pre></td></tr></table></figure>
+<p>然后，依然在  <code>SwipeableCell.m</code> 里，添加如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)awakeFromNib &#123;</div><div class="line">  [super awakeFromNib];</div><div class="line"></div><div class="line">  self.panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panThisCell:)];</div><div class="line">  self.panRecognizer.delegate = self;</div><div class="line">  [self.myContentView addGestureRecognizer:self.panRecognizer];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里设置了 Pan 手势并将其添加到 Cell 上：</p>
+<p>再添加如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">- (void)panThisCell:(UIPanGestureRecognizer *)recognizer &#123;</div><div class="line">  switch (recognizer.state) &#123;</div><div class="line">    case UIGestureRecognizerStateBegan:</div><div class="line">      self.panStartPoint = [recognizer translationInView:self.myContentView];</div><div class="line">      NSLog(@&quot;Pan Began at %@&quot;, NSStringFromCGPoint(self.panStartPoint));</div><div class="line">      break;</div><div class="line">    case UIGestureRecognizerStateChanged: &#123;</div><div class="line">      CGPoint currentPoint = [recognizer translationInView:self.myContentView];</div><div class="line">      CGFloat deltaX = currentPoint.x - self.panStartPoint.x;</div><div class="line">      NSLog(@&quot;Pan Moved %f&quot;, deltaX);</div><div class="line">    &#125;</div><div class="line">      break;</div><div class="line">    case UIGestureRecognizerStateEnded:</div><div class="line">      NSLog(@&quot;Pan Ended&quot;);</div><div class="line">      break;</div><div class="line">    case UIGestureRecognizerStateCancelled:</div><div class="line">      NSLog(@&quot;Pan Cancelled&quot;);</div><div class="line">      break;</div><div class="line">    default:</div><div class="line">      break;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法会在 Pan 手势识别器发动时执行，暂时，它只简单地打印 Pan 手势的细节。</p>
+<p>编译并运行；用手指拖动 Cell ，你就会看到如下log记录了移动信息：</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/01/Screen-Shot-2014-01-01-at-7.08.21-PM-195x320.jpg" alt="Pan Logs"></p>
+<p>如果你往初始点的右边滑动，你会看到正数，往初始点的左边滑动就会看到负数。这些数字将用于调整 <code>myContentView</code> 的约束。</p>
+<h3 id="移动这些约束"><a href="#移动这些约束" class="headerlink" title="移动这些约束"></a>移动这些约束</h3><p>从本质上将，你需要通过调整将 Cell 的 <code>contentView</code> 钉住的左、右约束来推动 <code>myContentView</code> 到左边。右约束将会接受一个正值，而左约束将接受一个绝对值相等的负值。</p>
+<p>举例来说，如果 <code>myContentView</code> 需要往左移动 5 点，那么 右约束将会接受的值是 5，而左约束将接受的值是 -5 。这将会将整个视图往左边滑动 5 点，而不会改变他的宽度。</p>
+<p>听起来蛮容易的——但还有许多移动相关的事情要注意。根据 Cell 是否已经打开和用户 Pan 的方向，你要处理不同的一大把事情。</p>
+<p>你同样需要知道 Cell 最远可以滑动多远。你将通过计算被按钮覆盖的区域的宽度来确定这一点。最简单的方法是用视图的整个宽度减去最左边的按钮的最小 X 位置。</p>
+<p>为了阐明，下面来个 sneak peek ，以明确的图示表明你所要关注的方面：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/width-min-x-480x254.png" alt="Minimum x of button 2"></p>
+<p>幸好，感谢 <a href="https://developer.apple.com/library/mac/documentation/graphicsimaging/reference/CGGeometry/Reference/reference.html" target="_blank" rel="external"><code>CGRect</code> CGGeometry 函数</a> ，这些很容易被转换为代码：</p>
+<p>添加如下方法到 <code>SwipeableCell.m</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (CGFloat)buttonTotalWidth &#123;</div><div class="line">    return CGRectGetWidth(self.frame) - CGRectGetMinX(self.button2.frame);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>添加如下两个骨架方法到 <code>SwipeableCell.m</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)resetConstraintContstantsToZero:(BOOL)animated notifyDelegateDidClose:(BOOL)endEditing</div><div class="line">&#123;</div><div class="line">	//TODO: Build.</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)setConstraintsToShowAllButtons:(BOOL)animated notifyDelegateDidOpen:(BOOL)notifyDelegate</div><div class="line">&#123;</div><div class="line">	//TODO: Build</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这两个骨架方法——一旦你填上血肉——将 snap 打开 Cell 并 snap 关闭 Cell。在你对 pan 手势识别起添加更多处理后，你会回到这两个方法。</p>
+<p>替换 <code>panThisCell:</code> 中的 <code>UIGestureRecognizerStateBegan</code> case 为下列代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">case UIGestureRecognizerStateBegan:</div><div class="line">  self.panStartPoint = [recognizer translationInView:self.myContentView];	           </div><div class="line">  self.startingRightLayoutConstraintConstant = self.contentViewRightConstraint.constant;</div><div class="line">  break;</div></pre></td></tr></table></figure>
+<p>你需要存储 Cell 的初始位置（例如，约束值）以确定 Cell 是要打开还是关闭。</p>
+<p>下一步你需要添加更多处理以应对 pan 手势识别器的改变。还是在 <code>panThisCell:</code> 里，修改 <code>UIGestureRecognizerStateChanged</code> case ，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">case UIGestureRecognizerStateChanged: &#123;</div><div class="line">  CGPoint currentPoint = [recognizer translationInView:self.myContentView];</div><div class="line">  CGFloat deltaX = currentPoint.x - self.panStartPoint.x;</div><div class="line">  BOOL panningLeft = NO;</div><div class="line">  if (currentPoint.x &lt; self.panStartPoint.x) &#123;  //1</div><div class="line">    panningLeft = YES;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  if (self.startingRightLayoutConstraintConstant == 0) &#123; //2</div><div class="line">    //The cell was closed and is now opening</div><div class="line">    if (!panningLeft) &#123;</div><div class="line">      CGFloat constant = MAX(-deltaX, 0); //3</div><div class="line">      if (constant == 0) &#123; //4</div><div class="line">        [self resetConstraintContstantsToZero:YES notifyDelegateDidClose:NO];</div><div class="line">      &#125; else &#123; //5</div><div class="line">        self.contentViewRightConstraint.constant = constant;</div><div class="line">      &#125;</div><div class="line">    &#125; else &#123;</div><div class="line">      CGFloat constant = MIN(-deltaX, [self buttonTotalWidth]); //6</div><div class="line">      if (constant == [self buttonTotalWidth]) &#123; //7</div><div class="line">        [self setConstraintsToShowAllButtons:YES notifyDelegateDidOpen:NO];</div><div class="line">      &#125; else &#123; //8</div><div class="line">        self.contentViewRightConstraint.constant = constant;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>上面大部分代码都在 Cell 默认的“关闭”状态下 处理pan手势识别器，下面是细节说明：</p>
+<ol>
+<li>判断 pan 手势是往左还是往右。</li>
+<li>如果右约束常量为 0 ，意味着 <code>myContentView</code> 完全挡住 <code>contentView</code> 。因此 Cell 在这里一定已经关闭，而用户准备打开它。</li>
+<li><p>这是处理用户从做到右滑动以关闭 Cell 的 情况。除了说“你不能做那个”之外，你还要处理的情况是，当用户滑动 Cell 只打开一点点，然后他们希望不必抬起他们的手指来结束此手势就可以滑动它关闭。译者注：就是说，打开一点点不会完全显示出后面的按钮，Cell 会自动关闭。</p>
+<p>因为一个从左到右的滑动会导致 <code>deltaX</code> 为正值，而从右到左的滑动回到导致 <code>deltaX</code> 为负值，你必须根据负的 <code>deltaX</code> 计算出常量以设置到右约束上。因为是从它与0中找出最大值，所以视图不可能往右边走多远。</p>
+</li>
+<li>如果常量为 0，Cell 就是完全关闭的。调用处理关闭的方法——它（如你回忆起的）在目前还什么也不会做。</li>
+<li>如果常量为不为 0，那么你就将其设置到右手边的约束上。</li>
+<li>否者，如果是从右往做滑动，那么用户试图打开 Cell 。这在个情况里，常量将会小于负<code>deltaX</code>或两个按钮的宽度之和。</li>
+<li>如果目标常量是两个按钮的宽度之和，那么 Cell 就被打开至捕捉点（catch point），你应该调用方法来处理这个打开状态。</li>
+<li>如果常量不是两个按钮的宽度之和，那就将其设置到右约束上。</li>
+</ol>
+<p>哟！处理得真不少… 而这个只是处理了 Cell 已经关闭得情况。你现在还要编写代码处理当手势开始时 Cell 就已经部分开启的情况。</p>
+<p>就在刚在添加的代码之下添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">  else &#123;</div><div class="line">    //The cell was at least partially open.</div><div class="line">    CGFloat adjustment = self.startingRightLayoutConstraintConstant - deltaX; //1</div><div class="line">    if (!panningLeft) &#123;</div><div class="line">      CGFloat constant = MAX(adjustment, 0); //2</div><div class="line">      if (constant == 0) &#123; //3</div><div class="line">        [self resetConstraintContstantsToZero:YES notifyDelegateDidClose:NO];</div><div class="line">      &#125; else &#123; //4</div><div class="line">        self.contentViewRightConstraint.constant = constant;</div><div class="line">      &#125;</div><div class="line">    &#125; else &#123;</div><div class="line">      CGFloat constant = MIN(adjustment, [self buttonTotalWidth]); //5</div><div class="line">      if (constant == [self buttonTotalWidth]) &#123; //6</div><div class="line">        [self setConstraintsToShowAllButtons:YES notifyDelegateDidOpen:NO];</div><div class="line">      &#125; else &#123; //7</div><div class="line">        self.contentViewRightConstraint.constant = constant;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  self.contentViewLeftConstraint.constant = -self.contentViewRightConstraint.constant; //8</div><div class="line">&#125;</div><div class="line">    break;</div></pre></td></tr></table></figure>
+<p>这是 if 语句的后半段。因此它用于处理 Cell 原本就打开的情况。</p>
+<p>再一次，下面说明你要处理的几个情况：</p>
+<ol>
+<li>在这个情况下，你只是接受 <code>deltaX</code> ，你就用 rightLayoutConstraint 的原始位置减去 <code>deltaX</code> 以便得知要做多少调整。</li>
+<li>如果用户从做往右滑动，你必须接受 adjustment 与 0 中的较大值。如果 adjustment 已变成负值，那就说明用户已经把 Cell 滑到边界之外了，Cell 就关闭了，这就让你进入下一个情况。</li>
+<li>如果常量为 0，那么 Cell 已经关闭，你就调用处理其关闭的方法。</li>
+<li>否则，将常量设置到右约束上。</li>
+<li>对于从右到左的滑动，你将接受 adjustment 与 两个按钮宽度之和 中的较小值。如果 adjustment 更大，那就表示用户已经滑出超过捕捉点了。</li>
+<li>如果常量刚好等于两个按钮宽度之和，那么 Cell 就打开了，你必须调用处理 Cell 打开的方法。</li>
+<li>否则，将常量设置到右约束上。</li>
+<li>现在，你已经处理完“Cell关闭”和“Cell部分开启”的情况，在这两个情况里，你都可对左约束做同样的事情：将其设置为右约束常量的负值。这就保证了 <code>myContentView</code> 的宽度一直保持不变。</li>
+</ol>
+<p>编译并运行；现在你可以来回滑动 Cell ！它不是非常流畅，而且它在你希望的地方之前的一点就停下了。这是因为你还没有真正实现那两个用于处理打开和关闭 Cell 的方法。</p>
+<blockquote>
+<p>Note：你可以也注意到，Table View 本身已经不会 scroll 了。不要担心，一旦你正确处理好 Cell 的滑动，你就能修复它。</p>
+</blockquote>
+<h3 id="Snap"><a href="#Snap" class="headerlink" title="Snap!"></a>Snap!</h3><p>接下来，你要让 Cell Snao 进入合适的位置。你会注意到，如果你放手 Cell 会停到合适的位置。</p>
+<p>在你进入方法开始处理之前，你需要一个单独的生成动画的方法。</p>
+<p>打开 <code>SwipeableCell.m</code> 并添加如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (void)updateConstraintsIfNeeded:(BOOL)animated completion:(void (^)(BOOL finished))completion &#123;</div><div class="line">  float duration = 0;</div><div class="line">  if (animated) &#123;</div><div class="line">    duration = 0.1;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^&#123;</div><div class="line">    [self layoutIfNeeded];</div><div class="line">  &#125; completion:completion];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Note：0.1 秒的间隔和 ease-out curve  动画都是我从实践和错误中总结出来的。如果你找到其他更让你看着愉悦的速度或动画类型，可以自由修改它们。</p>
+</blockquote>
+<p>接下来，你将填充那两个处理打开和关闭的骨架方法。记得在 Apple 的原始实现里，因为使用了 <code>UIScrollView</code> 子类作为最底层的试图，所以会有一点弹性。</p>
+<p>要让事情看起来正确，你将在 Cell 撞到边界时给它一点弹性。你同样要确保 <code>contentView</code> 和 <code>myContentView</code> 有同样的 <code>backgroundColor</code> 以造成弹性非常顺滑的错觉。</p>
+<p>添加如下常量到 <code>SwipeableCell.m</code> 顶部，就在 import 语句之下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">static CGFloat const kBounceValue = 20.0f;</div></pre></td></tr></table></figure>
+<p>这个常量存储了弹性值，将用于你的弹性动画中。</p>
+<p>如下更新 <code>setConstraintsToShowAllButtons:notifyDelegateDidOpen:</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (void)setConstraintsToShowAllButtons:(BOOL)animated notifyDelegateDidOpen:(BOOL)notifyDelegate &#123;</div><div class="line">  //TODO: Notify delegate.</div><div class="line"></div><div class="line">  //1</div><div class="line">  if (self.startingRightLayoutConstraintConstant == [self buttonTotalWidth] &amp;&amp;</div><div class="line">      self.contentViewRightConstraint.constant == [self buttonTotalWidth]) &#123;</div><div class="line">    return;</div><div class="line">  &#125;</div><div class="line">  //2</div><div class="line">  self.contentViewLeftConstraint.constant = -[self buttonTotalWidth] - kBounceValue;</div><div class="line">  self.contentViewRightConstraint.constant = [self buttonTotalWidth] + kBounceValue;</div><div class="line"></div><div class="line">  [self updateConstraintsIfNeeded:animated completion:^(BOOL finished) &#123;</div><div class="line">    //3</div><div class="line">    self.contentViewLeftConstraint.constant = -[self buttonTotalWidth];</div><div class="line">    self.contentViewRightConstraint.constant = [self buttonTotalWidth];</div><div class="line"></div><div class="line">    [self updateConstraintsIfNeeded:animated completion:^(BOOL finished) &#123;</div><div class="line">      //4</div><div class="line">      self.startingRightLayoutConstraintConstant = self.contentViewRightConstraint.constant;</div><div class="line">    &#125;];</div><div class="line">  &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法在 Cell 完全打开时执行。下面解释发生了什么：</p>
+<ol>
+<li>如果 Cell 已经开启，约束已经到达完全开启值，那就返回——否则弹性操作将会一次又一次的发生，就像你继续滑动超过总按钮宽度那样。</li>
+<li>你初始设置约束值为按钮总宽度和弹性值的结合值，它将 Cell 拉到左边一点点，这样才好 snap 回来。然后你就调用动画来实现这个设置。</li>
+<li>当第一个动画完成，发动第二个动画，它将 Cell 正好打开在从按钮宽度的位置。</li>
+<li>当第二个动画完成，重设起始约束否则你会看到多次弹跳。</li>
+</ol>
+<p>如下更新 <code>resetConstraintContstantsToZero:notifyDelegateDidClose:</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">- (void)resetConstraintContstantsToZero:(BOOL)animated notifyDelegateDidClose:(BOOL)notifyDelegate &#123;</div><div class="line">  //TODO: Notify delegate.</div><div class="line"></div><div class="line">  if (self.startingRightLayoutConstraintConstant == 0 &amp;&amp;</div><div class="line">      self.contentViewRightConstraint.constant == 0) &#123;</div><div class="line">    //Already all the way closed, no bounce necessary</div><div class="line">    return;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  self.contentViewRightConstraint.constant = -kBounceValue;</div><div class="line">  self.contentViewLeftConstraint.constant = kBounceValue;</div><div class="line"></div><div class="line">  [self updateConstraintsIfNeeded:animated completion:^(BOOL finished) &#123;</div><div class="line">    self.contentViewRightConstraint.constant = 0;</div><div class="line">    self.contentViewLeftConstraint.constant = 0;</div><div class="line"></div><div class="line">    [self updateConstraintsIfNeeded:animated completion:^(BOOL finished) &#123;</div><div class="line">      self.startingRightLayoutConstraintConstant = self.contentViewRightConstraint.constant;</div><div class="line">    &#125;];</div><div class="line">  &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如你所见，这类似于 <code>setConstraintsToShowAllButtons:notifyDelegateDidOpen:</code> ，但它的逻辑是关闭 Cell 而不是打开。</p>
+<p>编译并运行；随意滑动 Cell 到它的捕捉点，你就会在放手时看到弹性行为。</p>
+<p>然而，如果你在 Cell 完全开启或完全关闭之前将释放手指，它将会卡在中间。Whoops! 你还没有处理触摸结束或被取消的情况。</p>
+<p>找到 <code>panThisCell:</code> 用下列代码替换 <code>UIGestureRecognizerStateEnded</code> case ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">case UIGestureRecognizerStateEnded:</div><div class="line">  if (self.startingRightLayoutConstraintConstant == 0) &#123; //1</div><div class="line">    //Cell was opening</div><div class="line">    CGFloat halfOfButtonOne = CGRectGetWidth(self.button1.frame) / 2; //2</div><div class="line">    if (self.contentViewRightConstraint.constant &gt;= halfOfButtonOne) &#123; //3</div><div class="line">      //Open all the way</div><div class="line">      [self setConstraintsToShowAllButtons:YES notifyDelegateDidOpen:YES];</div><div class="line">    &#125; else &#123;</div><div class="line">      //Re-close</div><div class="line">      [self resetConstraintContstantsToZero:YES notifyDelegateDidClose:YES];</div><div class="line">    &#125;</div><div class="line">  &#125; else &#123;</div><div class="line">    //Cell was closing</div><div class="line">    CGFloat buttonOnePlusHalfOfButton2 = CGRectGetWidth(self.button1.frame) + (CGRectGetWidth(self.button2.frame) / 2); //4</div><div class="line">    if (self.contentViewRightConstraint.constant &gt;= buttonOnePlusHalfOfButton2) &#123; //5</div><div class="line">      //Re-open all the way</div><div class="line">      [self setConstraintsToShowAllButtons:YES notifyDelegateDidOpen:YES];</div><div class="line">    &#125; else &#123;</div><div class="line">      //Close</div><div class="line">      [self resetConstraintContstantsToZero:YES notifyDelegateDidClose:YES];</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  break;</div></pre></td></tr></table></figure>
+<p>在这里，你根据 Cell 是否已经打开或关闭以及手势结束时 Cell 的位置在执行不同的处理。具体来讲：</p>
+<ol>
+<li>通过检查开始右约束值，得知手势开始时 Cell 是否已经打开或关闭。</li>
+<li>如果 Cell 是关闭的，那你就正在打开它，你要让 Cell 自动滑动到打开，至少需要先滑动右边按钮(self.button1)一半的宽度。因为你在测量约束的常量，你只需要计算实际的按钮宽度，而不是它在视图中的 X 位置。</li>
+<li>接下来，测试约束是否已被打开至超过你希望让 Cell 自动打开的点。如果已经超过，那就自动打开 Cell。如果没有，那就自动关闭 Cell。</li>
+<li>此处表示 Cell 从打开的状态开始，你需要那个能让 Cell 自动 snap 关闭的点，至少需要超过最左边按钮的一半。 将不是最左边的按钮的那些按钮的宽度加起来，在这个情况里，只有 self.button1 而已，再加上最左边按钮的一半——也就是 self.button2 —— 以便找到需要的检查点。</li>
+<li>测试约束是否以及超过这个点，即你希望 Cell 自动关闭的那个点。如果超过了，关闭 Cell。如果没有，那就重新打开 Cell。</li>
+</ol>
+<p>最后，你还要处理一下手势被取消的情况。用如下代码替换 <code>UIGestureRecognizerStateCancelled</code> case ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">case UIGestureRecognizerStateCancelled:</div><div class="line">  if (self.startingRightLayoutConstraintConstant == 0) &#123;</div><div class="line">    //Cell was closed - reset everything to 0</div><div class="line">    [self resetConstraintContstantsToZero:YES notifyDelegateDidClose:YES];</div><div class="line">  &#125; else &#123;</div><div class="line">    //Cell was open - reset to the open state</div><div class="line">    [self setConstraintsToShowAllButtons:YES notifyDelegateDidOpen:YES];</div><div class="line">  &#125;</div><div class="line">  break;</div></pre></td></tr></table></figure>
+<p>这个处理相当直白；由于用户取消了触摸，表示他们不想改变 Cell 当前的状态，所以你只需要将一切都设置为它们原本的样子即可。</p>
+<p>编译并运行；滑动 Cell ，你会看到 Cell Snap 到打开或关闭，而不论你的手指再哪里，如下所示：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/swipeable-bounce.gif" alt="swipeable-bounce"></p>
+<h2 id="更好地处理-Table-View"><a href="#更好地处理-Table-View" class="headerlink" title="更好地处理 Table View"></a>更好地处理 Table View</h2><p>在最终完成前，只有少数几步了！</p>
+<p>首先，你的 <code>UIPanGestureRecognizer</code> 有时候会影响 <code>UITableView</code> 的 Scroll 操作。由于你已经设置了 Cell 的 Pan 手势识别器 的 <code>UIGestureRecognizerDelegate</code> ，你只需要实现一个（有些滑稽且冗长命名的） delegate 方法即可将一切恢复正常。</p>
+<p>添加如下方法到 <code>SwipeableCell.m</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#pragma mark - UIGestureRecognizerDelegate</div><div class="line">- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer</div><div class="line">&#123;</div><div class="line">   return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法告知各手势识别器，它们可以同时工作。</p>
+<p>编译并运行；打开第一个 Cell 然后你依然可以 Scroll tableView 。</p>
+<p>还有一个 Cell 重用引起的小问题：各个行不记得它们的状态，看起来是因为 Cell 重用了它们的视图的 开启/关闭 状态，然后它们的视图就不能正确反应用户的操作了。要查看这一情况，打开一个 Cell ，然后将 Table  Scroll 一点点。你就会注意每次都有一个 Cell 始终保持打开状态，但每次都不同。</p>
+<p>要修复这个问题头一半，添加如下方法到 <code>SwipeableCell.m</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (void)prepareForReuse &#123;</div><div class="line">  [super prepareForReuse];</div><div class="line">  [self resetConstraintContstantsToZero:NO notifyDelegateDidClose:NO];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法确保 Cell 在其回收重利用时再次关闭。</p>
+<p>要解决这个问题的后一半，你将添加一个公共方法给 Cell 以促使其打开。然后你会添加一些 delegate 方法以允许 <code>MasterViewController</code> 去管理那个 Cell 是打开的。</p>
+<p>打开 <code>SwipeableCell.h</code> 。在 <code>SwipeableCellDelegate</code> 协议的申明里，添加如下两个新的方法，就在已存在的那两个下面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (void)cellDidOpen:(UITableViewCell *)cell;</div><div class="line">- (void)cellDidClose:(UITableViewCell *)cell;</div></pre></td></tr></table></figure>
+<p>这些方法将会通知 delegate —— 在你的情况里，就是 Master View Controller —— 某个 Cell 被打开或关闭了。</p>
+<p>添加如下公共方法申明到 <code>SwipeableCell</code> 的 <code>@interface</code> 里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)openCell;</div></pre></td></tr></table></figure>
+<p>接下来，打开 <code>SwipeableCell.m</code> 并添加 <code>openCell</code> 的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (void)openCell &#123;</div><div class="line">  [self setConstraintsToShowAllButtons:NO notifyDelegateDidOpen:NO];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法允许 delegate 修改 Cell 的状态。</p>
+<p>依然在用一个文件里，找到 <code>resetConstraintsToZero:notifyDelegateDidOpen:</code> 并替换其中 <code>TODO</code> 为如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (notifyDelegate) &#123;</div><div class="line">  [self.delegate cellDidClose:self];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来，找到 <code>setConstraintsToShowAllButtons:notifyDelegateDidClose:</code> 并替换其中 <code>TODO</code> 为如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (notifyDelegate) &#123;</div><div class="line">  [self.delegate cellDidOpen:self];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这两个修改会在一个 swipe 手势完成时通知 delegate ，无论 Cell 是否以及打开或关闭。</p>
+<p>添加如下属性申明到 <code>MasterViewController.m</code> 顶部的类扩展里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, strong) NSMutableSet *cellsCurrentlyEditing;</div></pre></td></tr></table></figure>
+<p>它将存储当前已被打开的 Cell 的列表。</p>
+<p>添加如下代码到 <code>viewDidLoad</code> 的最后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">self.cellsCurrentlyEditing = [NSMutableSet new];</div></pre></td></tr></table></figure>
+<p>这个初始化保证了之后你可以正常使用数组。</p>
+<p>现在在同一个文件里添加如下方法实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- (void)cellDidOpen:(UITableViewCell *)cell &#123;</div><div class="line">  NSIndexPath *currentEditingIndexPath = [self.tableView indexPathForCell:cell];</div><div class="line">  [self.cellsCurrentlyEditing addObject:currentEditingIndexPath];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)cellDidClose:(UITableViewCell *)cell &#123;</div><div class="line">  [self.cellsCurrentlyEditing removeObject:[self.tableView indexPathForCell:cell]];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意到你添加的时 Index Path 而不是 Cell 本身到列表里。如果你直接添加 Cell 对象，那么之后你就会看到同样的问题，在 Cell 被回收后再次被打开。用了这个方法，你就可以使用合适 的 Index Path 来打开 Cell 了。</p>
+<p>最后，添加下面几行到 <code>tableView:cellForRowAtIndexPath:</code> ，就在 return 语句之前：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if ([self.cellsCurrentlyEditing containsObject:indexPath]) &#123;</div><div class="line">  [cell openCell];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果当前的 Cell 的 Index Path 在列表里，它就会将其设置为打开。</p>
+<p>编译并运行；全都搞定了！你现在有了一个能够 Scroll 的 Table View，还能处理 Cell 的打开和关闭状态，并在 Cell 的任意被点击时，使用 delegate 方法来加载任何任务。</p>
+<h2 id="下一步怎么走？"><a href="#下一步怎么走？" class="headerlink" title="下一步怎么走？"></a>下一步怎么走？</h2><p>译者注：吐血，终于翻译到这一句了！</p>
+<p>最终的项目可以在<a href="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/SwipeableTableCell.zip" target="_blank" rel="external">此处</a>下载。我还会继续我在此所开发的东西，并组成一个开源项目，以便让事情更有灵活性——在准备好推出时，我会在论坛里贴个链接。</p>
+<p>任何时候，如你在不知道他们如何做到的情况下复制出 Apple 所做的某些效果，你都会发现有许多许多的方式去做到这样的效果。所以这里的方案只是这个效果的实现办法之一；然而，它是我所发现的唯一一个不需要处理嵌套 Scroll View 的办法，产生的手势识别冲突也可以非常简单地解决！ :]</p>
+<p>写这篇文章时有一些很有用的资源，但文章里最终使用了非常不同的办法。这些资源是 <a href="http://www.teehanlax.com/blog/reproducing-the-ios-7-mail-apps-interface/" target="_blank" rel="external">Ash Furrow 的文章</a> 能让一切都工作起来，以及 <a href="https://github.com/mbigatti/BMXSwipableCell" target="_blank" rel="external">Massimiliano Bigatti’s BMXSwipeableCell</a> 项目，它现实通过 <code>UIScrollView</code> 这条路可以挖到多深。</p>
+<p>如果你有任何建议、问题或相关的代码，请在评论区讲出來吧！</p>
+<p>===============</p>
+<p>译者注：欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B1vqCrWfe" target="_blank" rel="external">http://weibo.com/2076580237/B1vqCrWfe</a> 以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

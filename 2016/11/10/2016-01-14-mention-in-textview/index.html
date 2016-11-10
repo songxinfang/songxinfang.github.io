@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      自定义 UITextView 关键字高亮与点击检测 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="一种很简单的方法，妙手偶得，可比较容易地处理 Mention、Hashtag 等
+作者：@nixzhu
+
+我们大概都知道，设置好 UITextView 的 dataDetectorTypes 后，就可自动检测并高亮网络链接、电话号码、地址等功能。而且在 iPhone 6s (Plus) 上，还可以 3D Touch 网络链接，直接就有 pop/peek 的功能。
+若我们要增加对 mention 或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义 UITextView 关键字高亮与点击检测 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2016-01-14-mention-in-textview/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="一种很简单的方法，妙手偶得，可比较容易地处理 Mention、Hashtag 等
+作者：@nixzhu
+
+我们大概都知道，设置好 UITextView 的 dataDetectorTypes 后，就可自动检测并高亮网络链接、电话号码、地址等功能。而且在 iPhone 6s (Plus) 上，还可以 3D Touch 网络链接，直接就有 pop/peek 的功能。
+若我们要增加对 mention 或">
+<meta property="og:image" content="https://raw.githubusercontent.com/nixzhu/dev-blog/master/images/mention_textview.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:19:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自定义 UITextView 关键字高亮与点击检测 | songxinfang's blog">
+<meta name="twitter:description" content="一种很简单的方法，妙手偶得，可比较容易地处理 Mention、Hashtag 等
+作者：@nixzhu
+
+我们大概都知道，设置好 UITextView 的 dataDetectorTypes 后，就可自动检测并高亮网络链接、电话号码、地址等功能。而且在 iPhone 6s (Plus) 上，还可以 3D Touch 网络链接，直接就有 pop/peek 的功能。
+若我们要增加对 mention 或">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nixzhu/dev-blog/master/images/mention_textview.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">自定义 UITextView 关键字高亮与点击检测</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>一种很简单的方法，妙手偶得，可比较容易地处理 Mention、Hashtag 等</p>
+<p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<hr>
+<p>我们大概都知道，设置好 UITextView 的 dataDetectorTypes 后，就可自动检测并高亮网络链接、电话号码、地址等功能。而且在 iPhone 6s (Plus) 上，还可以 3D Touch 网络链接，直接就有 pop/peek 的功能。</p>
+<p>若我们要增加对 mention 或 hashtag 的检测，例如 <code>*@nixzhu* hello</code> 里的 <code>@nixzhu</code> 或 <code>what a great #weather!</code> 里的 <code>#weather</code>，该怎么办呢？</p>
+<p>你可能会想着去找一个开源库，例如<a href="https://github.com/kevinzhow/RichTextView" target="_blank" rel="external">RichTextView</a>或<a href="https://github.com/kejinlu/SwiftyText" target="_blank" rel="external">SwiftyText</a>，它们可能支持很多种标记类型的检测，但也许你就只是需要检测 mention 而已。你当然可以研究其实现来自己改写，看一看 TextKit 相关的文档或 session 视频，弄明白 NSTextStorage、NSLayoutManager、NSTextContainer 等与 UITextView 的关系。</p>
+<p>不过今天我发现并实验了一种比较简单的办法，不需要去了解太复杂的东西（当然 TextKit 仍然值得被了解），所以分享在此。</p>
+<p>以字符串 <code>let text = &quot;@nixzhu Do you like Apple? www.apple.com&quot;</code> 为例，我们希望 <code>@nixzhu</code> 高亮且可点击，点击后自然可以执行某种操作。</p>
+<p>首先，UITextView 有 <code>attributedText: NSAttributedString</code> 属性。我们可以利用正则表达式给上面的字符串的 <code>@nixzhu</code> 加上属性，得到一个 NSAttributedString 再设置给 UITextView，这样高亮就很好实现了。代码大概如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> text = <span class="string">"@nixzhu Do you like Apple? www.apple.com"</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> attributedString = <span class="type">NSMutableAttributedString</span>(string: text)</div><div class="line"></div><div class="line"><span class="keyword">let</span> textRange = <span class="type">NSMakeRange</span>(<span class="number">0</span>, (text <span class="keyword">as</span> <span class="type">NSString</span>).length)</div><div class="line"></div><div class="line"><span class="keyword">let</span> mentionPattern = <span class="string">"@[A-Za-z0-9_]+"</span> <span class="comment">// 可能有更好的正则模式，或者更适合你 app 的正则模式</span></div><div class="line"><span class="keyword">let</span> mentionExpression = <span class="keyword">try</span>! <span class="type">NSRegularExpression</span>(pattern: mentionPattern, options: <span class="type">NSRegularExpressionOptions</span>())</div><div class="line"></div><div class="line">mentionExpression.enumerateMatchesInString(text, options: <span class="type">NSMatchingOptions</span>(), range: textRange, usingBlock: &#123; result, flags, stop <span class="keyword">in</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> result = result &#123;</div><div class="line">        <span class="keyword">let</span> subString = (<span class="keyword">self</span>.text <span class="keyword">as</span> <span class="type">NSString</span>).substringWithRange(result.range)</div><div class="line"></div><div class="line">        <span class="keyword">let</span> attributes: [<span class="type">String</span>: <span class="type">AnyObject</span>] = [</div><div class="line">            <span class="type">NSLinkAttributeName</span>: subString,</div><div class="line">            <span class="string">"CustomDetectionType"</span>: <span class="string">"Mention"</span>,</div><div class="line">        ]</div><div class="line"></div><div class="line">        attributedString.addAttributes(attributes, range: result.range )</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// TOOD: textView.attributedText = attributedString</span></div></pre></td></tr></table></figure>
+<p>这里我们给符合模式的子字符串添加上了 NSLinkAttributeName 属性和一个自定义检测属性。如果你将 UITextView 的 URL 检测打开，你可以看到 <code>@nixzhu</code> 与 <code>www.apple.com</code> 都有了颜色和下划线。也就是说，iOS 会将有 NSLinkAttributeName 属性的字符串当做链接。</p>
+<p><img src="https://raw.githubusercontent.com/nixzhu/dev-blog/master/images/mention_textview.png" alt="Mention in TextView"></p>
+<p>此时，我们点击 URL 有反应，点击 mention 也有类似效果，只是没有后续操作，因为我们还没做自定义。</p>
+<p>上面提到 iOS 会将有 NSLinkAttributeName 属性的字符串当做链接，因此，我们可以利用 UITextViewDelegate 的一个方法来做处理：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">MentionDetectableTextView</span>: <span class="title">UITextViewDelegate</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">textView</span><span class="params">(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line"></div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> detectionType = <span class="keyword">self</span>.attributedText.attribute(<span class="string">"CustomDetectionType"</span>, atIndex: characterRange.location, effectiveRange: <span class="literal">nil</span>) <span class="keyword">as</span>? <span class="type">String</span> <span class="keyword">where</span> detectionType == <span class="string">"Mention"</span> <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">let</span> text = (<span class="keyword">self</span>.text <span class="keyword">as</span> <span class="type">NSString</span>).substringWithRange(characterRange)</div><div class="line">        <span class="keyword">let</span> username = text.substringFromIndex(text.startIndex.advancedBy(<span class="number">1</span>))</div><div class="line"></div><div class="line">        <span class="keyword">if</span> !username.isEmpty &#123;</div><div class="line">            tapMentionAction?(username: username)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>先 guard 看看是否是自定义的类型，不然直接返回 true 让系统处理。若能继续，我们就可以通过参数拿到 username 进而触发一个操作。这里的操作是一个可选闭包，可以在其它地方如 UIViewController 里赋值以做进一步处理。</p>
+<p>这样我们就完成了对 mention 的高亮显示和点击检测，其体验和链接一致。而且，原来的链接检测不受影响，默认的 pop／peek 依然有效。</p>
+<p>具体代码请看 Demo：<a href="https://github.com/nixzhu/MentionInUITextViewDemo" target="_blank" rel="external">https://github.com/nixzhu/MentionInUITextViewDemo</a></p>
+<p>当然，若你还要检测 hashtag 等，稍微修改即可。</p>
+<hr>
+<p>欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条</p>
+<ul>
+<li>Tweet <a href="https://twitter.com/nixzhu/status/687456414386622464" target="_blank" rel="external">https://twitter.com/nixzhu/status/687456414386622464</a> 或</li>
+<li>微博 <a href="http://weibo.com/2076580237/Dd3N0869i" target="_blank" rel="external">http://weibo.com/2076580237/Dd3N0869i</a>  </li>
+</ul>
+<p>以分享此文或参与讨论！</p>
+<p>虽然我留了一个捐助的二维码，但似乎读者很少给机会让我买早餐：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

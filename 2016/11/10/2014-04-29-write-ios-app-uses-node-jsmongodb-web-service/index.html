@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      编写一个使用 Node.js/MongoDB Web 服务的 iOS 应用 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自 http://www.raywenderlich.com/61264/write-ios-app-uses-node-jsmongodb-web-service
+原作者：Michael Katz
+译者：@nixzhu
+==========================================
+欢迎回到本教程系列的第二部分，创建一个以 Node.js 和 MongoDB 为后端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编写一个使用 Node.js/MongoDB Web 服务的 iOS 应用 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-04-29-write-ios-app-uses-node-jsmongodb-web-service/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自 http://www.raywenderlich.com/61264/write-ios-app-uses-node-jsmongodb-web-service
+原作者：Michael Katz
+译者：@nixzhu
+==========================================
+欢迎回到本教程系列的第二部分，创建一个以 Node.js 和 MongoDB 为后端">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/iOS-Simulator-Screen-shot-Apr-8-2014-12.17.09-PM-281x500.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/Tour-My-Town-Screenshot-1-180x320.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/TourMyTown-Screenshot-2-180x320.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/TourMyTown-Screenshot-3-180x320.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/TMT_add_image-213x320.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/TMT_marker_with_image-213x320.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/02/debug_output_filter.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/iOS-Simulator-Screen-shot-Feb-8-2014-8.54.05-PM-213x320.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/iOS-Simulator-Screen-shot-Feb-8-2014-8.53.59-PM-213x320.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/02/iOS-Simulator-Screen-shot-Feb-8-2014-8.54.02-PM-213x320.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:27:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编写一个使用 Node.js/MongoDB Web 服务的 iOS 应用 | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自 http://www.raywenderlich.com/61264/write-ios-app-uses-node-jsmongodb-web-service
+原作者：Michael Katz
+译者：@nixzhu
+==========================================
+欢迎回到本教程系列的第二部分，创建一个以 Node.js 和 MongoDB 为后端">
+<meta name="twitter:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/iOS-Simulator-Screen-shot-Apr-8-2014-12.17.09-PM-281x500.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">编写一个使用 Node.js/MongoDB Web 服务的 iOS 应用</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自 <a href="http://www.raywenderlich.com/61264/write-ios-app-uses-node-jsmongodb-web-service" target="_blank" rel="external">http://www.raywenderlich.com/61264/write-ios-app-uses-node-jsmongodb-web-service</a></p>
+<p>原作者：<a href="http://www.raywenderlich.com/u/mkatz" target="_blank" rel="external">Michael Katz</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>==========================================</p>
+<p>欢迎回到本教程系列的第二部分，创建一个以 Node.js 和 MongoDB 为后端的 iOS 应用。</p>
+<p>在本系列的<a href="https://github.com/nixzhu/dev-blog/blob/master/2014-04-21-write-a-simple-nodejs-mongodb-web-service-for-an-ios-app.md" target="_blank" rel="external">第一部分</a>中，你创建了一个简单的 Node.js 服务器，它通过 REST API 暴露一个 MongoDB 数据库。</p>
+<p>在本系列的第二部分（也是最后一部分），你将创建一个有趣的 iPhone 应用，它能让用户标记他们附近有趣的地点，这样就能让更多其他用户发现它们。</p>
+<p>作为这个过程的一部分，你将使用一个我们提供的启动项目，然后在它之上添加几个功能：一个使用 <code>NSURLSession</code> 的网络层，对地理查询的支持，以及将图像存储到后端的能力。</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>首先 <a href="http://cdn5.raywenderlich.com/wp-content/uploads/2014/03/node_tutorial_starter_project.zip" target="_blank" rel="external">下载启动项目</a> 并将其解压到你系统中合适的位置。</p>
+<p>这个 zip 文件包含两个文件夹：</p>
+<ul>
+<li><em>server</em> 包含来自<a href="https://github.com/nixzhu/dev-blog/blob/master/2014-04-21-write-a-simple-nodejs-mongodb-web-service-for-an-ios-app.md" target="_blank" rel="external">前一个教程</a>的 Javascript 服务器代码。</li>
+<li><em>TourMyTown</em> 包含 Xcode 启动项目，已预设好 UI，但还没有网络相关的代码。</li>
+</ul>
+<p>打开 <em>TourMyTown\TourMyTown.xcodeproj</em> 然后编译运行。你会看到如下界面：</p>
+<p>译者注：因为要使用用户的地理位置，最好在真机上运行，或者记得设置模拟器的位置。</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/iOS-Simulator-Screen-shot-Apr-8-2014-12.17.09-PM-281x500.png" alt="starter project"></p>
+<p>目前为止没有太多事情发生，但在本教程完成时，你会看到的应用大概如下所示：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/Tour-My-Town-Screenshot-1-180x320.png" alt="TourMyTown screenshot"><br>TourMyTown 截图</p>
+<p>用户添加新的地点标记（Location Markers）到应用里，地点标记包括描述、分类以及图片。按下 <em>Add</em> 按钮将会在地图的中央放置一个标记，用户还可以拖动此标记到所需的地点。另外，按住屏幕并稍微保持一会儿将会在所选择的地方放置一个标记。</p>
+<p>视图 delegate 使用 Core Location 的地理编码功能去查找地点的地址和名字，如果它存在的话。在 Annotation View 上点击 <em>Info</em> 按钮将显示细节编辑屏幕。</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/01/TourMyTown-Screenshot-2-180x320.png" alt="Edit point of interest data"><br>编辑地点数据</p>
+<p>这个应用会将所有数据保存到后端，这样它在将来就可以重复使用这些数据了。</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/TourMyTown-Screenshot-3-180x320.png" alt="The map with an annotation."><br>有一个 Annotation 的地图</p>
+<p>要将应用变成我们所希望的状态，还有不少事情要做，所以让我们开始编码吧！</p>
+<h2 id="设置你的-Node-js-实例"><a href="#设置你的-Node-js-实例" class="headerlink" title="设置你的 Node.js 实例"></a>设置你的 Node.js 实例</h2><p>如果你没有完成本系列教程的第一部分，或者你不想使用你自己跟着教程走时所编写的项目，那你可以使用包含在 <em>server</em> 目录的文件作为起始点。</p>
+<p>下列说明会带领你设置 Node.js 实例；如果你已经有了来自本教程第一部分的可工作实例，那么可以跳过这些说明，直接进入下一节。</p>
+<p>打开终端并导航至 MongoDB 安装目录——例如 <em>/usr/local/opt/mongodb/</em> ，在你的系统上可能稍有差异。</p>
+<p>执行下列命令以启动 MongoDB 守护进程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongod</div></pre></td></tr></table></figure>
+<p>译者注：如我在第一部分的翻译中所提及的，可能并不需要进入 MongoDB 的安装目录，而且直接运行 mongod 可能会出错， <code>ERROR: dbpath (/data/db) does not exist.</code>，试试先创建一个自定义路径，再用 <code>mongod --dbpath &#39;~/somepath&#39;</code> 来启动服务器。</p>
+<p>现在导航至你解压出的 <em>server</em> 目录，执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install</div></pre></td></tr></table></figure>
+<p>它会读取 <em>package.json</em> 文件并安装服务器的相关依赖。</p>
+<p>最后，用下面的命令启动你的 Node.js 服务器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node .</div></pre></td></tr></table></figure>
+<blockquote>
+<p><em>Note:</em> 启动项目已配置为连接到 <code>localhost</code> ，端口 3000 。这对于在模拟器中本地运行应用来说很好，但如果你想在物理设备上部署这个应用，如果你的 Mac 和 iOS 设备处于同一个网络，你需要将 <code>localhost</code> 改为 <code>.local</code> 。而如果它们没有处于同一个网络，你需要将其设置为你的机器的 IP 地址。你会在 <em>Locations.m</em> 的顶部附近找到这些值。</p>
+</blockquote>
+<h2 id="应用的数据模型"><a href="#应用的数据模型" class="headerlink" title="应用的数据模型"></a>应用的数据模型</h2><p>项目中的 <em>Location</em> 类表示单个有趣的地点及其关联数据，它会做下列事情：</p>
+<ul>
+<li>保持地点的数据，包括它的坐标、描述和类别。</li>
+<li>知道如何将对象序列化为 JSON 兼容的 <code>NSDictionary</code> ，并能反序列化。</li>
+<li>实现 <code>MKAnnotation</code> 协议，因此它能作为一个大头针被放置在某个 <code>MKMapView</code> 实例上。</li>
+<li>有零个或多个定义在  <em>Categories.m</em> 里的类别。</li>
+</ul>
+<p><em>Locations</em> 类代表应用中 Location 对象的集合，以及从服务器加载这些对象的机制，这个类负责：</p>
+<ul>
+<li>提供一个叫做 <code>filteredObjects</code> 的可过滤的地点列表作为应用的数据模型。</li>
+<li>通过 <code>import</code>、<code>persist</code> 和 <code>query</code> 与服务器通信以加载或保存地点条目。</li>
+</ul>
+<p><em>Categories</em> 包含一个类别列表， Location 就可以属于这些类别，然后可以通过类别来过滤地点列表。<em>Categories</em> 还会做如下这些事情：</p>
+<ul>
+<li>存有 <code>allCategories</code> ，它提供类别的主列表。你还可以添加额外的类别到这个数组里。</li>
+<li>提供一个活动地点集合中所有类别的列表。</li>
+<li>通过类别过滤地点。</li>
+</ul>
+<h2 id="从服务器加载地点"><a href="#从服务器加载地点" class="headerlink" title="从服务器加载地点"></a>从服务器加载地点</h2><p>用下列代码替换 <em>Locations.m</em> 中 <code>import</code> 的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">- (void)import</div><div class="line">&#123;</div><div class="line">    NSURL* url = [NSURL URLWithString:[kBaseURL stringByAppendingPathComponent:kLocations]]; //1</div><div class="line"></div><div class="line">    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];</div><div class="line">    request.HTTPMethod = @&quot;GET&quot;; //2</div><div class="line">    [request addValue:@&quot;application/json&quot; forHTTPHeaderField:@&quot;Accept&quot;]; //3</div><div class="line"></div><div class="line">    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration]; //4</div><div class="line">    NSURLSession* session = [NSURLSession sessionWithConfiguration:config];</div><div class="line"></div><div class="line">    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) &#123; //5</div><div class="line">        if (error == nil) &#123;</div><div class="line">            NSArray* responseArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL]; //6</div><div class="line">            [self parseAndAddLocations:responseArray toArray:self.objects]; //7</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line"></div><div class="line">    [dataTask resume]; //8</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此处 <code>import</code> 做了：</p>
+<ol>
+<li>最重要的信息是 URL 和请求头。 URL 是由 base URL 与 “locations” 简单串联而来。</li>
+<li>因为是从服务器读取数据，所以使用 <code>GET</code> 。GET 是默认的方法，是不需要特别指明的，但这里指明这有助于完整性和清晰性。</li>
+<li>服务器代码使用 <code>Accept</code> 头的内容作为提示以确定哪一种响应会被发出。通过在请求中指定会接受 JSON 作为响应，那么返回的数据就是 JSON 而不是通常的 HTML 。</li>
+<li>在此你使用默认配置创建了一个 <em>NSURLSession</em> 实例。</li>
+<li>一个 <em>data task</em> 是 <code>NSURLSession</code> 的基本任务，用于从web服务里传输数据。还有其他特定用于上传和下载的任务，用于长期运行的传输和后台操作。一个数据任务在后台线程上异步运行，所以你要使用一个回调 Block 来响应操作的完成或失败。</li>
+<li>完成处理器（Completion Handler）先检查是否有任何错误；如果没有错误，它就使用 <code>NSJSONSerialization</code> 类方法来反序列化数据。</li>
+<li>假设返回值是一个地点数组，<code>parseAndAddLocations:</code> 解析对象并通知视图控制器已有数据更新。</li>
+<li>很奇怪，数据任务使用 <code>resume</code> 消息来开始。当你创建一个 NSURLSessionTask 实例后，它就处于  “暂停（paused）” 状态，所以简单的调用 <code>resume</code> 使其开始。</li>
+</ol>
+<p>还是在同一个文件里，用下列代码替换 <code>parseAndAddLocations:</code> 的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (void)parseAndAddLocations:(NSArray*)locations toArray:(NSMutableArray*)destinationArray //1</div><div class="line">&#123;</div><div class="line">    for (NSDictionary* item in locations) &#123;</div><div class="line">        Location* location = [[Location alloc] initWithDictionary:item]; //2</div><div class="line">        [destinationArray addObject:location];        </div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (self.delegate) &#123;</div><div class="line">        [self.delegate modelUpdated]; //3</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>按顺序看看每个注释：</p>
+<ol>
+<li>遍历 JSON 字典组成的列表并为每个条目创建一个新的 Location 对象。</li>
+<li>使用自定义的初始化方法将反序列化的 JSON 字典变为一个 <em>Location</em> 实例。</li>
+<li>模型通知 UI 有新的对象。</li>
+</ol>
+<p>合在一起，这两个方法让你的应用在启动时从服务器加载数据。 <code>import</code> 依赖  <code>NSURLSession</code> 去处理繁重的网络操作。对于 <code>NSURLSession</code> 的内部运作情况，请看看本站的 <a href="http://www.raywenderlich.com/51127/nsurlsession-tutorial" title="NSURLSession Tutorial" target="_blank" rel="external">NSURLSession</a></p>
+<p>注意到 <code>Location</code> 类已经有了如下的初始化方法，它从字典中获取各种值然后设置到相应对象合适的属性上。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (instancetype) initWithDictionary:(NSDictionary*)dictionary</div><div class="line">&#123;</div><div class="line">    self = [super init];</div><div class="line">    if (self) &#123;</div><div class="line">        self.name = dictionary[@&quot;name&quot;];</div><div class="line">        self.location = dictionary[@&quot;location&quot;];</div><div class="line">        self.placeName = dictionary[@&quot;placename&quot;];</div><div class="line">        self.imageId = dictionary[@&quot;imageId&quot;];</div><div class="line">        self.details = dictionary[@&quot;details&quot;];</div><div class="line">        _categories = [NSMutableArray arrayWithArray:dictionary[@&quot;categories&quot;]];</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="保存地点到服务器"><a href="#保存地点到服务器" class="headerlink" title="保存地点到服务器"></a>保存地点到服务器</h2><p>很明显，从一个空空如也的数据库里加载地点信息并不有趣。你接下来的任务是实现将地点信息保存到数据库的功能。</p>
+<p>用下列代码替换 <em>Locations.m</em> 中的 <code>persist:</code> 实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">- (void) persist:(Location*)location</div><div class="line">&#123;</div><div class="line">    if (!location || location.name == nil || location.name.length == 0) &#123;</div><div class="line">        return; //input safety check</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    NSString* locations = [kBaseURL stringByAppendingPathComponent:kLocations];</div><div class="line"></div><div class="line">    BOOL isExistingLocation = location._id != nil;</div><div class="line">    NSURL* url = isExistingLocation ? [NSURL URLWithString:[locations stringByAppendingPathComponent:location._id]] :</div><div class="line">    [NSURL URLWithString:locations]; //1</div><div class="line"></div><div class="line">    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];</div><div class="line">    request.HTTPMethod = isExistingLocation ? @&quot;PUT&quot; : @&quot;POST&quot;; //2</div><div class="line"></div><div class="line">    NSData* data = [NSJSONSerialization dataWithJSONObject:[location toDictionary] options:0 error:NULL]; //3</div><div class="line">    request.HTTPBody = data;</div><div class="line"></div><div class="line">    [request addValue:@&quot;application/json&quot; forHTTPHeaderField:@&quot;Content-Type&quot;]; //4</div><div class="line"></div><div class="line">    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];</div><div class="line">    NSURLSession* session = [NSURLSession sessionWithConfiguration:config];</div><div class="line"></div><div class="line">    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) &#123; //5</div><div class="line">        if (!error) &#123;</div><div class="line">            NSArray* responseArray = @[[NSJSONSerialization JSONObjectWithData:data options:0 error:NULL]];</div><div class="line">            [self parseAndAddLocations:responseArray toArray:self.objects];</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line">    [dataTask resume];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>persist:</code> 类似 <code>import</code> ，同样使用一个 <code>NSURLSession</code> 请求后端的 <code>locations</code>。然而，它们还有以下不同之处：</p>
+<ol>
+<li>有两个保存对象的端点：如果是添加一个新地点，使用 <code>/locations</code>，如果是更新一个已存在的地点，则使用 <code>/locations/_id</code> ，<code>id</code> 就表明了已存在的地点。</li>
+<li>这个请求使用 <code>PUT</code> 用于已存在对象，或使用  <code>POST</code> 用于新对象。服务器代码会据此调用合适的处理器而不是使用默认的 <code>GET</code> 处理器。</li>
+<li>因为你是在更新一个实体，你在请求中提供了一个 <code>HTTPBody</code> ，它是由 <code>NSJSONSerialization</code> 类创建的 <code>NSData</code> 实例。</li>
+<li>你提供一个 <code>Content-Type</code> 而不是 <code>Accept</code> 头。这会告知服务器上的 <code>bodyParser</code> 如何处理 body 里的数据。</li>
+<li>完成处理器再一次接受从服务器返回的修改后的实体，解析它并将其放入本地的 Location 对象集合里。</li>
+</ol>
+<p>注意到，如同 <code>initWithDictionary:</code> ，<em>Location.m</em> 已经有了一个帮助模块可以处理 Location 对象到 JSON 兼容的字典的转换，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">#define safeSet(d,k,v) if (v) d[k] = v;</div><div class="line">- (NSDictionary*) toDictionary</div><div class="line">&#123;</div><div class="line">    NSMutableDictionary* jsonable = [NSMutableDictionary dictionary];</div><div class="line">    safeSet(jsonable, @&quot;name&quot;, self.name);</div><div class="line">    safeSet(jsonable, @&quot;placename&quot;, self.placeName);</div><div class="line">    safeSet(jsonable, @&quot;location&quot;, self.location);</div><div class="line">    safeSet(jsonable, @&quot;details&quot;, self.details);</div><div class="line">    safeSet(jsonable, @&quot;imageId&quot;, self.imageId);</div><div class="line">    safeSet(jsonable, @&quot;categories&quot;, self.categories);</div><div class="line">    return jsonable;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>toDictionary</code> 包含一个神奇的宏：<code>safeSet()</code> 。它在将某个值放入 NSDictionary 前会先检查那值是否不是 <code>nil</code> ；这件避免了抛出  <code>NSInvalidArgumentException</code> 异常。你需要这个检查是因为你的应用不能强制你的对象填充哪些属性。</p>
+<p>你可能会问：“为何不使用 <code>NSCoder</code> ？” 因为 <code>NSCoding</code> 协议用 <code>NSKeyedArchiver</code> 可以做到与 <code>toDictionary</code> 和 <code>initWithDictionary</code> 一样的事情；即，提供一个键值对象转换。</p>
+<p>然而，<code>NSKeyedArchiver</code> 是为了和 <code>plists</code> 一起工作而设计的，这是一个不同的格式，有着略微不同的数据类型。上面所用的方式比利用 <code>NSCoding</code> 机制稍微简单。</p>
+<h2 id="保存图像到服务器"><a href="#保存图像到服务器" class="headerlink" title="保存图像到服务器"></a>保存图像到服务器</h2><p>启动项目已经有了给地点添加图片的机制；这是一种在应用内浏览数据的好方式。图片在地图 Annotation 上和细节屏幕上都以缩略图形式显示。Location 对象已经有一个 <code>imageId</code> 属性，它用于保存服务器上某个文件的链接。</p>
+<p>添加图像需要做两件事：客户端调用保存和加载图像，服务器端需要存储图像。</p>
+<p>回到终端，确保你在 <em>server</em> 目录，执行下列明明以创建一个新文件放置你的文件处理器代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">edit fileDriver.js</div></pre></td></tr></table></figure>
+<p>添加下列代码到 <em>fileDriver.js</em> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ObjectID = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).ObjectID,</div><div class="line">    fs = <span class="built_in">require</span>(<span class="string">'fs'</span>); <span class="comment">//1</span></div><div class="line"></div><div class="line">FileDriver = <span class="function"><span class="keyword">function</span>(<span class="params">db</span>) </span>&#123; <span class="comment">//2</span></div><div class="line">  <span class="keyword">this</span>.db = db;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>它用下列步骤设置你的 <em>FileDriver</em> 模块：</p>
+<ol>
+<li>这个模块使用文件系统模块  <em>fs</em> 去读写硬盘。</li>
+<li>这个构造器接受一个到 MongoDB 数据库驱动器的引用，以便在后续方法中使用。</li>
+</ol>
+<p>添加下列代码到 <em>fileDriver.js</em> ，就在上面添加的代码之后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">FileDriver.prototype.getCollection = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.db.collection(<span class="string">'files'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">error, file_collection</span>) </span>&#123; <span class="comment">//1</span></div><div class="line">    <span class="keyword">if</span>( error ) callback(error);</div><div class="line">    <span class="keyword">else</span> callback(<span class="literal">null</span>, file_collection);</div><div class="line">  &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>getCollection()</code> 查找 <code>files</code> 集合；除了文件本身的内容，每个文件还有一个条目在 <code>files</code> 集合里，它保存文件的元数据，包括它在硬盘上存放的位置。</p>
+<p>添加如下代码到刚才你添加的代码块后面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//find a specific file</span></div><div class="line">FileDriver.prototype.get = <span class="function"><span class="keyword">function</span>(<span class="params">id, callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.getCollection(<span class="function"><span class="keyword">function</span>(<span class="params">error, file_collection</span>) </span>&#123; <span class="comment">//1</span></div><div class="line">        <span class="keyword">if</span> (error) callback(error);</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">var</span> checkForHexRegExp = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"^[0-9a-fA-F]&#123;24&#125;$"</span>); <span class="comment">//2</span></div><div class="line">            <span class="keyword">if</span> (!checkForHexRegExp.test(id)) callback(&#123;<span class="attr">error</span>: <span class="string">"invalid id"</span>&#125;);</div><div class="line">            <span class="keyword">else</span> file_collection.findOne(&#123;<span class="string">'_id'</span>:ObjectID(id)&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">error,doc</span>) </span>&#123; <span class="comment">//3</span></div><div class="line">                <span class="keyword">if</span> (error) callback(error);</div><div class="line">                <span class="keyword">else</span> callback(<span class="literal">null</span>, doc);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>下面说明以上代码的功能：</p>
+<ol>
+<li><code>get</code> 从数据库中获取 files 集合。</li>
+<li>由于输入到这个函数的字符串表示对象的 <code>_id</code>，你必须将其转换为一个 BSON ObjectID 对象。</li>
+<li><code>findOne()</code> 找到那个匹配的实体（如果它存在的话）。</li>
+</ol>
+<p>添加如下代码到刚才你添加的代码块后面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">FileDriver.prototype.handleGet = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123; <span class="comment">//1</span></div><div class="line">    <span class="keyword">var</span> fileId = req.params.id;</div><div class="line">    <span class="keyword">if</span> (fileId) &#123;</div><div class="line">        <span class="keyword">this</span>.get(fileId, <span class="function"><span class="keyword">function</span>(<span class="params">error, thisFile</span>) </span>&#123; <span class="comment">//2</span></div><div class="line">            <span class="keyword">if</span> (error) &#123; res.send(<span class="number">400</span>, error); &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">if</span> (thisFile) &#123;</div><div class="line">                         <span class="keyword">var</span> filename = fileId + thisFile.ext; <span class="comment">//3</span></div><div class="line">                         <span class="keyword">var</span> filePath = <span class="string">'./uploads/'</span>+ filename; <span class="comment">//4</span></div><div class="line">    	                 res.sendfile(filePath); <span class="comment">//5</span></div><div class="line">    	            &#125; <span class="keyword">else</span> res.send(<span class="number">404</span>, <span class="string">'file not found'</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;);        </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">	    res.send(<span class="number">404</span>, <span class="string">'file not found'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>handleGet</code> 是一个 Express 路由器要使用的请求处理器。它通过从 <em>index.js</em> 中抽象出文件处理，简化了服务器代码。它执行下列操作：</p>
+<ol>
+<li>通过提供的 id 从数据库中获取文件实体。</li>
+<li>添加存储在数据库条目里的扩展名到 id 上，以创建文件名</li>
+<li>将文件存储在本地的 <code>uploads</code> 目录里。</li>
+<li>在应答对象上调用 <code>sendfile()</code> ；这个方法知道如何传输文件和设置合适的响应头。</li>
+</ol>
+<p>再一次，添加如下代码到刚才你添加的代码块后面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//save new file</span></div><div class="line">FileDriver.prototype.save = <span class="function"><span class="keyword">function</span>(<span class="params">obj, callback</span>) </span>&#123; <span class="comment">//1</span></div><div class="line">    <span class="keyword">this</span>.getCollection(<span class="function"><span class="keyword">function</span>(<span class="params">error, the_collection</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span>( error ) callback(error);</div><div class="line">      <span class="keyword">else</span> &#123;</div><div class="line">        obj.created_at = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">        the_collection.insert(obj, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">          callback(<span class="literal">null</span>, obj);</div><div class="line">        &#125;);</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>上面的 <code>save()</code> 和 <em>collectionDriver</em> 里的那个一样；它插入一个新的对象到 files 集合里。</p>
+<p>添加如下代码到刚才你添加的代码块后面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">FileDriver.prototype.getNewFileId = <span class="function"><span class="keyword">function</span>(<span class="params">newobj, callback</span>) </span>&#123; <span class="comment">//2</span></div><div class="line">	<span class="keyword">this</span>.save(newobj, <span class="function"><span class="keyword">function</span>(<span class="params">err,obj</span>) </span>&#123;</div><div class="line">		<span class="keyword">if</span> (err) &#123; callback(err); &#125;</div><div class="line">		<span class="keyword">else</span> &#123; callback(<span class="literal">null</span>,obj._id); &#125; <span class="comment">//3</span></div><div class="line">	&#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ol>
+<li><code>getNewFileId()</code> 是 <code>save</code> 的包装器，以便创建一个新的文件实体并单独返回 <code>id</code> 。</li>
+<li>只返回新创建对象的 <code>id</code> 。</li>
+</ol>
+<p>添加如下代码到刚才你添加的代码块后面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">FileDriver.prototype.handleUploadRequest = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123; <span class="comment">//1</span></div><div class="line">    <span class="keyword">var</span> ctype = req.get(<span class="string">"content-type"</span>); <span class="comment">//2</span></div><div class="line">    <span class="keyword">var</span> ext = ctype.substr(ctype.indexOf(<span class="string">'/'</span>)+<span class="number">1</span>); <span class="comment">//3</span></div><div class="line">    <span class="keyword">if</span> (ext) &#123;ext = <span class="string">'.'</span> + ext; &#125; <span class="keyword">else</span> &#123;ext = <span class="string">''</span>;&#125;</div><div class="line">    <span class="keyword">this</span>.getNewFileId(&#123;<span class="string">'content-type'</span>:ctype, <span class="string">'ext'</span>:ext&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">err,id</span>) </span>&#123; <span class="comment">//4</span></div><div class="line">        <span class="keyword">if</span> (err) &#123; res.send(<span class="number">400</span>, err); &#125;</div><div class="line">        <span class="keyword">else</span> &#123; 	         </div><div class="line">             <span class="keyword">var</span> filename = id + ext; <span class="comment">//5</span></div><div class="line">             filePath = __dirname + <span class="string">'/uploads/'</span> + filename; <span class="comment">//6</span></div><div class="line"></div><div class="line">	     <span class="keyword">var</span> writable = fs.createWriteStream(filePath); <span class="comment">//7</span></div><div class="line">	     req.pipe(writable); <span class="comment">//8</span></div><div class="line">             req.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123; <span class="comment">//9</span></div><div class="line">               res.send(<span class="number">201</span>,&#123;<span class="string">'_id'</span>:id&#125;);</div><div class="line">             &#125;);               </div><div class="line">             writable.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123; <span class="comment">//10</span></div><div class="line">                res.send(<span class="number">500</span>,err);</div><div class="line">             &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">exports.FileDriver = FileDriver;</div></pre></td></tr></table></figure>
+<p>这个方法做了不少事情，花点时间根据注释看一看：</p>
+<ol>
+<li><code>handleUploadRequest</code> 创建一个新的对象到 files 集合里，它使用 <code>Content-Type</code> 来决定文件的扩展名并返回新对象的 <code>_id</code>。</li>
+<li>查找由应用设置的 <code>Content-Type</code> 的值</li>
+<li>尝试通过 Content Type 得到文件扩展名。例如， <code>image/png</code> 对应着 <code>png</code> 这个扩展名。</li>
+<li>将 <code>Content-Type</code> 和 <code>extension</code> 存储到文件集合实体里。</li>
+<li>通过将合适的扩展名连接到新的 <code>id</code> 后面来创建一个文件名。</li>
+<li>文件的特定路径是服务器的根目录，在  <em>uploads</em> 子目录之下，<code>__dirname</code> 是 Node.js 执行脚本的目录。</li>
+<li><code>fs</code> 包含 <code>writeStream</code> 它——如你所猜测的——是一个输出流。</li>
+<li>请求对象同样有一个 <code>readStream</code> ，所以你可以用 <code>pipe()</code> 函数将其导入到某个 write stream 里。这些 <a href="http://nodejs.org/api/stream.htm" target="_blank" rel="external">Stream</a> 对象是 Node.js 时间驱动范式的绝好例子。</li>
+<li><code>on()</code> 用一个回调关联 stream 事件。在这个例子里，<code>readStream</code> 的 <code>end</code> 事件将在 pipe 操作完成时发生，返回给 Express 的应答是一个 201 状态码和一个新的文件 <code>_id</code>。</li>
+<li>如果 write stream 抛出一个 <code>error</code> 事件，那么将有一个 error 被写入文件。服务器应答返回一个 500 内部服务器错误与一个适当的文件系统错误。</li>
+</ol>
+<p>由于上面的代码需要有一个 <em>uploads</em> 子目录，那就在终端里执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir uploads</div></pre></td></tr></table></figure>
+<p>添加如下代码到 <em>index.js</em> 顶部的  <code>require</code> 代码块之后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">FileDriver = <span class="built_in">require</span>(<span class="string">'./fileDriver'</span>).FileDriver;</div></pre></td></tr></table></figure>
+<p>接下来，再添加下面的代码到 <em>index.js</em> ，就在 <code>var mongoPort = 27017;</code> 这一行下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fileDriver;</div></pre></td></tr></table></figure>
+<p>添加下面的代码到 <em>index.js</em> ，就在 <code>var db = mongoClient.db(&quot;MyDatabase&quot;);</code> 这一行下面：</p>
+<p>在 monglClient 设置回调创建一个 FileDriver 实例，就在 CollectionDriver 创建后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fileDriver = <span class="keyword">new</span> FileDriver(db);</div></pre></td></tr></table></figure>
+<p>这会创建一个新的 <code>FileDriver</code> 实例。</p>
+<p>添加如下代码到  <em>index.js</em> ，就在通用的 <code>/:collection</code> 路由之前：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">app.use(express.static(path.join(__dirname, <span class="string">'public'</span>)));</div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.post(<span class="string">'/files'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>) </span>&#123;fileDriver.handleUploadRequest(req,res);&#125;);</div><div class="line">app.get(<span class="string">'/files/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;fileDriver.handleGet(req,res);&#125;);</div></pre></td></tr></table></figure>
+<p>将这些代码放在通用的 <code>/:collection</code> 路由之前意味着将 <em>files</em> 不同于通用的 <em>files</em> 集合来对待。</p>
+<p>保存你的工作，若有必要，通过 Ctrl + C 干掉你的 Node 实例再使用如下命令重启它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node index.js</div></pre></td></tr></table></figure>
+<p>现在你的服务器可以处理文件了，这也意味着你需要修改应用，让它 Post 图像到服务器。</p>
+<h2 id="在应用中保存图像"><a href="#在应用中保存图像" class="headerlink" title="在应用中保存图像"></a>在应用中保存图像</h2><p>Location 类有两个属性：<code>image</code> 和 <code>imageId</code>。 <code>imageId</code> 是一个后端属性，它将 <code>locations</code> 集合的某个实体链接一个 <code>files</code> 集合的实体。如果这是关系数据库，你可以使用一个外键来表示这个链接。<code>image</code> 存储着实际的 <code>UIImage</code> 对象。</p>
+<p>保存和加载文件要求一个额外的请求，每个对象都要再传输文件数据。操作的顺序很重要，以确保文件 id 与合适的对象关联。当你保存一个文件，你必须先发送文件以接收到关联的 id 再将其链接到地点数据上。</p>
+<p>添加如下代码到 <em>Locations.m</em> 的底部：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">- (void) saveNewLocationImageFirst:(Location*)location</div><div class="line">&#123;</div><div class="line">    NSURL* url = [NSURL URLWithString:[kBaseURL stringByAppendingPathComponent:kFiles]]; //1</div><div class="line">    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];</div><div class="line">    request.HTTPMethod = @&quot;POST&quot;; //2</div><div class="line">    [request addValue:@&quot;image/png&quot; forHTTPHeaderField:@&quot;Content-Type&quot;]; //3</div><div class="line"></div><div class="line">    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];</div><div class="line">    NSURLSession* session = [NSURLSession sessionWithConfiguration:config];</div><div class="line"></div><div class="line">    NSData* bytes = UIImagePNGRepresentation(location.image); //4</div><div class="line">    NSURLSessionUploadTask* task = [session uploadTaskWithRequest:request fromData:bytes completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) &#123; //5</div><div class="line">        if (error == nil &amp;&amp; [(NSHTTPURLResponse*)response statusCode] &lt; 300) &#123;</div><div class="line">            NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];</div><div class="line">            location.imageId = responseDict[@&quot;_id&quot;]; //6</div><div class="line">            [self persist:location]; //7</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line">    [task resume];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是个相当忙碌的模块，但只要你一句一句地看，它还是比较简单的：</p>
+<ol>
+<li>URL 表示 <em>files</em> 端点。</li>
+<li>使用 <code>POST</code> 触发 <code>fileDriver</code> 的 <code>handleUploadRequest</code> 以保存文件。</li>
+<li>设置 Content Type 以确保文件被正确保存到服务器上。<code>Content-Type</code> 头对于服务器决定文件扩展名来说很重要。</li>
+<li>将一个 <code>UIImage</code> 实例变为 PNG 文件数据。</li>
+<li><code>NSURLSessionUploadTask</code> 让你发送 <code>NSData</code> 到服务器。例如，上传任务自动根据数据长度设置 <code>Content-Length</code> 头。上传任务会报告进度并能在后台运行，但对于这两个特性，这里都没有使用。</li>
+<li>响应里包含有新的文件数据实体，所以你保存 <code>_id</code> 到地点对象中以便日后使用。</li>
+<li>一旦图像被保存而且 <code>_id</code> 被记录，那么地点实体就可以保存到服务器上了。</li>
+</ol>
+<p>添加如下代码到  <em>Location.m</em> 中的 <code>persist:</code> 里，就在 <code>if (!location || location.name == nil || location.name.length == 0)</code> 语句块的后面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void) persist:(Location*)location</div><div class="line"></div><div class="line">    //if there is an image, save it first</div><div class="line">    if (location.image != nil &amp;&amp; location.imageId == nil) &#123; //1</div><div class="line">        [self saveNewLocationImageFirst:location]; //2</div><div class="line">        return;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>这会检查新图像的存在性，并第一次保存图像。看看注释的语句说了什么：</p>
+<ol>
+<li>如果有图像但没有图像 id，那么图像没有被保存过。</li>
+<li>调用新方法保存图像，然后退出。</li>
+</ol>
+<p>一旦保存完成，<code>persist:</code> 会被再次调用，但在那时 <code>imageId</code> 不会是 nil ，and the code will proceed into the existing procedure for saving the Location entity.</p>
+<p>接下来，用下列代码替换 <em>Location.m</em> 中的 <code>loadImage:</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (void)loadImage:(Location*)location</div><div class="line">&#123;</div><div class="line">    NSURL* url = [NSURL URLWithString:[[kBaseURL stringByAppendingPathComponent:kFiles] stringByAppendingPathComponent:location.imageId]]; //1</div><div class="line"></div><div class="line">    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];</div><div class="line">    NSURLSession* session = [NSURLSession sessionWithConfiguration:config];</div><div class="line"></div><div class="line">    NSURLSessionDownloadTask* task = [session downloadTaskWithURL:url completionHandler:^(NSURL *fileLocation, NSURLResponse *response, NSError *error) &#123; //2</div><div class="line">        if (!error) &#123;</div><div class="line">            NSData* imageData = [NSData dataWithContentsOfURL:fileLocation]; //3</div><div class="line">            UIImage* image = [UIImage imageWithData:imageData];</div><div class="line">            if (!image) &#123;</div><div class="line">                NSLog(@&quot;unable to build image&quot;);</div><div class="line">            &#125;</div><div class="line">            location.image = image;</div><div class="line">            if (self.delegate) &#123;</div><div class="line">                [self.delegate modelUpdated];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line"></div><div class="line">    [task resume]; //4</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面解释上面的代码做了什么：</p>
+<ol>
+<li>就像加载一个特定的地点一样，图像的 id 连接到代表 <code>files</code> 端点的路径之后。</li>
+<li>下载任务是第三种  <code>NSURLSession</code> ；它下载一个文件到临时存储位置并返回一个到那个位置的 URL，而不是原始的  <code>NSData</code> 对象，因为原始对象可能相当大。</li>
+<li>临时存储位置只保证在完成 Block 执行期间可用，所以你必须将其装载进入内存，或者将其移动到其他地方。</li>
+<li>如同所有的 <code>NSURLSession</code> 任务，你使用 <code>resume</code> 让其开始。</li>
+</ol>
+<p>接下来，用下列代码替换当前的 <code>parseAndAddLocations:toArray:</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- (void)parseAndAddLocations:(NSArray*)locations toArray:(NSMutableArray*)destinationArray</div><div class="line">&#123;</div><div class="line">    for (NSDictionary* item in locations) &#123;</div><div class="line">        Location* location = [[Location alloc] initWithDictionary:item];</div><div class="line">        [destinationArray addObject:location];</div><div class="line"></div><div class="line">        if (location.imageId) &#123; //1</div><div class="line">            [self loadImage:location];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (self.delegate) &#123;</div><div class="line">        [self.delegate modelUpdated];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>更新后的 <code>parseAndAddLocations:toArray:</code> 的会检查 imageId；如果找到了，它就调用 <code>loadImage:</code> 。</p>
+<h2 id="文件处理的快速小结"><a href="#文件处理的快速小结" class="headerlink" title="文件处理的快速小结"></a>文件处理的快速小结</h2><p>总的来说：文件传输在 iOS 应用工作概念上和常规的数据传输的方式一样。大的区别是你使用的 <code>NSURLSessionUploadTask</code> 和 <code>NSURLSessionDownloadTask</code> 在对象和语义上与 <code>NSURLSessionDataTask</code> 略有不同。</p>
+<p>在服务器端，文件处理是另外一头不同的野兽。它要求一个特别的处理器对象，这个对象与文件系统而不是 Mongo 数据库通信，但依然需要存储一些元数据到数据库中以便更容易地检索。</p>
+<p>特殊路由被设置为映射传入的 HTTP 动词和端点到文件驱动器。你也 <em>能够</em> 用通用数据端点来做到这一点，但当要确定在何处持久化数据时，代码会变得相当复杂。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>编译并运行你的应用，然后点击右上角的按钮添加一个新的地点。</p>
+<p>作为创建新地点的一部分，要添加一个图像。记住你可以在模拟器的 Safari 中通过长按图片添加多个图像到模拟器中的相机胶卷了，便于测试。</p>
+<p>一旦你保存了新的地点，就重启应用——然后观察，应用会顺利地重新载入你的数据，截图如下：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/TMT_add_image-213x320.png" alt="Adding an image to a Location in Tour My Town."><br>添加一个图像到地点中</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/TMT_marker_with_image-213x320.png" alt="Location annotation with an image."><br>一个有图像的地点 Annotation</p>
+<h2 id="查询地点"><a href="#查询地点" class="headerlink" title="查询地点"></a>查询地点</h2><p>你这超级流行的 Tour My Town 应用会在释出后以令人难以置信的速度收集到大量数据。为了避免下载所有数据到应用里造成漫长的等待，你可以通过基于位置的过滤来限制数据量。这样你就只需要检索出那些只会出现在屏幕上的数据。</p>
+<p>MongoDB 有一个强大的特性，即能找到匹配给定条件（criteria）的实体。这些<a href="http://docs.mongodb.org/manual/reference/operator/query/" target="_blank" rel="external">条件</a>可以是基本比较、类型检查、表达式求值（包括正则表达式和任意JavaScript），以及地理空间查询（Geospatial Querying）。</p>
+<p>MongoDB 的地理空间查询对于基于映射的应用来说实乃天作之合。你可以使用地图视图的范围来获得那些只需要显示在屏幕上的数据组成的子集</p>
+<p>下一个任务是修改  <em>collectionDriver.js</em> 以通过 GET 请求提供过滤条件。</p>
+<p>添加如下方法到 <em>collectionDriver.js</em> 中最后一行 <code>exports</code> 之上：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Perform a collection query</span></div><div class="line">CollectionDriver.prototype.query = <span class="function"><span class="keyword">function</span>(<span class="params">collectionName, query, callback</span>) </span>&#123; <span class="comment">//1</span></div><div class="line">    <span class="keyword">this</span>.getCollection(collectionName, <span class="function"><span class="keyword">function</span>(<span class="params">error, the_collection</span>) </span>&#123; <span class="comment">//2</span></div><div class="line">      <span class="keyword">if</span>( error ) callback(error)</div><div class="line">      <span class="keyword">else</span> &#123;</div><div class="line">        the_collection.find(query).toArray(<span class="function"><span class="keyword">function</span>(<span class="params">error, results</span>) </span>&#123; <span class="comment">//3</span></div><div class="line">          <span class="keyword">if</span>( error ) callback(error)</div><div class="line">          <span class="keyword">else</span> callback(<span class="literal">null</span>, results)</div><div class="line">        &#125;);</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>下面说明这个方法的功能：</p>
+<ol>
+<li><code>query</code> 类似于已存在的 <code>findAll</code>，除了它有一个 <code>query</code> 参数指定过滤条件。</li>
+<li>获取集合以访问对象，就像其他方法一样。</li>
+<li><code>CollectionDriver</code> 的 <code>findAll</code> 方法使用没有参数的 <code>find()</code> ，但这里 <code>query</code> 对象以参数的形式传递进去。这会通过 MongoDB 的评估，因此只有匹配的文档才会在结果中返回。</li>
+</ol>
+<blockquote>
+<p><em>Note:</em> 这里直接传递 query 对象到 MongoDB里。在公开 API 的情况下，这可能会非常危险，因为 MongoDB 允许通过  <code>$where</code> 查询操作符执行任意 JavaScript 代码。这会带来一些风险，包括运行崩溃、无法预料的结果或安全问题；但在本教程的项目中只使用了有限的一组操作，只是一个微不足道的问题。</p>
+</blockquote>
+<p>回到 <em>index.js</em> 用下列代码替换 <code>app.get(&#39;/:collection&#39;...</code> 代码块：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">app.get(<span class="string">'/:collection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;  </div><div class="line">   <span class="keyword">var</span> params = req.params;</div><div class="line">   <span class="keyword">var</span> query = req.query.query; <span class="comment">//1</span></div><div class="line">   <span class="keyword">if</span> (query) &#123;</div><div class="line">        query = <span class="built_in">JSON</span>.parse(query); <span class="comment">//2</span></div><div class="line">        collectionDriver.query(req.params.collection, query, returnCollectionResults(req,res)); <span class="comment">//3</span></div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">        collectionDriver.findAll(req.params.collection, returnCollectionResults(req,res)); <span class="comment">//4</span></div><div class="line">   &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">returnCollectionResults</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">error, objs</span>) </span>&#123; <span class="comment">//5</span></div><div class="line">        <span class="keyword">if</span> (error) &#123; res.send(<span class="number">400</span>, error); &#125;</div><div class="line">	        <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">if</span> (req.accepts(<span class="string">'html'</span>)) &#123; <span class="comment">//6</span></div><div class="line">                        res.render(<span class="string">'data'</span>,&#123;<span class="attr">objects</span>: objs, <span class="attr">collection</span>: req.params.collection&#125;);</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        res.set(<span class="string">'Content-Type'</span>,<span class="string">'application/json'</span>);</div><div class="line">                        res.send(<span class="number">200</span>, objs);</div><div class="line">                &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ol>
+<li>HTTP 查询可以添加到 URL 后面，形式为 <code>http://domain/endpoint?key1=value1&amp;amp;key2=value2...</code> 。用 <code>req.query</code> 可以得到传入的 URL 中的整个“查询”部分。</li>
+<li>这个查询值在 MongoDB 条件对象里应该以一个字符串呈现。<code>JSON.parse()</code> 将 JSON字符串变为一个 JavaScript 对象，然后直接传入 MongoDB。</li>
+<li>如果一个查询被提供给端点，就调用  <code>collectionDriver.query()</code>；<code>returnCollectionResults</code> 是一个通用的帮助函数，它负责格式化请求的输出。</li>
+<li>如果没有查询被提供，那么 <code>collectionDriver.findAll</code> 返回集合所有的条目。</li>
+<li>由于 <code>returnCollectionResults()</code> 在它被调用时就执行，这个函数为集合驱动器返回一个回调函数。</li>
+<li>如果请求指定 HTML 作为响应答，那么将数据渲染为 HTML 表格；否则在 body 中返回一个 JSON 文件。</li>
+</ol>
+<p>保存你的工作，干掉 Node.js 实例并重启它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node index.js</div></pre></td></tr></table></figure>
+<p>现在服务器已设置好查询，你该在应用里添加地理查询功能了。</p>
+<p>用下列代码替换 <em>Locations.m</em>  中 <code>queryRegion</code> 的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">- (void) queryRegion:(MKCoordinateRegion)region</div><div class="line">&#123;</div><div class="line">    //note assumes the NE hemisphere. This logic should really check first.</div><div class="line">    //also note that searches across hemisphere lines are not interpreted properly by Mongo</div><div class="line">    CLLocationDegrees x0 = region.center.longitude - region.span.longitudeDelta; //1</div><div class="line">    CLLocationDegrees x1 = region.center.longitude + region.span.longitudeDelta;</div><div class="line">    CLLocationDegrees y0 = region.center.latitude - region.span.latitudeDelta;</div><div class="line">    CLLocationDegrees y1 = region.center.latitude + region.span.latitudeDelta;</div><div class="line"></div><div class="line">    NSString* boxQuery = [NSString stringWithFormat:@&quot;&#123;\&quot;$geoWithin\&quot;:&#123;\&quot;$box\&quot;:[[%f,%f],[%f,%f]]&#125;&#125;&quot;,x0,y0,x1,y1]; //2</div><div class="line">    NSString* locationInBox = [NSString stringWithFormat:@&quot;&#123;\&quot;location\&quot;:%@&#125;&quot;, boxQuery]; //3</div><div class="line">    NSString* escBox = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,</div><div class="line">                                                                                  (CFStringRef) locationInBox,</div><div class="line">                                                                                  NULL,</div><div class="line">                                                                                  (CFStringRef) @&quot;!*();&apos;:@&amp;=+$,/?%#[]&#123;&#125;&quot;,</div><div class="line">                                                                                  kCFStringEncodingUTF8)); //4</div><div class="line">    NSString* query = [NSString stringWithFormat:@&quot;?query=%@&quot;, escBox]; //5</div><div class="line">    [self runQuery:query]; //7</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这些代码相当简单； <code>queryRegion:</code> 将一个从 MKMapView 生成的 Map Kit 区域变为 bounded-box 查询，它是这样做的：</p>
+<ol>
+<li>这四行用 bounding box 的对角计算地图坐标。</li>
+<li>这里使用 MongoDB 的特定查询语言为查询定义一个 JSON 结构。一个有 <code>$geoWithin</code> 键值的查询指定一个搜索条件，结构里的一切都通过所提供的值来定义。<code>$box</code> 指定通过提供的坐标定义的矩形，并被作为一个有着两个对角的“经度纬度对”的数组。</li>
+<li><code>boxQuery</code> 定义了条件值；你同时还需要提供搜索键值字段与 <code>boxQuery</code> 一道作为一个 JSON 对象传到 MongoDB。</li>
+<li>然后你 Escape 整个查询对，它会作为 URL 的一部分被 Post；你需要确保内部的引号、括号、逗号以及其他非字母数字符号不会被解释为 HTTP 查询参数的一部分。<code>CFURLCreateStringByAddingPercentEscapes</code> 是一个 CoreFoundation 方法，用于创建URL 编码的字符串</li>
+<li>字符串构建的最后部分是设置整个 Escaped MongoDB 查询作为 URL 中的查询值。</li>
+<li>然后使用你的新查询从服务器请求匹配的值。</li>
+</ol>
+<blockquote>
+<p><em>Note:</em> 在 MongoDB 里，坐标对被指定为 [longitude（经度）, latitude（纬度）] ，它刚好和常见的 lat/long 对相反（例如 Google Maps API 里使用的）。</p>
+</blockquote>
+<p>用下列代码替换  <em>Locations.m</em> 中 <code>runQuery:</code> 的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">- (void) runQuery:(NSString *)queryString</div><div class="line">&#123;</div><div class="line">    NSString* urlStr = [[kBaseURL stringByAppendingPathComponent:kLocations] stringByAppendingString:queryString]; //1</div><div class="line">    NSURL* url = [NSURL URLWithString:urlStr];</div><div class="line"></div><div class="line">    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];</div><div class="line">    request.HTTPMethod = @&quot;GET&quot;;</div><div class="line">    [request addValue:@&quot;application/json&quot; forHTTPHeaderField:@&quot;Accept&quot;];</div><div class="line"></div><div class="line">    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];</div><div class="line">    NSURLSession* session = [NSURLSession sessionWithConfiguration:config];</div><div class="line"></div><div class="line">    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) &#123;</div><div class="line">        if (error == nil) &#123;</div><div class="line">            [self.objects removeAllObjects]; //2</div><div class="line">            NSArray* responseArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];</div><div class="line">            NSLog(@&quot;received %d items&quot;, responseArray.count);</div><div class="line">            [self parseAndAddLocations:responseArray toArray:self.objects];</div><div class="line">        &#125;</div><div class="line">    &#125;];    </div><div class="line">     [dataTask resume];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>runQuery:</code> 非常类似于 <code>import</code> ，但有两个重要区别：</p>
+<ol>
+<li>你要添加 <code>queryRegion:</code> 生成的查询字符串到 locations 端点 URL 的后面。</li>
+<li>你还要丢弃前一组地点并用从服务器返回的过滤集合替换。</li>
+</ol>
+<p>编译并运行；创建一写新的有趣的地点，分散在地图上。放大一点点，然后滑动并缩放地图并观察 NSLog 显示不断改变的地图范围内/外的条目数量，如下所示：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/02/debug_output_filter.png" alt="Debugger output while panning and zooming map."><br>滑动和缩放地图时的调试输出</p>
+<h2 id="使用查询按类别筛选"><a href="#使用查询按类别筛选" class="headerlink" title="使用查询按类别筛选"></a>使用查询按类别筛选</h2><p>最后一点是添加 <em>categories</em> 到你的 Locations ，这样用户能用来过滤。这个过滤能够重用服务器在前一节使用 MongoDB 的数组条件运算完成的工作。</p>
+<p>用下列代码替换 <em>Categories.m</em> 中 <code>query</code> 的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">+ (NSString*) query</div><div class="line">&#123;</div><div class="line">    NSArray* a = [self filteredCategories:YES]; //1</div><div class="line">    NSString* query = @&quot;&quot;;</div><div class="line">    if (a.count &gt; 0) &#123;</div><div class="line"></div><div class="line">        query = [NSString stringWithFormat:@&quot;&#123;\&quot;categories\&quot;:&#123;\&quot;$in\&quot;:[%@]&#125;&#125;&quot;, [a componentsJoinedByString:@&quot;,&quot;]]; //2</div><div class="line">        query = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,</div><div class="line">                                                                                           (CFStringRef) query,</div><div class="line">                                                                                           NULL,</div><div class="line">                                                                                           (CFStringRef) @&quot;!*();&apos;:@&amp;=+$,/?%#[]&#123;&#125;&quot;,</div><div class="line">                                                                                           kCFStringEncodingUTF8));</div><div class="line"></div><div class="line">        query = [@&quot;?query=&quot; stringByAppendingString:query];</div><div class="line">    &#125;</div><div class="line">    return query;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里创建的查询字符串类似前面地理查询里使用的那个，但有如下不同：</p>
+<ol>
+<li>这是一个所选类别的列表。</li>
+<li><code>$in</code> 操作符接收一个 MongoDB 文件，如果指定的 <code>categories</code> 属性有一个值能匹配相应数组中的任意某些条目。</li>
+</ol>
+<p>编译并运行；添加一些地点，并给它们分配一个或多个类别。点击文件夹图标，选择一个类别开始过滤。地图会重新加载那些只符合选定类别的地点Annotations，如下所示：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/iOS-Simulator-Screen-shot-Feb-8-2014-8.54.05-PM-213x320.png" alt="A map with many locations"><br>有多个地点的地图</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/iOS-Simulator-Screen-shot-Feb-8-2014-8.53.59-PM-213x320.png" alt="Select just the &quot;Park&quot; category"><br>只选择 Park 类别</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/02/iOS-Simulator-Screen-shot-Feb-8-2014-8.54.02-PM-213x320.png" alt="Map after filtering"><br>过滤后的地图</p>
+<h2 id="下一步怎么走？"><a href="#下一步怎么走？" class="headerlink" title="下一步怎么走？"></a>下一步怎么走？</h2><p>你可以在此<a href="http://www.raywenderlich.com/61264/write-ios-app-uses-node-jsmongodb-web-service/node_tutorial_sample_app_complete" target="_blank" rel="external">下载完成的示例项目</a>。</p>
+<p>在本教程中，你覆盖了 MongoDB 存储的基本内容——但还有其它非常多的功能没有被覆盖到。</p>
+<p>MongoDB 对于从数据库中筛选数据提供了众多选项；也有很多服务器端的特性可用于管理缩放和安全。而且，你的 Node.js 应用一定可以通过添加用户验证和更多围绕数据的隐私来得到改善。</p>
+<p>至于你的 iOS 应用，你还可以添加一些有趣的功能，包括：</p>
+<ul>
+<li>将用户导向感兴趣的地点</li>
+<li>给地点添加更多媒体信息</li>
+<li>改进文本编辑体验</li>
+</ul>
+<p>另外，每个像样的网络应用都应该在本地缓存数据，这样当网络连接不稳定时，它仍然具有功能性。</p>
+<p>希望你在这个尝试 Node.js 、 Express 和 MongoDB 的过程中收获了乐趣——如果你有任何问题或评论，欢迎加入下面的讨论！</p>
+<p>===============</p>
+<p>译者注：欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条微博<a href="http://weibo.com/2076580237/B20mzy00X" target="_blank" rel="external">http://weibo.com/2076580237/B20mzy00X</a> 以分享给更多人。</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

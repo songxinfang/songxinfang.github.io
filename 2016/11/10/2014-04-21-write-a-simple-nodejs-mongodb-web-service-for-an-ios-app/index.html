@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      为一个 iOS 应用编写一个简单的 Node.js/MongoDB Web 服务 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自 http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app
+原作者：Michael Katz
+译者：@nixzhu
+==========================================
+在当今这个协作和社交应用的世界里，其关键是要有一个能简单构建和易于部署的后台。许">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为一个 iOS 应用编写一个简单的 Node.js/MongoDB Web 服务 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-04-21-write-a-simple-nodejs-mongodb-web-service-for-an-ios-app/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自 http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app
+原作者：Michael Katz
+译者：@nixzhu
+==========================================
+在当今这个协作和社交应用的世界里，其关键是要有一个能简单构建和易于部署的后台。许">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/02/tmt_db-480x270.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/02/tmt_basic-213x320.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/02/node_run-480x109.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/02/node_server-480x88.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/02/web_helloworld-480x230.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/npm_install-480x284.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/curl_v-437x320.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/web_hello-480x230.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/02/web_hieverybody-480x230.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/02/web_404-480x230.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/web_emptyitems-480x247.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/term_create-437x320.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/02/web_createitem-480x247.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/term_update-437x320.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/02/web_updated-480x247.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/term_delete-437x320.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/web_delete-480x247.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:28:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为一个 iOS 应用编写一个简单的 Node.js/MongoDB Web 服务 | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自 http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app
+原作者：Michael Katz
+译者：@nixzhu
+==========================================
+在当今这个协作和社交应用的世界里，其关键是要有一个能简单构建和易于部署的后台。许">
+<meta name="twitter:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/02/tmt_db-480x270.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">为一个 iOS 应用编写一个简单的 Node.js/MongoDB Web 服务</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自 <a href="http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app" target="_blank" rel="external">http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app</a></p>
+<p>原作者：<a href="http://www.raywenderlich.com/u/mkatz" target="_blank" rel="external">Michael Katz</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>==========================================</p>
+<p>在当今这个协作和社交应用的世界里，其关键是要有一个能简单构建和易于部署的后台。许多组织机构都依赖于一个应用栈（Application Stack），其使用下面三项技术：</p>
+<ul>
+<li><a href="http://nodejs.org/" target="_blank" rel="external">Node.js</a></li>
+<li><a href="http://expressjs.com/" target="_blank" rel="external">Express</a></li>
+<li><a href="https://www.mongodb.org/" target="_blank" rel="external">MongoDB</a></li>
+</ul>
+<p>这个栈对于移动应用来说相当流行，因为原生数据格式是JSON，它容易被应用解析，例如通过使用 Cocoa 的 <code>NSJSONSerialization</code> 类或其它类似的解析器。</p>
+<p>在本教程中，你将学会如何搭建了一个 Node.js 环境，驱动 Express；在此平台之上，你将构建一个通过 REST API 来提供一个 MongoDB 数据库的服务器，就像这样：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/02/tmt_db-480x270.png" alt="The backend database rendered in a HTML table"><br>在一个 HTML 表格中呈现的后端数据库</p>
+<p>本教程的第二部分重点放在 iOS 应用端。你将构建一个很酷的叫做“有趣的地方”的应用，标记有趣的位置，让其它用户能够找出他们附近有趣的地方。下面稍微窥探一下你将构建的应用：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/02/tmt_basic-213x320.png" alt="The TourMyTown main view"><br>TourMyTown 的主视图</p>
+<p>本教程假设你已经了解了 JavaScript 和 Web 开发的基础，但对 Node.js、Express 以及 MongoDB 都不熟悉。</p>
+<h2 id="一个-Node-Mongo-案例"><a href="#一个-Node-Mongo-案例" class="headerlink" title="一个 Node+Mongo 案例"></a>一个 Node+Mongo 案例</h2><p>大多数 Objective-C 开发者都不太熟悉 JavaScript ，但它对于 Web 开发者来说是极其常见的语言。因为这个原因，Node 作为一个 Web 框架收获了大量人气，但还有更多原因使其成为后端服务的绝好选择：</p>
+<ul>
+<li>内建的服务器功能</li>
+<li>通过它的包管理器做到良好的项目管理</li>
+<li>一个快速的 JavaScript 引擎，也就是 V8</li>
+<li>异步事件驱动编程模型</li>
+</ul>
+<p>一个异步的关于事件和回调的编程模型非常适合服务器，它要等待许多事情，例如到来的请求以及通过其它服务（例如 MongoDB）的内部进程通信。</p>
+<p>MongoDB 是一个低开销的数据库，其所有实体都是自由形式 BSON —— “二进制 JSON” —— 文档。这能让你同异构数据打交道，而且处理各种各样的数据格式也变得很容易。因为 BSON 与 JSON 兼容，构建一个 REST API 就很简单——服务器代码能够传递请求到数据驱动器而不需要很多的中间处理。</p>
+<p>Node 和 MongoDB 在本质上都具有可扩展性，能够轻松地在跨越分布式模型中的多个机器，实现同步；这个组合对于不具有均匀分布负载的应用来说是一个理想选择。</p>
+<h2 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h2><p>本教程假设你使用 OS X Mountain Lion 或 Mavericks ，Xcode 及其 command line tools 都已经安装好了。</p>
+<p>第一步是安装 <a href="http://brew.sh/" target="_blank" rel="external">Homebrew</a> 。就像 CocoaPods 为 Cocoa 管理各种包 和 Gem 为 Ruby 管理各种包一样，Homebrew 管理 OS X 上的 Unix 工具。它构建在 Ruby 和 Git 之上，而且它具有高度的灵活性和可定制性。</p>
+<p>如果你已经安装了 Homebrew ，那就可以跳过下面的步骤。不然，打开终端执行下列命令来安装 Homebrew ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby -e &quot;$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：<code>cURL</code> 是使用 URL 请求来发送和接收文件与数据的称手工具。此处你使用它加载 Homebrew 安装脚本——在本教程后面，你还会使用它与 Node 服务器交互。</p>
+</blockquote>
+<p>一旦安装好 Homebrew ，就在终端输入下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew update</div></pre></td></tr></table></figure>
+<p>这只是更新 Homebrew ，让你拥有最新的软件包列表。</p>
+<p>现在，通过 Homebrew 安装 MongoDB ，使用下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install mongodb</div></pre></td></tr></table></figure>
+<p>记下 MongoDB 被安装的位置，它就在输出的“Summary”中。稍后你将用它加载 MongoDB 服务。</p>
+<p>从 <a href="http://nodejs.org/download/" target="_blank" rel="external">http://nodejs.org/download/</a> 下载并运行 Node.js 安装器。</p>
+<p>一旦安装完成，你就马上测试 Node.js 是否安装成功。</p>
+<p>在终端里输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node</div></pre></td></tr></table></figure>
+<p>这能让你进入 Node.js 的交互式运行环境，在此你可以执行 JavaScript 表达式。</p>
+<p>在提示符后输入下面的表达式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">console.log(&quot;Hello World&quot;);</div></pre></td></tr></table></figure>
+<p>你将得到如下输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hello World</div><div class="line">undefined</div></pre></td></tr></table></figure>
+<p><code>console.log</code> 在 Node.js 中相当于 <code>NSLog</code> 。当然，<code>console</code> 的输出流比 <code>NSLog</code> 的要复杂得多：它有 <code>console.info</code>、<code>console.assert</code>、<code>console.error</code> 以及你期望的从更先进的记录器例如 <code>CocoaLumberjack</code> 而来的其它流。</p>
+<p>写在输出里的 “undefined” 值是 <code>console.log</code> 的返回值，而 <code>console.log</code> 没有返回值。 因为 Node.js 总是显示出所有表达式的输出，无论其返回值是否有定义。</p>
+<blockquote>
+<p>注意：如果你以前使用过 JavaScript ，你需要知道 Node.js 环境和浏览器环境之间有些许不同。<code>全局</code>对象被叫做 <code>global</code> 而不是 <code>window</code> 。在 Node.js 交互提示符后键入 <code>global</code> 并按下回车就会显示 global 命名空间里所有的方法和对象；当然，直接使用 <a href="http://nodejs.org/api/" target="_blank" rel="external">Node.js 文档</a> 来做参考更容易些。 :]<br><code>global</code> 对象有所有预定义的常数、函数以及数据类型，都可用于所有运行在 Node.js 环境里的程序。任何用户创造的变量同样也都添加到全局上下文对象。基本上 <code>global</code> 的输出将列出所有内存中可以访问的事物。</p>
+</blockquote>
+<h2 id="运行一个-Node-js-脚本"><a href="#运行一个-Node-js-脚本" class="headerlink" title="运行一个 Node.js 脚本"></a>运行一个 Node.js 脚本</h2><p>Node.js 的交互式环境对于玩耍和调试 JavaScript 表达式是很棒的，但通常你都会使用脚本文件来做实际的事情。就像 iOS 应用包含有 <code>Main.m</code> 作为其入口点，Node.js 的默认入口点就是 <code>index.js</code> 。然而，不同于 Objective-C ，这里没有 main 函数；相反， <code>index.js</code> 将从头到尾的执行。</p>
+<p>按下 Control+C 两次以退出 Node.js Shell。执行下面的命令，新建一个目录以保存你的脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir ~/Documents/NodeTutorial</div></pre></td></tr></table></figure>
+<p>然后执行下面的命令进入新建的目录并使用你默认的文本编辑器新建一个脚本文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd ~/Documents/NodeTutorial/; edit index.js</div></pre></td></tr></table></figure>
+<p>在 <code>index.js</code> 中添加如下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello World."</span>);</div></pre></td></tr></table></figure>
+<p>保存你的工作，回到终端执行下面的命令看看你的脚本如何运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node index.js</div></pre></td></tr></table></figure>
+<p>再一次，我们看到了熟悉的 “Hello World” 输出。你也可以执行 <code>node .</code> 来运行你的脚本，<code>.</code> 就会默认查找 <code>index.js</code> 。</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/02/node_run-480x109.png" alt="node_run"></p>
+<p>固然，一个 “Hello World” 脚本成不了一个服务器，但这是测试你的安装是否成功的快速方式。下一节将向你介绍 Node.js 包的世界，这会成为你那闪亮的新 Web 服务器的基础！</p>
+<h2 id="Node-包"><a href="#Node-包" class="headerlink" title="Node 包"></a>Node 包</h2><p>Node.js 应用程序都被分成不同的包，这就是 Node.js 世界的“框架”。 Node.js 自带有几个基础且强大的包，但还有超过 50000 个由活跃的开发社区提供的公开包——如果你不能找到你需要的包，你自己也可以比较容易地创造。</p>
+<blockquote>
+<p>注意：查看 <a href="https://npmjs.org/" target="_blank" rel="external">https://npmjs.org/</a> 可得到所有可用包的列表</p>
+</blockquote>
+<p>用下列代码替换 <code>index.js</code> 的内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1</span></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="comment">//2</span></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html'</span>&#125;);</div><div class="line">  res.end(<span class="string">'&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;'</span>);</div><div class="line">&#125;).listen(<span class="number">3000</span>);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Server running on port 3000.'</span>);</div></pre></td></tr></table></figure>
+<p>依次按照编号好的注释看看：</p>
+<ol>
+<li><code>require</code> 引入（import）模块（module）到当前文件。本次你引入了 HTTP 库。</li>
+<li>你创建一个 Web 服务，它对简单的 HTTP 请求的回应是发送一个 200 应答，并将页面内容放在应答里。</li>
+</ol>
+<p>Node.js 作为一个运行时环境的最大的优势之一就是他的 <code>事件驱动模型（event-driven model）</code> 。它围绕着异步调用的回调函数的概念来设计。在上面的例子里，你正监听 3000 端口等着传入的 HTTP 请求。当你收到一个请求，你的脚本调用 <code>function (req, res) {…}</code> 并返回一个应答给调用者。</p>
+<p>保存你的文件，回到终端并执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node index.js</div></pre></td></tr></table></figure>
+<p>你将在控制台看到如下输出：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/02/node_server-480x88.png" alt="node_server"></p>
+<p>打开你最喜欢的浏览器导航至 <a href="http://localhost:3000" target="_blank" rel="external">http://localhost:3000</a> ；好好瞧着， Node.js 正在提供给你的是一个 “Hello World” 页面。</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/02/web_helloworld-480x230.png" alt="web_helloworld"></p>
+<p>你的脚本还在哪里，耐心地等待从 3000 端口传入的 HTTP 请求。要干掉（kill）你的 Node 实例，只需在终端按下 <code>Ctrl+C</code>。</p>
+<blockquote>
+<p>注意：Node 包通常由顶层函数或引入的对象写就。通过使用 require ，这个函数在之后就被分配给一个顶层变量。这样有助于以一个健全的方式管理范围（scope）以及暴露（expose）模块的 API 。稍后在本教程中你会看到如何创建一个自定义模块，你将为 MongoDB 添加一个驱动器。</p>
+</blockquote>
+<h2 id="NPM-——-使用外部-Node-模块"><a href="#NPM-——-使用外部-Node-模块" class="headerlink" title="NPM —— 使用外部 Node 模块"></a>NPM —— 使用外部 Node 模块</h2><p>前一小节覆盖了 Node.js 内建的模块，那第三方的模块该怎么处理呢？例如你之后需要的 Express 模块，它为你的服务器平台提供路由中间件。</p>
+<p>外部模块同样可以使用 require 函数引入到文件里，但你需要分开下载它们然后才能用于你的 Node 实例。</p>
+<p>Node.js 使用　<code>npm</code> —— Node 包模块——来下载、安装以及管理包依赖。如果你熟悉 CocoaPods 或者 Ruby gems ，那么你对 <code>npm</code> 也会觉得熟悉。你的 Node.js 应用程序使用 <code>package.json</code> ，它专门定义配置和 <code>npm</code> 依赖。</p>
+<h2 id="使用-Express"><a href="#使用-Express" class="headerlink" title="使用 Express"></a>使用 Express</h2><p>Express 是一个流行的 Node.js 模块，提供路由中间件。为什么你会需要这个独立的包呢？考虑下面的情形。</p>
+<p>如果你只使用 <code>http</code> 模块自身，你不得不分开解析每个请求的位置以找出提供什么内容给请求者——如此这般，事情很快就会变得难以处理。</p>
+<p>然而，用 Express 你就能容易地为每个请求定义路由和回调。 Express 同样让为基于 HTTP 动词（例如 POST, PUT, GET, DELETE, HEAD, 等）以提供不同的回调变得很容易。</p>
+<h3 id="HTTP-动词的简要介绍"><a href="#HTTP-动词的简要介绍" class="headerlink" title="HTTP 动词的简要介绍"></a>HTTP 动词的简要介绍</h3><p>一个 HTTP 请求包含一个方式——或者动词——的值。默认值是 <code>GET</code> ，它是为了获取数据，例如浏览器中 Web 页面。 <code>POST</code> 意味着上传数据，例如提交 Web 表单。对于 Web API 来说， <code>POST</code> 通常用于添加数据，但它同样可用于远程处理调用类型端点（but it can also be used for remote procedure call-type endpoints.）。</p>
+<p><code>PUT</code> 与 <code>POST</code> 的不同在于它通常用于替换已有数据。在实践中， <code>POST</code> 和 <code>PUT</code> 通常以同样的方式使用：在请求 Body 里提供实体以放进后端的数据存储里。 <code>DELETE</code>  用于从你的后端数据存储里移除条目。</p>
+<p><code>POST</code>、<code>GET</code>、<code>PUT</code> 以及 <code>DELETE</code> 就是 HTTP 实现的 CRUD 模型 —— Create、Read、Update 以及 Delete。</p>
+<p>还有其它一些少有人知的 HTTP 动词。 <code>HEAD</code> 表现得像一个 <code>GET</code> 但只返回应答头而没有 Body 。这有助于最小化数据传输，如果应答头中的信息足够确定是否有可用的新数据。其它动词如 <code>TRACE</code> 和 <code>CONNECT</code> 用于网络路由。</p>
+<h2 id="添加一个包到-Node-实例"><a href="#添加一个包到-Node-实例" class="headerlink" title="添加一个包到 Node 实例"></a>添加一个包到 Node 实例</h2><p>在终端里执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">edit package.json</div></pre></td></tr></table></figure>
+<p>这会创建一个新的 <code>package.json</code> ，它将包含你的包配置和依赖。</p>
+<p>添加如下代码到 <code>package.json</code> 中：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"mongo-server"</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"0.0.1"</span>,</div><div class="line">  <span class="attr">"private"</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">"dependencies"</span>: &#123;</div><div class="line">    <span class="attr">"express"</span>: <span class="string">"3.3.4"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个文件定义了一些元数据，例如项目的名字和版本，一些脚本，以及对于你的目的来说最重要的包依赖。下面说明每行的意思：</p>
+<ul>
+<li><code>name</code> 是项目的名字。</li>
+<li><code>version</code> 是项目目前的版本。</li>
+<li><code>private</code> 防止项目被意外地公开，如果你设置其为 true 。</li>
+<li><code>dependencies</code> 是一个包含你应用使用的模块的列表。</li>
+</ul>
+<p>依赖以 键/值 形式接受模块名和版本。你的依赖列表包含有 3.3.4 版本的 Express； 如果你想指明 Node.js 去使用最新版本的包，你可以使用通配符”*”。</p>
+<p>保存文件，在终端里执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install</div></pre></td></tr></table></figure>
+<p>你会看到如下输出：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/npm_install-480x284.png" alt="npm_install"></p>
+<p><code>install</code> 下载并安装 <code>package.json</code> 指定的依赖——以及你的依赖本身的依赖！:] ——存进一个叫做 <code>node_modules</code> 的目录，并让你的应用程序使用它们。</p>
+<p>一旦 <code>npm</code> 完成，你就可以在你的应用程序中使用 Express 了。</p>
+<p>在 <code>index.js</code> 中找到下列行：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div></pre></td></tr></table></figure>
+<p>并添加 Express 的 <code>require</code> 调用，如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>),</div><div class="line">    express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div></pre></td></tr></table></figure>
+<p>这就引入了 Express 包，并将其存在变量 <code>express</code> 中。</p>
+<p>添加如下代码到 <code>index.js</code>，就在刚在添加的区域的下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.set(<span class="string">'port'</span>, process.env.PORT || <span class="number">3000</span>);</div></pre></td></tr></table></figure>
+<p>这就创建了一个 Express 应用并设置其默认端口为 3000 。你可以通过创建一个环境变量 <code>PORT</code> 来覆盖此默认值。这种类型的自定义在开发工具中非常方便，特别是如果你有多个应用程序监听这好几个端口。</p>
+<p>添加如下代码到 <code>index.js</code> ，就在刚刚添加的区域的下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这就创建了一个<code>路由处理器（route handler）</code>，它是给定 URL 的请求处理者链的花哨名字。Express 匹配请求中指定的路径并执行适当的回调。</p>
+<p>你上面的回调告诉 Express 去匹配根路径 “/“ 并返回一个给定的 HTML 。 <code>send</code> 为你格式化各种响应头——例如 <code>content-type</code> 和 <code>status code</code> —— 如此你就能专注于编写伟大代码了。</p>
+<p>最后，替换 <code>http.createServer(...)</code> 为下面的实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Express server listening on port '</span> + app.get(<span class="string">'port'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这比之前的稍微紧凑些。 <code>app</code> 分开实现 <code>function(req,res)</code> 回调，而不是在  <code>createServer</code> 这里内联地包含它们。你同样添加了一个完成处理器回调，一旦端口准备好接收请求它就会被调用。现在你的应用在打印 “listening” 消息到控制台之前就等着端口准备好。</p>
+<p>为了审查，<code>index.js</code> 整个看起来如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>),</div><div class="line">    express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.set(<span class="string">'port'</span>, process.env.PORT || <span class="number">3000</span>);</div><div class="line"></div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Express server listening on port '</span> + app.get(<span class="string">'port'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>保存你的文件，并在终端执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node index.js</div></pre></td></tr></table></figure>
+<p>回到浏览器，重新载入 <a href="http://localhost:3000" target="_blank" rel="external">http://localhost:3000</a> 去看看你的 Hello World 页面是否依然加载。</p>
+<p>你的页面看起来与之前没有区别，但有不止一种方法可以查看引擎盖下发生了什么事。</p>
+<p>创建终端的另一个实例，并执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -v http://localhost:3000</div></pre></td></tr></table></figure>
+<p>你会看到如下输出：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/curl_v-437x320.png" alt="curl_v"></p>
+<p><code>curl</code> 吐出你的 HTTP 请求的头和内容，给你显示服务传来的东西的原始细节。注意 <code>X-Powered-By : Express</code> 头；Express 会自动添加这个元数据到应答里。</p>
+<h2 id="使用-Express-提供内容"><a href="#使用-Express-提供内容" class="headerlink" title="使用 Express 提供内容"></a>使用 Express 提供内容</h2><p>用 Express 提供静态文件非常容易。</p>
+<p>添加如下语句到 <code>index.js</code> 顶部的 <code>require</code> 区域：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div></pre></td></tr></table></figure>
+<p>再添加下面一行到 <code>app.set</code> 语句之后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.use(express.static(path.join(__dirname, <span class="string">'public'</span>)));</div></pre></td></tr></table></figure>
+<p>这就告诉 Express 去使用 <code>express.static</code> 中间件 ，它为到来的请求提供静态文件作为应答。</p>
+<p><code>path.join(__dirname, &#39;public&#39;)</code> 映射本地子目录 <code>public</code> 到基路由 <code>/</code> ； 它使用 Node.js <code>path</code> 模块创建一个平台无关的子目录字符串。</p>
+<p><code>index.js</code> 现在看起来如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1</span></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>),</div><div class="line">    express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">    path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"></div><div class="line"><span class="comment">//2</span></div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.set(<span class="string">'port'</span>, process.env.PORT || <span class="number">3000</span>);</div><div class="line">app.use(express.static(path.join(__dirname, <span class="string">'public'</span>)));</div><div class="line"></div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Express server listening on port '</span> + app.get(<span class="string">'port'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>使用了静态处理器，任何在 <code>/public</code> 中的东西都可以由其名字访问到。</p>
+<p>为了证明这一点，按下 Control+C 干掉你的 Node 实例，然后执行下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir public; edit public/hello.html</div></pre></td></tr></table></figure>
+<p>添加如下代码到 <code>hello.html</code> ：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>这就创建了一个新的 <code>public</code> 目录并创建了一个基础的静态 HTML 文件。</p>
+<p>再次用命令 <code>node index.js</code> 重启你的 Node 实例。 浏览器打开 <a href="http://localhost:3000/hello.html" target="_blank" rel="external">http://localhost:3000/hello.html</a> 你就会看到这个新创建的页面，如下所示：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/web_hello-480x230.png" alt="web_hello"></p>
+<h2 id="高级路由"><a href="#高级路由" class="headerlink" title="高级路由"></a>高级路由</h2><p>静态页面是不错，但 Express 的真正威力是动态路由。 Express 在路由字符串上使用一个正则表达是匹配器，允许你为路由定义参数。</p>
+<p>举个例子，路由字符串可以包含下列元素：</p>
+<ul>
+<li>静态元素—— <code>/files</code> 只会匹配 <code>http://localhost:3000/pages</code> （译者注：似乎有点问题，应该只会匹配 <code>http://localhost:3000/files</code>）</li>
+<li>以“:”开头的参数—— <code>/files/:filename</code> 匹配 <code>/files/foo</code> 和 <code>/files/bar</code>，但不能匹配 <code>/files</code></li>
+<li>以“?”结尾的可选参数——<code>/files/:filename?</code> 匹配 <code>/files/foo</code> 也能匹配 <code>/files</code></li>
+<li>正则表达式—— <code>/^\/people\/(\w+)/</code> 匹配 <code>/people/jill</code> 和 <code>/people/john</code></li>
+</ul>
+<p>要试试看，就添加下列路由到 <code>index.js</code> 中 <code>app.get</code> 语句后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app.get(<span class="string">'/:a?/:b?/:c?'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</div><div class="line">	res.send(req.params.a + <span class="string">' '</span> + req.params.b + <span class="string">' '</span> + req.params.c);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这就创建了一个新的路由，它接收三个路径层级并在应答 Body 中显示这些路径组件。任何由<code>:</code>开始的东西都映射到所提供名字的请求参数上。</p>
+<p>重启你的 Node 实例，再将浏览器转到 <a href="http://localhost:3000/hi/every/body" target="_blank" rel="external">http://localhost:3000/hi/every/body</a> 。你将看到如下页面：</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/02/web_hieverybody-480x230.png" alt="web_hieverybody"></p>
+<p>“hi” 是 <code>req.params.a</code> 的值，“every” 是<code>req.params.b</code> 的值，最后 “body” 分配给 <code>req.params.c</code> 。</p>
+<p>路由匹配对于构建 REST API 来说很有用，你可以用动态路径指定后端数据存储的特定元素。</p>
+<p>除了 <code>app.get</code> ， Express 还支持 <code>app.post</code>、<code>app.put</code>、<code>app.delete</code> 等等。</p>
+<h2 id="错误处理与模版化-Web-视图"><a href="#错误处理与模版化-Web-视图" class="headerlink" title="错误处理与模版化 Web 视图"></a>错误处理与模版化 Web 视图</h2><p>服务器错误可用一到两种方式处理。你可以传递一个异常给调用栈——这样做可能干掉应用——或者你可以捕捉错误并返回一个合适的错误码。</p>
+<p><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank" rel="external">HTTP 1.1</a> 协议在 4xx 和 5xx 范围内定义了好几个错误码。 400 段的错误用于用户错误，例如请求一个不存在的条目：一个熟悉的错误码是 404 Not Found 错误。500 段的错误表示服务器错误，例如超时或者编程错误（比如 null 解除引用（null dereference））。</p>
+<p>你将添加一个捕捉所有（catch-all）的路由并在请求内容不能被找到时返回一个 404 页面。因为路由处理器按照它们设置 <code>app.use</code> 或 app.<em>verb</em> 的顺序添加，一个捕捉所有（catch-all）的路由可以添加在路由链的最后。</p>
+<p>添加如下代码到 <code>index.js</code> ，就在最后的 <code>app.get</code> 与调用 <code>http.createServer</code> 之间:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app.use(<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123; <span class="comment">//1</span></div><div class="line">    res.render(<span class="string">'404'</span>, &#123;<span class="attr">url</span>:req.url&#125;); <span class="comment">//2</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这些代码会导致 404 页面的加载，如果此处没有前一个调用使用 <code>res.send()</code> .</p>
+<p>这里有一些值得记录的点：</p>
+<ul>
+<li><code>app.use(callback)</code> 匹配<em>所有</em>请求。当它被放在所有 <code>app.use</code> 和 app.<em>verb</em> 的列表的最后，callback 就会成为捕捉所有（catch-all）。</li>
+<li><code>res.render(view, params)</code>调用使用<code>模版引擎( templating engine)</code>渲染的输出填充响应 Body 。 一个模版引擎使用磁盘上一个叫做“View”的模版文件并用一组键值参数替换其中的变量以生成一个新的文档。</li>
+</ul>
+<p>等等——一个“模版引擎”？这货搞什么飞机？</p>
+<p>Express 能使用好几种模版引擎来提供视图。要让这个例子工作起来，你将添加一个流行的 <a href="http://jade-lang.com/" target="_blank" rel="external">Jade</a> 模版引擎到你的应用程序中。</p>
+<p>Jade 是一种简单的语言，它避开括号并使用空白符来代替，以确定 HTML 标签的顺序和内容。它同样可以使用变量、条件判断、迭代以及分支以便动态地创建 HTML 文档。</p>
+<p>更新 <code>package.json</code> 中的依赖为：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"dependencies"</span>: &#123;</div><div class="line">    <span class="attr">"express"</span>: <span class="string">"3.3.4"</span>,</div><div class="line">    <span class="attr">"jade"</span>: <span class="string">"1.1.5"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>回到终端，干掉你的 Node 实例，并执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm update</div></pre></td></tr></table></figure>
+<p>这将下载并安装 <code>jade</code> 包。</p>
+<p>添加如下代码到 <code>index.js</code> ，就在第一个 <code>app.set</code> 之后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">app.set(<span class="string">'views'</span>, path.join(__dirname, <span class="string">'views'</span>));</div><div class="line">app.set(<span class="string">'view engine'</span>, <span class="string">'jade'</span>);</div></pre></td></tr></table></figure>
+<p>上面的第一行指定了视图模版的位置，第二行就设置 jade 作为视图渲染引擎。</p>
+<p>在终端执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir views; edit views/404.jade</div></pre></td></tr></table></figure>
+<p>添加下列代码到 <code>404.jade</code> 中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">doctype html</div><div class="line">body</div><div class="line">    h1= &apos;Could not load page: &apos; + url</div></pre></td></tr></table></figure>
+<p>Jade 模版中的前两行创建了一个有 <code>body</code> 元素的新 HTML 文档。第三行通过缩进创在 <code>body</code> 内建了一个  <code>h1</code> 元素。间距在 Jade 中很重要！ :]</p>
+<p><code>h1</code> 元素的文本由  “Could not load page” 和作为 <code>index.js</code> 中 <code>res.render()</code> 的一部分传递的 <code>url</code> 参数串联而成。</p>
+<p>作为一个快速检查，你的 <code>index.js</code> 现在看起来如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>),</div><div class="line">    express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">    path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.set(<span class="string">'port'</span>, process.env.PORT || <span class="number">3000</span>);</div><div class="line">app.set(<span class="string">'views'</span>, path.join(__dirname, <span class="string">'views'</span>)); <span class="comment">//A</span></div><div class="line">app.set(<span class="string">'view engine'</span>, <span class="string">'jade'</span>); <span class="comment">//B</span></div><div class="line"></div><div class="line">app.use(express.static(path.join(__dirname, <span class="string">'public'</span>)));</div><div class="line"></div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.use(<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</div><div class="line">    res.render(<span class="string">'404'</span>, &#123;<span class="attr">url</span>:req.url&#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Express server listening on port '</span> + app.get(<span class="string">'port'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>重启你的 Node 实例，使用浏览器加载 URL <a href="http://localhost:3000/show/a/404/page" target="_blank" rel="external">http://localhost:3000/show/a/404/page</a> 。你将看到如下页面：</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/02/web_404-480x230.png" alt="web_404"></p>
+<p>现在你的 <code>index.js</code> 中有足够的启动代码去接收传入的请求并提供一些基本的响应。而缺失的部分就是数据库持久化，它能将这些东西变成一个有用的Web应用程序，能够被一个移动应用所利用。</p>
+<h2 id="介绍-MongoDB"><a href="#介绍-MongoDB" class="headerlink" title="介绍 MongoDB"></a>介绍 MongoDB</h2><p>MongoDB 是一个存储 JSON 对象的数据库。不像 SQL 数据库，类似 Mongo 的 <code>NoSQL 数据库</code> 不支持实体关系。进一步说明，没有预定义的模式，所以同一集合里的实体不需要有同样的字段或符合预定义的模式。</p>
+<p>MongoDB 同样提供了强大的的查询语言 <code>map-reduce</code> 以及对定位数据的支持。MongoDB 因其扩展、复制和碎片（scale, replicate and shard）能力而广受欢迎。扩展和高可用特性不在本教程覆盖范围。</p>
+<p>MongoDB 最大的缺点是缺少关系支持，而且在内存映射实际的数据库文件时可能会占用过多内存。这些问题可以通过仔细构造的数据得到缓解；这将在本教程的第二部分进行说明。</p>
+<p>因为 MongoDB 文档 和 JSON 的亲密关系，MongoDB 对于 Web 和移动应用都是很棒的选择。 MongoDB 不存储原始 JSON；而是叫做 BSON（即 Binary JSON） 格式的文档，这对于数据存储和查询来说更有效率。BSON 同时还支持比 JSON 更多的数据类型，例如日期和C类型（C-type）。</p>
+<h2 id="添加-MongoDB-到你的项目中"><a href="#添加-MongoDB-到你的项目中" class="headerlink" title="添加 MongoDB 到你的项目中"></a>添加 MongoDB 到你的项目中</h2><p>MongoDB 是一个原生应用程序，通过<code>驱动器（drivers）</code>访问。有好多种驱动器可用于几乎任何环境，当然包括 Node.js 。MongoDB 驱动器连接 MongoDB 服务器并发出命令去更新或读取数据。</p>
+<p>这就意味着你需要运行一个 MongoDB 实例以在一个打开的端口上监听。幸运的是，这就是你的下一个步骤！:]</p>
+<p>新开一个终端窗口并执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/opt/mongodb/; mongod</div></pre></td></tr></table></figure>
+<p>译者注：这里可能会发生错误 <code>ERROR: dbpath (/data/db) does not exist.</code>，试试先创建一个自定义路径，再用 <code>mongod --dbpath &#39;~/somepath&#39;</code> 来启动服务器。</p>
+<p>这就能启动一个 MongoDB 守护服务器。</p>
+<p>现在 MongoDB 已经启动，运行在默认端口 27017 上。</p>
+<p>虽然 MongoDB 驱动器提供了数据库连接，但它依然需要被连接到服务器以便转换传入的 HTTP 请求为适当的数据库命令。</p>
+<h2 id="创建一个-MongoDB-集合驱动器（Collection-Driver）"><a href="#创建一个-MongoDB-集合驱动器（Collection-Driver）" class="headerlink" title="创建一个 MongoDB 集合驱动器（Collection Driver）"></a>创建一个 MongoDB 集合驱动器（Collection Driver）</h2><p>还记得你之前实现的 <code>/:a/:b/:c</code> 路由吗？如果你可以使用这个模式去查找数据库实体如何？</p>
+<p>既然 MongoDB 文档被组织为集合，那么路由就可以很简单如： <code>/:collection/:entity</code> ，这能让你以超级 fashion 的 RESTful 的方式使用一个简单的地址系统去访问对象。</p>
+<p>干掉你的 Node 实例并在终端执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">edit collectionDriver.js</div></pre></td></tr></table></figure>
+<p>添加如下代码到 <code>collectionDriver.js</code> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ObjectID = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).ObjectID;</div></pre></td></tr></table></figure>
+<p>这一行引入了各个需要的包；在本例中，是来自 MongoDB 包的 <code>ObjectID</code> 。</p>
+<blockquote>
+<p>注意：如果你比较熟悉传统数据库，你可能明白术语“主键”。MongoDB有类似的概念：默认来说，新实体都会被分配一个唯一的 <code>_id</code> 字段，其类型为  <code>ObjectID</code> ，这是 MongoDB 用来优化查找和插入的。因为 ObjectID 是一个 BSON 类型而不是 JSON 类型，你必须转换任何传入的字符串为 ObjectID ，如果它们用于和一个　<code>_id</code> 字段进行比较。</p>
+</blockquote>
+<p>添加如下代码到 <code>collectionDriver.js</code> 刚才那行后面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CollectionDriver = <span class="function"><span class="keyword">function</span>(<span class="params">db</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.db = db;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这个函数定义了 <code>CollectionDriver</code> 构造器方法；它存储一个 MongoDB 客户端实例以便之后使用。在 JavaScript 中， <code>this</code> 是当前上下文的引用，就像 Objective-C 中的 <code>self</code> 。</p>
+<p>继续添加如下代码当刚刚添加的代码块下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">CollectionDriver.prototype.getCollection = <span class="function"><span class="keyword">function</span>(<span class="params">collectionName, callback</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.db.collection(collectionName, <span class="function"><span class="keyword">function</span>(<span class="params">error, the_collection</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span>( error ) callback(error);</div><div class="line">    <span class="keyword">else</span> callback(<span class="literal">null</span>, the_collection);</div><div class="line">  &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这一段定义了一个帮助方法 <code>getCollection</code> 以便通过名字去获取一个 Mongo 集合。你通过添加函数到 <code>prototype</code> 定义了类方法。</p>
+<p><code>db.collection(name,callback)</code> 获取集合对象并返回集合——或一个错误——给回调。</p>
+<p>继续添加如下代码到刚才添加的代码块下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">CollectionDriver.prototype.findAll = <span class="function"><span class="keyword">function</span>(<span class="params">collectionName, callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.getCollection(collectionName, <span class="function"><span class="keyword">function</span>(<span class="params">error, the_collection</span>) </span>&#123; <span class="comment">//A</span></div><div class="line">      <span class="keyword">if</span>( error ) callback(error);</div><div class="line">      <span class="keyword">else</span> &#123;</div><div class="line">        the_collection.find().toArray(<span class="function"><span class="keyword">function</span>(<span class="params">error, results</span>) </span>&#123; <span class="comment">//B</span></div><div class="line">          <span class="keyword">if</span>( error ) callback(error);</div><div class="line">          <span class="keyword">else</span> callback(<span class="literal">null</span>, results);</div><div class="line">        &#125;);</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>A 行的 <code>CollectionDriver.prototype.findAll</code> 获取集合，如果没有如不能访问 MongoDB 服务器这样的错误，它就调用 B 行的 <code>find()</code> 。这将返回所有找到的对象。</p>
+<p><code>find()</code> 返回一个<code>数据游标（data cursor）</code>，它可用于遍历匹配对象。<code>find()</code> 同样能接受一个选择器对象来过滤结果。 <code>toArray()</code> 组织所有的结果为一个数组并将其传递给回调。最后回调返回给调用者一个找到的对象的数组或者一个错误。</p>
+<p>继续添加如下代码到刚才添加的代码块下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">CollectionDriver.prototype.get = <span class="function"><span class="keyword">function</span>(<span class="params">collectionName, id, callback</span>) </span>&#123; <span class="comment">//A</span></div><div class="line">    <span class="keyword">this</span>.getCollection(collectionName, <span class="function"><span class="keyword">function</span>(<span class="params">error, the_collection</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (error) callback(error);</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">var</span> checkForHexRegExp = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"^[0-9a-fA-F]&#123;24&#125;$"</span>); <span class="comment">//B</span></div><div class="line">            <span class="keyword">if</span> (!checkForHexRegExp.test(id)) callback(&#123;<span class="attr">error</span>: <span class="string">"invalid id"</span>&#125;);</div><div class="line">            <span class="keyword">else</span> the_collection.findOne(&#123;<span class="string">'_id'</span>:ObjectID(id)&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">error,doc</span>) </span>&#123; <span class="comment">//C</span></div><div class="line">                <span class="keyword">if</span> (error) callback(error);</div><div class="line">                <span class="keyword">else</span> callback(<span class="literal">null</span>, doc);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>在 A 行， <code>CollectionDriver.prototype.get</code> 使用 <code>_id</code> 从一个集合中获取单个条目。类似于 <code>prototype.findAll</code> 方法，这个调用首先获取一个集合对象然后在返回的对象上执行一个 <code>findOne</code> 。因为这匹配 <code>_id</code> 字段，本例中的一个 <code>find()</code> 或 <code>findOne()</code> 将会使用正确的<a href="http://docs.mongodb.org/manual/reference/bson-types/" target="_blank" rel="external">数据类型</a>来匹配它。</p>
+<p>MongoDB 存储 <code>_id</code> 字段为 BSON 类型 <code>ObjectID</code> 。在上面的 C 行，<code>ObjectID()</code> 接受一个字符串并将其转换为一个 BSON ObjectID 去匹配集合。然而，<code>ObjectID()</code> 很小气，需要适当的十六进制字符串否则它会返回一个错误：因此，B 行会先用正则作检查。</p>
+<p>这不能保证有一个与 <code>_id</code> 匹配的对象，但它保证 <code>ObjectID</code> 能够传递字符串。选择器 <code>{&#39;_id&#39;:ObjectID(id)}</code> 使用提供的 <code>id</code> 匹配 <code>_id</code> 字段。</p>
+<blockquote>
+<p>注意：从一个不存在的集合或实体中读取不是一个错误—— MongoDB 驱动器只会返回一个空的容器。</p>
+</blockquote>
+<p>继续添加如下代码到刚才添加的代码块下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exports.CollectionDriver = CollectionDriver;</div></pre></td></tr></table></figure>
+<p>这一行定义或暴露实体用于其他应用程序，它们以一个需求模块列在 <code>collectionDriver.js</code> 中。</p>
+<p>保存你的修改——你完成了这个文件！现在你需要一个方式去调用这个文件。</p>
+<h2 id="使用你的集合驱动器"><a href="#使用你的集合驱动器" class="headerlink" title="使用你的集合驱动器"></a>使用你的集合驱动器</h2><p>要调用你的 <code>collectionDriver</code> ，首先添加下面一行到 <code>package.json</code> 中的 <code>dependencies</code> 内：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">"mongodb":"1.3.23"</div></pre></td></tr></table></figure>
+<p>在终端执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm update</div></pre></td></tr></table></figure>
+<p>这将下载并安装 MongoDB 包。</p>
+<p>在终端执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">edit views/data.jade</div></pre></td></tr></table></figure>
+<p>现在添加下列代码到 <code>data.jade</code> 中，注意缩进层级：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">body</div><div class="line">    h1= collection</div><div class="line">    #objects</div><div class="line">        table(border=1)</div><div class="line">          if objects.length &gt; 0</div><div class="line">              - each val, key in objects[0]</div><div class="line">                  th= key</div><div class="line">          - each obj in objects</div><div class="line">            tr.obj</div><div class="line">              - each val, key in obj</div><div class="line">                td.key= val</div></pre></td></tr></table></figure>
+<p>这个模版渲染一个集合到一个 HTML 表格中，使其对人类可读。</p>
+<p>添加下列代码到 <code>index.js</code> ，就在 <code>path = require(&#39;path&#39;)</code> 那行下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">MongoClient = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).MongoClient,</div><div class="line">Server = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Server,</div><div class="line">CollectionDriver = <span class="built_in">require</span>(<span class="string">'./collectionDriver'</span>).CollectionDriver;</div></pre></td></tr></table></figure>
+<p>这里你包含了来自 MongoDB 模块的 <code>MongoClient</code> 和  <code>Server</code> 对象以及你新创建的 <code>CollectionDriver</code> 。</p>
+<p>添加下列代码到 <code>index.js</code> ，就在最后一行 <code>app.set</code> 的下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mongoHost = <span class="string">'localHost'</span>; <span class="comment">//A</span></div><div class="line"><span class="keyword">var</span> mongoPort = <span class="number">27017</span>;</div><div class="line"><span class="keyword">var</span> collectionDriver;</div><div class="line"></div><div class="line"><span class="keyword">var</span> mongoClient = <span class="keyword">new</span> MongoClient(<span class="keyword">new</span> Server(mongoHost, mongoPort)); <span class="comment">//B</span></div><div class="line">mongoClient.open(<span class="function"><span class="keyword">function</span>(<span class="params">err, mongoClient</span>) </span>&#123; <span class="comment">//C</span></div><div class="line">  <span class="keyword">if</span> (!mongoClient) &#123;</div><div class="line">      <span class="built_in">console</span>.error(<span class="string">"Error! Exiting... Must start MongoDB first"</span>);</div><div class="line">      process.exit(<span class="number">1</span>); <span class="comment">//D</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">var</span> db = mongoClient.db(<span class="string">"MyDatabase"</span>);  <span class="comment">//E</span></div><div class="line">  collectionDriver = <span class="keyword">new</span> CollectionDriver(db); <span class="comment">//F</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>上面 A 行假设 MongoDB 实例是本地运行在端口 27017 。如果你已经在其他地方运行过 MongoDB 服务器，那你就需要修改这些值，但在本教程中就留下它们吧。</p>
+<p>B 行创建了一个新的 MongoClient 并调用 C 行的 <code>open</code> 试图建立一个连接。如果你的连接尝试失败了，那很可能是你还没有启动你的 MongoDB 服务器。在无连接的情况下，应用将在 D 行退出。</p>
+<p>如果客户端连接成功，它就在 E 行打开 <code>MyDatabase</code> 数据库。一个 MongoDB 实例可以包含多个数据库，每一个都有唯一的命名空间和唯一的数据。最后，你在 F 行创建 <code>CollectionDriver</code> 对象并传递一个处理器给 MongoDB 客户端。</p>
+<p>用下列语句替换 <code>index.js</code> 中的头两行 <code>app.get</code> 调用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">app.get(<span class="string">'/:collection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123; <span class="comment">//A</span></div><div class="line">   <span class="keyword">var</span> params = req.params; <span class="comment">//B</span></div><div class="line">   collectionDriver.findAll(req.params.collection, <span class="function"><span class="keyword">function</span>(<span class="params">error, objs</span>) </span>&#123; <span class="comment">//C</span></div><div class="line">    	  <span class="keyword">if</span> (error) &#123; res.send(<span class="number">400</span>, error); &#125; <span class="comment">//D</span></div><div class="line">	      <span class="keyword">else</span> &#123;</div><div class="line">	          <span class="keyword">if</span> (req.accepts(<span class="string">'html'</span>)) &#123; <span class="comment">//E</span></div><div class="line">    	          res.render(<span class="string">'data'</span>,&#123;<span class="attr">objects</span>: objs, <span class="attr">collection</span>: req.params.collection&#125;); <span class="comment">//F</span></div><div class="line">              &#125; <span class="keyword">else</span> &#123;</div><div class="line">	          res.set(<span class="string">'Content-Type'</span>,<span class="string">'application/json'</span>); <span class="comment">//G</span></div><div class="line">                  res.send(<span class="number">200</span>, objs); <span class="comment">//H</span></div><div class="line">              &#125;</div><div class="line">         &#125;</div><div class="line">   	&#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.get(<span class="string">'/:collection/:entity'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123; <span class="comment">//I</span></div><div class="line">   <span class="keyword">var</span> params = req.params;</div><div class="line">   <span class="keyword">var</span> entity = params.entity;</div><div class="line">   <span class="keyword">var</span> collection = params.collection;</div><div class="line">   <span class="keyword">if</span> (entity) &#123;</div><div class="line">       collectionDriver.get(collection, entity, <span class="function"><span class="keyword">function</span>(<span class="params">error, objs</span>) </span>&#123; <span class="comment">//J</span></div><div class="line">          <span class="keyword">if</span> (error) &#123; res.send(<span class="number">400</span>, error); &#125;</div><div class="line">          <span class="keyword">else</span> &#123; res.send(<span class="number">200</span>, objs); &#125; <span class="comment">//K</span></div><div class="line">       &#125;);</div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">      res.send(<span class="number">400</span>, &#123;<span class="attr">error</span>: <span class="string">'bad url'</span>, <span class="attr">url</span>: req.url&#125;);</div><div class="line">   &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这就创建了两个新路由 <code>/:collection</code> 和 <code>/:collection/:entity</code> 。它们分别调用 <code>collectionDriver.findAll</code> 和 <code>collectionDriver.get</code> 方法并返回 JSON 对象、HTML 文档或一个错误。</p>
+<p>当你在 Express 中 定义 <code>/collection</code> ，它将明确匹配 “collection” 。然而，如果你定义如 A 行的路由 <code>/:collection</code> 那么它将匹配任何存储在 B 行的 <code>req.params</code> 集合中的第一层路径。在本例中，你使用 C 行的 <code>CollectionDriver</code> 的 <code>findAll</code> 定义的端点去匹配任何到 MongoDB 的 URL 。</p>
+<p>如果查询成功，那么代码会在 E 行的头中检查，是否请求会接受一个 HTML 结果。如果是，那 F 行就从 <code>data.jade</code> 模版存储渲染过的 HTML 到<code>应答</code>中。这将简单地呈现集合内容到一个 HTML 表格中。</p>
+<p>默认情况下，Web 浏览器会在它们的请求中指定它们接受 HTML 。当其他类型的客户端请求这个端点，例如 iOS 应用使用 <code>NSURLSession</code> ，这个方法就会在 G 行返回一个机器可读的 JSON 文档。 与 H 行， <code>res.send()</code> 会返回由集合驱动器生成的 JSON 文档和一个成功码。</p>
+<p>这个例子中，对于两层 URL 指定的位置， I 行将其作为集合名和实体 <code>_id</code> 对待。之后你在 J 行使用 <code>collectionDriver</code> 的 <code>get()</code> 请求特定的实体。如果那个实体被找到，你就在 K 行将其作为 JSON 文档返回。</p>
+<p>保存你的工作，重启你的 Node 实例， 检查你的 mongod 守护进程是否依然在运行，然后将浏览器指向 <a href="http://localhost:3000/items" target="_blank" rel="external">http://localhost:3000/items</a> ；你将看到如下页面：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/web_emptyitems-480x247.png" alt="web_emptyitems"></p>
+<p>怎么什么都没有？发生了什么事？</p>
+<p>哦，等等——那是因为你还没有添加任何数据呢。是时候了！</p>
+<h2 id="与数据同行"><a href="#与数据同行" class="headerlink" title="与数据同行"></a>与数据同行</h2><p>从一个空空如也的数据库里读取对象一点儿也不有趣。要测试功能，就要有一个添加实体到数据库的途径。</p>
+<p>在 <code>CollectionDriver.js</code> 中添加下列新的原型方法，就在 <code>exports.CollectionDriver</code> 行之前：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//save new object</span></div><div class="line">CollectionDriver.prototype.save = <span class="function"><span class="keyword">function</span>(<span class="params">collectionName, obj, callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.getCollection(collectionName, <span class="function"><span class="keyword">function</span>(<span class="params">error, the_collection</span>) </span>&#123; <span class="comment">//A</span></div><div class="line">      <span class="keyword">if</span>( error ) callback(error)</div><div class="line">      <span class="keyword">else</span> &#123;</div><div class="line">        obj.created_at = <span class="keyword">new</span> <span class="built_in">Date</span>(); <span class="comment">//B</span></div><div class="line">        the_collection.insert(obj, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">//C</span></div><div class="line">          callback(<span class="literal">null</span>, obj);</div><div class="line">        &#125;);</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>就像 <code>findAll</code> 和 <code>get</code> ，A 行的 <code>save</code> 首先检索集合对象。之后回调取得提供的实体并再添加一个字段记录创建的日期（如 B 行所示）。最后，你在 C 行插入修改后的对象到集合里。 <code>insert</code> 同时会自动添加一个  <code>_id</code> 。</p>
+<p>添加下列代码到 <code>index.js</code> ，就在刚才添加的 <code>get</code> 方法之后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">app.post(<span class="string">'/:collection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123; <span class="comment">//A</span></div><div class="line">    <span class="keyword">var</span> object = req.body;</div><div class="line">    <span class="keyword">var</span> collection = req.params.collection;</div><div class="line">    collectionDriver.save(collection, object, <span class="function"><span class="keyword">function</span>(<span class="params">err,docs</span>) </span>&#123;</div><div class="line">          <span class="keyword">if</span> (err) &#123; res.send(<span class="number">400</span>, err); &#125;</div><div class="line">          <span class="keyword">else</span> &#123; res.send(<span class="number">201</span>, docs); &#125; <span class="comment">//B</span></div><div class="line">     &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这就在 A 行为 <code>POST</code> 动词创建了一个新的路由，它通过调用你刚刚添加到你的驱动器里的 <code>save()</code> 将 Body 当作一个对象插入到指定的集合里。当资源被创建后，B 行就返回 HTTP 201 成功码。</p>
+<p>只有最后一块了。添加下列代码到 <code>index.js</code> ，就在 <code>app.set</code> 行后面，但在 <code>app.use</code> 或 <code>app.get</code> 行之前：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.use(express.bodyParser());</div></pre></td></tr></table></figure>
+<p>这会告诉 Express 去解析传入的 Body 数据；如果它是 JSON，那么用它创建一个 JSON 对象。通过将这个调用提前，Body 解析将在其他路由处理器之前调用。这样 <code>req.body</code> 就能直接作为 JavaScript 对象传递给驱动器。</p>
+<p>再次重启你的 Node 实例，在终端里执行下列命令，插入一个测试对象到你的数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -H &quot;Content-Type: application/json&quot; -X POST -d &apos;&#123;&quot;title&quot;:&quot;Hello World&quot;&#125;&apos; http://localhost:3000/items</div></pre></td></tr></table></figure>
+<p>你会在控制台看到记录的返回信息，如下所示：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/term_create-437x320.png" alt="term_create"></p>
+<p>现在转到你的浏览器，并重新加载 <a href="http://localhost:3000/items" target="_blank" rel="external">http://localhost:3000/items</a> ；你就会在表格中看到你插入的项目。</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/02/web_createitem-480x247.png" alt="web_createitem"></p>
+<h2 id="更新与删除数据"><a href="#更新与删除数据" class="headerlink" title="更新与删除数据"></a>更新与删除数据</h2><p>你已经实现了 CRUD 中的 Create 和 Read 操作——还剩下 Update 和 Delete 。这些都比较简单，遵循与其他两个一样的模式。</p>
+<p>添加下列代码到 <code>CollectionDriver.js</code>，就在 <code>exports.CollectionDriver</code> 行之前：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//update a specific object</span></div><div class="line">CollectionDriver.prototype.update = <span class="function"><span class="keyword">function</span>(<span class="params">collectionName, obj, entityId, callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.getCollection(collectionName, <span class="function"><span class="keyword">function</span>(<span class="params">error, the_collection</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (error) callback(error);</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            obj._id = ObjectID(entityId); <span class="comment">//A convert to a real obj id</span></div><div class="line">            obj.updated_at = <span class="keyword">new</span> <span class="built_in">Date</span>(); <span class="comment">//B</span></div><div class="line">            the_collection.save(obj, <span class="function"><span class="keyword">function</span>(<span class="params">error,doc</span>) </span>&#123; <span class="comment">//C</span></div><div class="line">                <span class="keyword">if</span> (error) callback(error);</div><div class="line">                <span class="keyword">else</span> callback(<span class="literal">null</span>, obj);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>update()</code> 函数接受一个对象，并在 C 行使用 <code>collectionDriver</code> 的 <code>save()</code> 方法在集合中更新它。这假设 Body 的 <code>_id</code> 与 A 行指定的路由一样。B 行添加一个 <code>updated_at</code> 字段作为对象更新时间。添加一个修改时间戳是一个好主意，有助于理解数据在你的应用程序的生命周期里是如何改变的。</p>
+<p>注意这个更新用新对象操作取代了之前的对象——这里并没有属性级别的更新支持。</p>
+<p>添加下列代码到 <code>CollectionDriver.js</code>，就在 <code>exports.CollectionDriver</code> 行之前：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//delete a specific object</span></div><div class="line">CollectionDriver.prototype.delete = <span class="function"><span class="keyword">function</span>(<span class="params">collectionName, entityId, callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.getCollection(collectionName, <span class="function"><span class="keyword">function</span>(<span class="params">error, the_collection</span>) </span>&#123; <span class="comment">//A</span></div><div class="line">        <span class="keyword">if</span> (error) callback(error);</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            the_collection.remove(&#123;<span class="string">'_id'</span>:ObjectID(entityId)&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">error,doc</span>) </span>&#123; <span class="comment">//B</span></div><div class="line">                <span class="keyword">if</span> (error) callback(error);</div><div class="line">                <span class="keyword">else</span> callback(<span class="literal">null</span>, doc);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>delete()</code> 与其他 CRUD 一样的操作。 在 A 行，它获取集合对象，然后在 B 行用提供的 <code>id</code> 调用 <code>remove()</code> 。</p>
+<p>现在你需要两个新的路由来处理这些操作。幸运的是，<code>PUT</code> 和 <code>DELETE</code> 动词已经存在，所以你可以用与 <code>GET</code> 一样的语义创建处理器。</p>
+<p>添加如下代码到 <code>index.js</code> ，就在 <code>app.post()</code> 调用之后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">app.put(<span class="string">'/:collection/:entity'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123; <span class="comment">//A</span></div><div class="line">    <span class="keyword">var</span> params = req.params;</div><div class="line">    <span class="keyword">var</span> entity = params.entity;</div><div class="line">    <span class="keyword">var</span> collection = params.collection;</div><div class="line">    <span class="keyword">if</span> (entity) &#123;</div><div class="line">       collectionDriver.update(collection, req.body, entity, <span class="function"><span class="keyword">function</span>(<span class="params">error, objs</span>) </span>&#123; <span class="comment">//B</span></div><div class="line">          <span class="keyword">if</span> (error) &#123; res.send(<span class="number">400</span>, error); &#125;</div><div class="line">          <span class="keyword">else</span> &#123; res.send(<span class="number">200</span>, objs); &#125; <span class="comment">//C</span></div><div class="line">       &#125;);</div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">       <span class="keyword">var</span> error = &#123; <span class="string">"message"</span> : <span class="string">"Cannot PUT a whole collection"</span> &#125;;</div><div class="line">       res.send(<span class="number">400</span>, error);</div><div class="line">   &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这个 <code>put</code> 回调遵循同单实体 <code>get</code> 一样的模式：你在集合上匹配名字和 <code>_id</code> ，如 A 行所示。和 <code>post</code> 路由一样， 在 B 行 <code>put</code> 传递来自 Body 的 JSON 对象到 <code>collectionDriver</code> 里新写的 <code>update()</code> 方法中。</p>
+<p>更新的对象将在应答中返回（C 行），所以客户端可以解析到任何服务器更新的字段，例如 <code>updated_at</code> 。</p>
+<p>添加如下代码到 <code>index.js</code> ，就在刚添加的  <code>put</code> 方法之后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">app.delete(<span class="string">'/:collection/:entity'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123; <span class="comment">//A</span></div><div class="line">    <span class="keyword">var</span> params = req.params;</div><div class="line">    <span class="keyword">var</span> entity = params.entity;</div><div class="line">    <span class="keyword">var</span> collection = params.collection;</div><div class="line">    <span class="keyword">if</span> (entity) &#123;</div><div class="line">       collectionDriver.delete(collection, entity, <span class="function"><span class="keyword">function</span>(<span class="params">error, objs</span>) </span>&#123; <span class="comment">//B</span></div><div class="line">          <span class="keyword">if</span> (error) &#123; res.send(<span class="number">400</span>, error); &#125;</div><div class="line">          <span class="keyword">else</span> &#123; res.send(<span class="number">200</span>, objs); &#125; <span class="comment">//C 200 b/c includes the original doc</span></div><div class="line">       &#125;);</div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">       <span class="keyword">var</span> error = &#123; <span class="string">"message"</span> : <span class="string">"Cannot DELETE a whole collection"</span> &#125;;</div><div class="line">       res.send(<span class="number">400</span>, error);</div><div class="line">   &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p><code>delete</code> 端点非常类似于 <code>put</code>，如 A 行所示，除了 <code>delete</code> 不需要一个 Body。在 B 行，你传递参数给 <code>collectionDriver</code> 里的 <code>delete()</code> 方法，如果删除操作成功，那么你就在 C 行返回一个原始对象和一个 200 应答码。</p>
+<p>如果上述操作中发生任何错误，你就返回一个适当的错误码。</p>
+<p>保存你的工作，并重启你的 Node 实例。</p>
+<p>在终端执行下列命令，替换 <code>{_id}</code>  为上一个 <code>POST</code> 调用的返回值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -H &quot;Content-Type: application/json&quot; -X PUT -d &apos;&#123;&quot;title&quot;:&quot;Good Golly Miss Molly&quot;&#125;&apos; http://localhost:3000/items/&#123;_id&#125;</div></pre></td></tr></table></figure>
+<p>你会在终端看到如下应答：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/term_update-437x320.png" alt="term_update"></p>
+<p>转到浏览器，重新载入 <a href="http://localhost:3000/items" target="_blank" rel="external">http://localhost:3000/items</a> ；你会在表格中看到你修改的条目：</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/02/web_updated-480x247.png" alt="web_updated"></p>
+<p>在终端里执行下列命令以删除你的记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -H &quot;Content-Type: application/json&quot; -X DELETE  http://localhost:3000/items/&#123;_id&#125;</div></pre></td></tr></table></figure>
+<p>你会看到 curl 收到的响应：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/02/term_delete-437x320.png" alt="term_delete"></p>
+<p>重新载入 <a href="http://localhost:3000/items" target="_blank" rel="external">http://localhost:3000/items</a> ，我能确定，你的实体不见了。</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/02/web_delete-480x247.png" alt="web_delete"></p>
+<p>就这样，你使用 Node.js、Express 以及 MongoDB 完成了你的整个 CRUD 模型！</p>
+<h2 id="下一步怎么走？"><a href="#下一步怎么走？" class="headerlink" title="下一步怎么走？"></a>下一步怎么走？</h2><p>这里是完成的<a href="http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app/mongodb_sample_project-3" target="_blank" rel="external">示例项目</a>，它包含有上面教程里所有的代码。</p>
+<p>你的服务器现在准备好应对客户端的连接并开始传输数据。在本教程的下一部分里，你将构建一个 iOS 应用来连接你的新服务器，并利用一些 MongoDB 和 Express 的炫酷特性。</p>
+<p>关于 MongoDB 的更多信息，看看 <a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/" target="_blank" rel="external">官方的 MongoDB 文档</a> 。</p>
+<p>如果你有任何问题或评论，可自由地加入下方的讨论！</p>
+<p>===============</p>
+<p>译者注：欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条微博  <a href="http://weibo.com/2076580237/B0JsD8YKe" target="_blank" rel="external">http://weibo.com/2076580237/B0JsD8YKe</a> 以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

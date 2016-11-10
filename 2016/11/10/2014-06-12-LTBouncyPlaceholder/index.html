@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      分析一个有趣的 Swift 项目：LTBouncyPlaceholder | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文尝试分析 LTBouncyPlaceholder 项目的实现
+项目作者：lexrus
+分析作者：@nixzhu
+=================================
+我希望你已经下载了 LTBouncyPlaceholder 的 Demo ，用 Xcode 6 打开并编译、运行，然后在界面中显示的几个 UITextField 里输入一些文字来体验这个扩展。看到 Placehold">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分析一个有趣的 Swift 项目：LTBouncyPlaceholder | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-06-12-LTBouncyPlaceholder/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文尝试分析 LTBouncyPlaceholder 项目的实现
+项目作者：lexrus
+分析作者：@nixzhu
+=================================
+我希望你已经下载了 LTBouncyPlaceholder 的 Demo ，用 Xcode 6 打开并编译、运行，然后在界面中显示的几个 UITextField 里输入一些文字来体验这个扩展。看到 Placehold">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/219689/3242824/e3d3f00e-f14f-11e3-8028-08327d011499.gif">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:26:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分析一个有趣的 Swift 项目：LTBouncyPlaceholder | songxinfang's blog">
+<meta name="twitter:description" content="本文尝试分析 LTBouncyPlaceholder 项目的实现
+项目作者：lexrus
+分析作者：@nixzhu
+=================================
+我希望你已经下载了 LTBouncyPlaceholder 的 Demo ，用 Xcode 6 打开并编译、运行，然后在界面中显示的几个 UITextField 里输入一些文字来体验这个扩展。看到 Placehold">
+<meta name="twitter:image" content="https://cloud.githubusercontent.com/assets/219689/3242824/e3d3f00e-f14f-11e3-8028-08327d011499.gif">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">分析一个有趣的 Swift 项目：LTBouncyPlaceholder</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文尝试分析 <a href="https://github.com/lexrus/LTBouncyPlaceholder" target="_blank" rel="external">LTBouncyPlaceholder</a> 项目的实现</p>
+<p>项目作者：<a href="http://lextang.com/" target="_blank" rel="external">lexrus</a></p>
+<p>分析作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>我希望你已经下载了 LTBouncyPlaceholder 的 <a href="https://github.com/lexrus/LTBouncyPlaceholder" target="_blank" rel="external">Demo</a> ，用 Xcode 6 打开并编译、运行，然后在界面中显示的几个 UITextField 里输入一些文字来体验这个扩展。看到 Placeholder 的动画了吗？PS：iOS 8 的键盘也挺带感。</p>
+<p><img src="https://cloud.githubusercontent.com/assets/219689/3242824/e3d3f00e-f14f-11e3-8028-08327d011499.gif" width="322" height="581" alt="Demo" style="max-width:100%;"></p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>我首先观察到扩展里重载了 <code>willMoveToSuperview:</code>，对于这个方法，Xcode 的文档里写有：</p>
+<blockquote>
+<p>The default implementation of this method does nothing. Subclasses can override it to perform additional actions whenever the superview changes.</p>
+</blockquote>
+<p>也就是说，这个方法默认不做事情，但子类可以重载它以便在 superview 改变时执行额外的操作。那么当 UITextField 被加载时，这个方法就会自动调用，所以我们先来看看它做了什么：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">willMoveToSuperview</span><span class="params">(newSuperview: UIView!)</span></span> &#123;</div><div class="line">    <span class="keyword">if</span> newSuperview &#123;</div><div class="line">        <span class="comment">// 1. 首先要求 lt_placeholderLabel 显示它自己</span></div><div class="line">        lt_placeholderLabel.setNeedsDisplay()</div><div class="line"></div><div class="line">        <span class="comment">// 2. 然后替换了 drawPlaceholderInRect 方法</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">TokenHolder</span> </span>&#123;</div><div class="line">            <span class="keyword">static</span> <span class="keyword">var</span> token: dispatch_once_t = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        dispatch_once(&amp;<span class="type">TokenHolder</span>.token) &#123;</div><div class="line">            <span class="keyword">var</span> originMethod: <span class="type">Method</span> = class_getInstanceMethod(object_getClass(<span class="type">UITextField</span>()),</div><div class="line">                <span class="type">Selector</span>.convertFromStringLiteral(<span class="string">"drawPlaceholderInRect:"</span>.<span class="built_in">bridgeToObjectiveC</span>().<span class="type">UTF8String</span>))</div><div class="line">            <span class="keyword">var</span> swizzledMethod: <span class="type">Method</span> = class_getInstanceMethod(object_getClass(<span class="type">UITextField</span>()),</div><div class="line">                <span class="type">Selector</span>.convertFromStringLiteral(<span class="string">"_drawPlaceholderInRect:"</span>.<span class="built_in">bridgeToObjectiveC</span>().<span class="type">UTF8String</span>))</div><div class="line">            method_exchangeImplementations(originMethod, swizzledMethod)</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 3. 最后监听通知，这样用户输入文字或删除文字时，_didChange: 也会执行了</span></div><div class="line">        <span class="type">NSNotificationCenter</span>.defaultCenter().addObserver(<span class="keyword">self</span>,</div><div class="line">            selector: <span class="type">Selector</span>.convertFromStringLiteral(<span class="string">"_didChange:"</span>),</div><div class="line">            name: <span class="type">UITextFieldTextDidChangeNotification</span>,</div><div class="line">            object: <span class="literal">nil</span>)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="type">NSNotificationCenter</span>.defaultCenter().removeObserver(<span class="keyword">self</span>,</div><div class="line">            name: <span class="type">UITextFieldTextDidChangeNotification</span>,</div><div class="line">            object: <span class="literal">nil</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>阅读代码并观察我添加的注释，我们知道了，这个扩展为原类添加了一个新的属性 <code>lt_placeholderLabel</code>（因为它是被直接使用的，就像原类的属性一样不需要写 <code>self.</code>），而从其名字可以得知它应该是一个用于显示占位符的 UILabel；之后 lexrus 利用 <code>dispatch_once</code> 和 <code>method_exchangeImplementations</code> 将系统的 <code>drawPlaceholderInRect:</code> 实现替换为 <code>_drawPlaceholderInRect:</code>，我们稍后会分析它的实现；最后，lexrus 在扩展里监听 <code>UITextFieldTextDidChangeNotification</code> 通知，这个通知大家应该比较熟悉，即当 UITextField 里的文字发生改变时，这个通知就会被发出。作者希望在这个通知出现时做一些事情，因而要执行 <code>_didChange</code>，我们之后也会分析其实现。</p>
+<h2 id="“虚拟”属性"><a href="#“虚拟”属性" class="headerlink" title="“虚拟”属性"></a>“虚拟”属性</h2><p>我们首先看看 <code>lt_placeholderLabel</code> ，既然 lexrus 对其调用了 <code>setNeedsDisplay()</code> ，那么它肯定要先生成。在 <code>UITextField+LTBouncyPlaceholder.swift</code> 里搜索 <code>lt_placeholderLabel</code> ，我们就会看到：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> lt_placeholderLabel: <span class="type">UILabel</span> &#123;</div><div class="line"><span class="keyword">get</span> &#123;</div><div class="line">    <span class="keyword">var</span> _placeholderLabelObject: <span class="type">AnyObject</span>? = objc_getAssociatedObject(<span class="keyword">self</span>, kPlaceholderLabelPointer)</div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> _placeholderLabel : <span class="type">AnyObject</span> = _placeholderLabelObject &#123;</div><div class="line">        <span class="keyword">return</span> _placeholderLabel <span class="keyword">as</span> <span class="type">UILabel</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> _placeholderLabel = <span class="type">UILabel</span>(frame: <span class="keyword">self</span>.placeholderRectForBounds(<span class="keyword">self</span>.bounds))</div><div class="line">    _placeholderLabel.font = <span class="keyword">self</span>.font</div><div class="line">    _placeholderLabel.text = placeholder</div><div class="line">    _placeholderLabel.textColor = <span class="type">UIColor</span>.lightGrayColor()</div><div class="line">    <span class="keyword">self</span>.addSubview(_placeholderLabel)</div><div class="line">    objc_setAssociatedObject(<span class="keyword">self</span>,</div><div class="line">        kPlaceholderLabelPointer,</div><div class="line">        _placeholderLabel,</div><div class="line">        objc_AssociationPolicy(<span class="type">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span>))</div><div class="line">    <span class="keyword">return</span> _placeholderLabel</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是一个实例变量，但要知道我们现在在一个扩展中，并不能直接扩展类的属性。而为了扩展原类的属性，lexrus 使用了被称为“关联对象（Associated Objects）”的技术（请参考mattt编写的文章，<a href="http://nshipster.cn/associated-objects/" target="_blank" rel="external">中文翻译</a>或<a href="http://nshipster.com/associated-objects/" target="_blank" rel="external">英文原文</a>），利用 <code>objc_setAssociatedObject</code> 和 <code>objc_getAssociatedObject</code> “虚拟”出一个属性。而这个属性使用起来的感觉和在原类中定义的属性一样。</p>
+<p>上面的代码并不复杂，<code>get</code> 类似 Objective-C 里的 <code>getter</code>，当我们访问这个属性的时候，它就会自动执行。它首先看看是否已有这个“虚拟属性”，有就直接返回。若没有，就利用原类的 <code>bounds</code> 和自带方法 <code>placeholderRectForBounds</code> 计算一个 <code>frame</code> 以便生成了一个新的 <code>UILabel</code>，再设置好字体等就作为 <code>subview</code> 被添加到 <code>self</code>（即 <code>UITextField</code>） 上了。最后设置好“虚拟属性”。这样下次再访问此属性时，这个 <code>UILabel</code> 就可以直接返回而不会被重复创建了。怎样？一样有 <strong>Lazyload</strong> 的感觉吧？</p>
+<p>另外，稍微注意一下 <code>kPlaceholderLabelPointer</code> 的使用，它定义在 <code>UITextField+LTBouncyPlaceholderKeys.swift</code> 文件里，其实是一个 <code>CConstVoidPointer</code> ，相当于 C 的 <code>const void *</code>，具体请参考 Apple 提供的文档：<a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithCAPIs.html#//apple_ref/doc/uid/TP40014216-CH8-XID_13" target="_blank" rel="external">Interacting with C APIs</a> 一节。</p>
+<h2 id="方法替换"><a href="#方法替换" class="headerlink" title="方法替换"></a>方法替换</h2><p>接下来，我们看看 <code>_drawPlaceholderInRect:</code> 的实现：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">_drawPlaceholderInRect</span><span class="params">(rect: CGRect)</span></span> &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>似乎什么都没做，而这正是方法替换的神奇之处。根据 <code>drawPlaceholderInRect:</code> 的文档说明：</p>
+<blockquote>
+<p>You should not call this method directly. If you want to customize the drawing behavior for the placeholder text, you can override this method to do your drawing.</p>
+<p>By the time this method is called, the current graphics context is already configured with the default environment and text color for drawing. In your overridden method, you can configure the current context further and then invoke super to do the actual drawing or do the drawing yourself. If you do render the text yourself, you should not invoke super.</p>
+</blockquote>
+<p>这个方法是用于绘制原生的 Placeholder 的，而我们现在使用了自定义的 Placeholder ，因此原生的对我们来说没有用处了，所以不需要将其绘制出来。</p>
+<h2 id="处理通知"><a href="#处理通知" class="headerlink" title="处理通知"></a>处理通知</h2><p>最后我们再来看看 <code>_didChange</code> 做了什么：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">_didChange</span> <span class="params">(notification: NSNotification)</span></span> &#123;</div><div class="line">    <span class="keyword">if</span> notification.object === <span class="keyword">self</span> &#123;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.text.lengthOfBytesUsingEncoding(<span class="type">NSUTF8StringEncoding</span>) &gt; <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">if</span> alwaysBouncePlaceholder &#123;</div><div class="line">                <span class="keyword">self</span>._animatePlaceholder(toRight: <span class="literal">true</span>)</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                lt_placeholderLabel.hidden = <span class="literal">true</span></div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span> alwaysBouncePlaceholder &#123;</div><div class="line">                <span class="keyword">self</span>._animatePlaceholder(toRight: <span class="literal">false</span>)</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                lt_placeholderLabel.hidden = <span class="literal">false</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>先确认通知的发送者是自己，然后在 <code>UITextField</code> 里输入有文字时，若 <code>alwaysBouncePlaceholder</code> 属性的状态为 <code>true</code>，就执行 <code>self._animatePlaceholder(toRight: true)</code> ，我想大概是将我们刚才讨论的作为 Placeholder 的 <code>UILabel</code> 以动画的方式移动到右边。</p>
+<blockquote>
+<p>注意：如之前提到，UITextField 本身的 Placeholder 因为方法替换，不会被绘制出来，而 <code>lt_placeholderLabel</code> 的 <code>text</code> 就是设置为 UITextField 自身的 <code>placeholder</code> 的，在没有输入文字时，它看起来就是原生的 Placeholder。</p>
+</blockquote>
+<h2 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h2><p>事实上，只要读者稍微阅读一下 <code>_animatePlaceholder</code> 就可以分析出来，lexrus 还使用了一个名为 <code>lt_rightPlaceholderLabel</code> 的“虚拟属性”，用于在 <code>UITextField</code> 里有字符时，在其最右边显示另外一个 Placeholder，大家运行 Demo 时应该有所体会。</p>
+<p>这里的 Core Animation 将 <code>lt_placeholderLabel</code> 移动到右边并隐去，与此同时， <code>lt_rightPlaceholderLabel</code> 也被移动到右边，但它是渐显，这样就得到我们所体验到的效果。</p>
+<blockquote>
+<p>作者注：不知道只用一个自定义的 Placeholder 能否实现这个效果，但既然 lexrus 这样写，可能有他的道理。</p>
+</blockquote>
+<p>补记：lexrus 给出了解释：</p>
+<blockquote>
+<p>用两个 UILabel 是因为我之前在 QuartzComposer 里试过只用一个的话，文字变化的动画就会比较难做，两个 UILabel 分别淡入、淡出比较简单。</p>
+</blockquote>
+<h2 id="在-IB-里设置运行时属性"><a href="#在-IB-里设置运行时属性" class="headerlink" title="在 IB 里设置运行时属性"></a>在 IB 里设置运行时属性</h2><p>最后，在扩展文件的开头，我们还看到 <code>alwaysBouncePlaceholder</code> 与 <code>abbreviatedPlaceholder</code> 这两个“虚拟属性”，它们被创建所用的技术和 <code>lt_placeholderLabel</code> 一致，不再赘述。只需要观察到，这两个属性在 Demo 中的 IB 中对应 UITextField 的 Identity Inspector 里有被使用，这样就等于直接初始化了它们。</p>
+<p>另外，<code>abbreviatedPlaceholder</code> 意思是“简短的占位符”，它顺便设置了 <code>lt_rightPlaceholderLabel</code> 的 <code>text</code> 属性，非常合理。注意 <code>newValue</code> 应该是 <code>set</code> 的默认参数。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到此，我们差不多就分析完了这个相当出色的 UITextField 的扩展，它为我们带来了新鲜的使用体验。</p>
+<p>而我们学习了一些新技术，特别是以 Swift 语言写成这一点值得大家研究。这些技术是：</p>
+<ul>
+<li>属性的 set 和 get 的使用</li>
+<li>在扩展里“创建”属性的方法，即“关联对象（Associated Objects）”</li>
+<li>UITextField 的工作特点，加载、通知等，这些对于自定义控件来说很有用</li>
+<li>一些 Core Animation 的组合，弹性动画+渐隐渐显</li>
+<li>GCD 的使用，注意到 <code>dispatch_once</code> 了吗？它一般用于生成单例。</li>
+<li>方法替换，作者替换了 <code>drawPlaceholderInRect:</code> 以取消原生 Placeholder 的绘制。</li>
+</ul>
+<h2 id="挑战"><a href="#挑战" class="headerlink" title="挑战"></a>挑战</h2><ol>
+<li>如我提到的，是否只用一个自定义的 Placeholder 也能实现这个效果？</li>
+<li>用本文分析的这些技术，为系统的其它原生控件编写扩展。你需要的可能仅仅只是一点品味和想像力。</li>
+<li>能直接在扩展里使用 IBDesignable 和 IBInspectable 吗？如果不能，尝试使用子类化的方式来实现这个扩展并加上对 IBDesignable 和 IBInspectable 的支持，你可以参考我翻译的<a href="https://github.com/nixzhu/dev-blog/blob/master/2014-06-10-make-awesome-ui-components-ios-8-using-swift-xcode-6.md" target="_blank" rel="external">这篇文章</a>。</li>
+</ol>
+<p>若本文的分析有任何不当之处，请读者指出，提 Issue 或者直接发送 PR 都可以！</p>
+<p>=====================</p>
+<p>作者注：欢迎非商业转载，但请一定注明出处：<a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a> ！</p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B8CSosnAz" target="_blank" rel="external">http://weibo.com/2076580237/B8CSosnAz</a>  以分享给更多人！</p>
+<p>如果你认为这篇原创文章不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳作者的辛苦（PS：作者刚刚辞职）：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+<p>版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="external">Creative Commons BY-NC-ND 3.0</a></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

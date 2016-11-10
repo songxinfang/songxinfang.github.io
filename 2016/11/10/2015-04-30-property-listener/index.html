@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      用 Swift 实现轻量的属性监听系统 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文的主要目的是解决客户端开发中对“模型的一处修改，UI 要多处更新”的问题。当然，我们要知晓解决方案的细节和思考过程，以及看到其能达到的效果。我们会用到函数式编程的思想，以及伟大的“泛型”。请相信我，我们并非为了使用新技术而使用新技术。如果一个问题有更好的方法去解决，那为何不替换掉旧方法呢？
+作者：@nixzhu
+=================================
+假如你正在写的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Swift 实现轻量的属性监听系统 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2015-04-30-property-listener/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文的主要目的是解决客户端开发中对“模型的一处修改，UI 要多处更新”的问题。当然，我们要知晓解决方案的细节和思考过程，以及看到其能达到的效果。我们会用到函数式编程的思想，以及伟大的“泛型”。请相信我，我们并非为了使用新技术而使用新技术。如果一个问题有更好的方法去解决，那为何不替换掉旧方法呢？
+作者：@nixzhu
+=================================
+假如你正在写的">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/property_listener_ui.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:25:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用 Swift 实现轻量的属性监听系统 | songxinfang's blog">
+<meta name="twitter:description" content="本文的主要目的是解决客户端开发中对“模型的一处修改，UI 要多处更新”的问题。当然，我们要知晓解决方案的细节和思考过程，以及看到其能达到的效果。我们会用到函数式编程的思想，以及伟大的“泛型”。请相信我，我们并非为了使用新技术而使用新技术。如果一个问题有更好的方法去解决，那为何不替换掉旧方法呢？
+作者：@nixzhu
+=================================
+假如你正在写的">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/property_listener_ui.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">用 Swift 实现轻量的属性监听系统</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文的主要目的是解决客户端开发中对“模型的一处修改，UI 要多处更新”的问题。当然，我们要知晓解决方案的细节和思考过程，以及看到其能达到的效果。我们会用到函数式编程的思想，以及伟大的“泛型”。请相信我，我们并非为了使用新技术而使用新技术。如果一个问题有更好的方法去解决，那为何不替换掉旧方法呢？</p>
+<p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>假如你正在写的 App 是有用户系统的，也就是用户需要管理自己的信息，如修改名字、头发颜色之类的。</p>
+<p>单独拿名字来说，除开在修改界面，可能在系统的其他界面也会使用到它，这就涉及到在更新名字后再更新其他界面的问题。</p>
+<p>你的第一直觉是什么呢？多半是使用通知，也就是 NSNotification。这是一种很好的办法，虽然逻辑松散，写起来有些麻烦。比如要定义一个通知名，发送通知，各界面都监听通知再处理，等等。</p>
+<p>例如，对于如下 3 个界面，都有显示名字。通过 push，用户可以在第 3 个界面里修改名字，这就需要更新这 3 个界面的名字，不然用户 pop 返回时就会觉得奇怪。</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/property_listener_ui.png" alt="UI"></p>
+<p>假如我们的名字放在一个叫做 UserInfo 的类里（访问和修改都使用单例），如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> <span class="keyword">let</span> sharedInstance = <span class="type">UserInfo</span>()</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Notification</span> </span>&#123;</div><div class="line">        <span class="keyword">static</span> <span class="keyword">let</span> <span class="type">NameChanged</span> = <span class="string">"UserInfo.Notification.NameChanged"</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> name: <span class="type">String</span> = <span class="string">"NIX"</span> &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            <span class="type">NSNotificationCenter</span>.defaultCenter().postNotificationName(<span class="type">Notification</span>.<span class="type">NameChanged</span>, object: name)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同时我们定义了一个通知。在 name 被改变后就发出这个通知，并把 name 传出去。</p>
+<p>三个界面分别为 FirstViewController、SecondViewController、ThirdViewController，都有一个 button 在正中间。其中前两个负责 push，最后一个点击后可以改名字。因此，对于 FirstViewController 来说：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FirstViewController</span>: <span class="title">UIViewController</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> nameButton: <span class="type">UIButton</span>!</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewDidLoad()</div><div class="line"></div><div class="line">        title = <span class="string">"First"</span></div><div class="line"></div><div class="line">        nameButton.setTitle(<span class="type">UserInfo</span>.sharedInstance.name, forState: .<span class="type">Normal</span>)</div><div class="line"></div><div class="line">        <span class="type">NSNotificationCenter</span>.defaultCenter().addObserver(<span class="keyword">self</span>, selector: <span class="string">"updateUI:"</span>, name: <span class="type">UserInfo</span>.<span class="type">Notification</span>.<span class="type">NameChanged</span>, object: <span class="literal">nil</span>)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">updateUI</span><span class="params">(notification: NSNotification)</span></span> &#123;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> name = notification.object <span class="keyword">as</span>? <span class="type">String</span> &#123;</div><div class="line">            nameButton.setTitle(name, forState: .<span class="type">Normal</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除了加载时设置 button 之外，我们还要监听通知，并在 name 被改变时更新 button 的 title。</p>
+<p>SecondViewController 的代码类似 FirstViewController，不赘述。</p>
+<p>对于 ThirdViewController，除了设置和通知外，还有一个 button 的 target-action 方法用于修改名字，也很简单：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@IBAction</span> <span class="function"><span class="keyword">func</span> <span class="title">changeName</span><span class="params">(sender: UIButton)</span></span> &#123;</div><div class="line"></div><div class="line">    <span class="keyword">let</span> alertController = <span class="type">UIAlertController</span>(title: <span class="string">"Change name"</span>, message: <span class="literal">nil</span>, preferredStyle: .<span class="type">Alert</span>)</div><div class="line"></div><div class="line">    alertController.addTextFieldWithConfigurationHandler &#123; (textField) -&gt; <span class="type">Void</span> <span class="keyword">in</span></div><div class="line">        textField.placeholder = <span class="keyword">self</span>.nameButton.titleLabel?.text</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">let</span> action: <span class="type">UIAlertAction</span> = <span class="type">UIAlertAction</span>(title: <span class="string">"OK"</span>, style: .<span class="type">Default</span>) &#123; action -&gt; <span class="type">Void</span> <span class="keyword">in</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> textField = alertController.textFields?.first <span class="keyword">as</span>? <span class="type">UITextField</span> &#123;</div><div class="line">            <span class="type">UserInfo</span>.sharedInstance.name = textField.text <span class="comment">// 更新名字</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    alertController.addAction(action)</div><div class="line"></div><div class="line">    <span class="keyword">self</span>.presentViewController(alertController, animated: <span class="literal">true</span>, completion: <span class="literal">nil</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>似乎并不麻烦，看起来也算合理，那上面这样写有什么问题？我想答案是太重复。为了减少重复，我们来增加自己的知识，让脑神经稍微痛苦一点，好形成一些新的联结或破坏一些旧的联结。</p>
+<p>我们可以传递闭包给 UserInfo，它将闭包存储起来，并在 name 被改变时调用这些闭包，这样闭包里的操作就会被执行了。自然，我们要在闭包里更新 UI。</p>
+<p>这样，新的 UserInfo 如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> <span class="keyword">let</span> sharedInstance = <span class="type">UserInfo</span>()</div><div class="line"></div><div class="line">    <span class="keyword">typealias</span> <span class="type">NameListener</span> = <span class="type">String</span> -&gt; <span class="type">Void</span></div><div class="line"></div><div class="line">    <span class="keyword">var</span> nameListeners = [<span class="type">NameListener</span>]()</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">bindNameListener</span>(<span class="title">nameListener</span>: <span class="title">NameListener</span>) </span>&#123;</div><div class="line">        <span class="keyword">self</span>.sharedInstance.nameListeners.append(nameListener)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">bindAndFireNameListener</span>(<span class="title">nameListener</span>: <span class="title">NameListener</span>) </span>&#123;</div><div class="line">        bindNameListener(nameListener)</div><div class="line"></div><div class="line">        nameListener(<span class="keyword">self</span>.sharedInstance.name)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> name: <span class="type">String</span> = <span class="string">"NIX"</span> &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            nameListeners.<span class="built_in">map</span> &#123; $<span class="number">0</span>(<span class="keyword">self</span>.name) &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们删除了通知相关的代码，定义了 NameListener，增加了一个 nameListeners 用于保存监听者闭包，并实现两个类方法 <code>bindNameListener</code> 和 <code>bindAndFireNameListener</code> 来保存（并触发）监听者闭包。而在 name 的 didSet 里，我们只需要调用每个闭包即可，这里用了 map，也很直观。</p>
+<p>那么 FirstViewController 的代码就简化为：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FirstViewController</span>: <span class="title">UIViewController</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> nameButton: <span class="type">UIButton</span>!</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewDidLoad()</div><div class="line"></div><div class="line">        title = <span class="string">"First"</span></div><div class="line"></div><div class="line">        <span class="type">UserInfo</span>.bindAndFireNameListener &#123; name <span class="keyword">in</span></div><div class="line">            <span class="keyword">self</span>.nameButton.setTitle(name, forState: .<span class="type">Normal</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们删除了通知相关的代码和 <code>updateUI</code> 方法，只需要将我们更新 UI 的闭包绑定到 UserInfo 即可。因为我们也需要初始设置 button，所以用了 <code>bindAndFireNameListener</code>。</p>
+<p>SecondViewController 和  ThirdViewController 的修改类似 FirstViewController，不赘述。</p>
+<p>这样一来，设置 UI 的操作和更新 UI 的操作就被很好地“融合”到一起了。代码比第一版的的逻辑性更强，VC 也更简单。</p>
+<p>但是还有一个问题， UserInfo 里的 nameListeners 数组可能会越来越长，比如用户不断地 push/pop。虽然在有限的时间里，nameListeners 的数量不会变的非常大，程序的性能可以接受，但这毕竟是一种浪费（内存和CPU时间）。我们再来解决这个问题。</p>
+<p>问题关键是我们的闭包并没有名字，我们无法将其找出并删除。例如对于 SecondViewController 来说，第一次进入它时，bindAndFireNameListener 执行了一次，如果 pop 再 push，它又执行了一次。那么，第一次被绑定的闭包其实没有任何用处了，因为第二次看到的 VC 是新生成的。如果我们能为闭包取名字，我们就能在第二次进入时用新的闭包替换旧的闭包，从而保证 nameListeners 的数量不会无限制的增长，也就不会浪费内存和 CPU 了。</p>
+<p>为了限制 nameListeners 的无限制增长，我们可以将 nameListeners 改成 nameListenerSet，类型从 Array 改成 Set，这样绑定时就能保证其中“同一个地方添加的闭包”最多只有一个。但很不幸，我们无法将闭包 NameListener 放入 Set，因为闭包无法实现 Hashable 协议，而这正是使用 Set 所需要的。</p>
+<p>似乎陷入困境了！</p>
+<p>不要恐慌。虽然一个单纯的闭包无法实现 Hashable，但我们可以将其再封装一次，例如放入一个 struct 里，我们再让 struct 实现 Hashable 协议。前面刚提到过，闭包无法实现 Hashable，那么我们必然要在 struct 放入另外一个可以 Hashable 的属性来帮助我们的 struct 实现 Hashable。也就是：为闭包取一个名字。因此，我们新的 UserInfo 如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> ==<span class="params">(lhs: UserInfo.NameListener, rhs: UserInfo.NameListener)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> lhs.name == rhs.name</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> <span class="keyword">let</span> sharedInstance = <span class="type">UserInfo</span>()</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">NameListener</span>: <span class="title">Hashable</span> </span>&#123;</div><div class="line">        <span class="keyword">let</span> name: <span class="type">String</span></div><div class="line"></div><div class="line">        <span class="keyword">typealias</span> <span class="type">Action</span> = <span class="type">String</span> -&gt; <span class="type">Void</span></div><div class="line">        <span class="keyword">let</span> action: <span class="type">Action</span></div><div class="line"></div><div class="line">        <span class="keyword">var</span> hashValue: <span class="type">Int</span> &#123;</div><div class="line">            <span class="keyword">return</span> name.hashValue</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> nameListenerSet = <span class="type">Set</span>&lt;<span class="type">NameListener</span>&gt;()</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">bindNameListener</span>(<span class="title">name</span>: <span class="title">String</span>, <span class="title">action</span>: <span class="title">NameListener</span>.<span class="title">Action</span>) </span>&#123;</div><div class="line">        <span class="keyword">let</span> nameListener = <span class="type">NameListener</span>(name: name, action: action)</div><div class="line"></div><div class="line">        <span class="keyword">self</span>.sharedInstance.nameListenerSet.insert(nameListener)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">bindAndFireNameListener</span>(<span class="title">name</span>: <span class="title">String</span>, <span class="title">action</span>: <span class="title">NameListener</span>.<span class="title">Action</span>) </span>&#123;</div><div class="line">        bindNameListener(name, action: action)</div><div class="line"></div><div class="line">        action(<span class="keyword">self</span>.sharedInstance.name)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> name: <span class="type">String</span> = <span class="string">"NIX"</span> &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            <span class="keyword">for</span> nameListener <span class="keyword">in</span> nameListenerSet &#123;</div><div class="line">                nameListener.action(name)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们设计了一个新的 struct：NameListener，它有一个 name 表明它是谁，原来的闭包就变成了 action，也很合理。为了满足 Hashable 协议，我们用 name.hashValue 来作为 struct 的 hashValue。另外，因为 Hashable 继承于 Equatable，我们也要实现一个 <code>func ==</code>。</p>
+<p>另外，为了 API 更好使用，我们将 <code>bindNameListener</code> 与 <code>bindAndFireNameListener</code> 改造为接受一个 name 和一个 action 作为参数，在方法内部才“合成”一个 nameListener，这样 API 在使用时看起来会更合理，如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="type">UserInfo</span>.bindAndFireNameListener(<span class="string">"FirstViewController.nameButton"</span>) &#123; name <span class="keyword">in</span></div><div class="line">    <span class="keyword">self</span>.nameButton.setTitle(name, forState: .<span class="type">Normal</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们只在闭包前面增加了一个闭包的“名字”而已。</p>
+<p>最后，UserInfo 的 name 的 didSet 里要稍微修改，因为是 Set，没法 map 了，那就改成最传统的循环吧。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>我们面临一个“一处修改，多处更新”的问题，起初时我们用通知来实现，并无不可。之后我们想要更合理（或者更酷）一些，于是利用 Swift 的闭包特性实现了一个监听者模式。最后，我们使用包装的办法，解决了监听者可能会无限制增长的问题。</p>
+<p>而这一切的目的，都是为了让代码更有逻辑性，并减少 VC 的代码量。</p>
+<p>最后的最后，UserInfo 里可能会包含其他类型的属性，例如 <code>var hairColor: UIColor</code>，如果它也面临“一处修改，多处更新”的问题，那么我们也需要实现一个 HairColorListener 吗？</p>
+<p>也许我们该利用 Swift 的泛型编写一个更加合理的 Listener，你说对吧？</p>
+<p>非最终的效果请查看并运行 Demo 代码：<a href="https://github.com/nixzhu/PropertyListenerDemo" target="_blank" rel="external">https://github.com/nixzhu/PropertyListenerDemo</a>。如果你愿意的话，可以查看 git 的各个 commit 以得到整个过程。</p>
+<p>（最终的）更好的泛型实现在分支 <a href="https://github.com/nixzhu/PropertyListenerDemo/tree/generic" target="_blank" rel="external">generic</a> 里，它的关键就是利用泛型实现一个 <code>class Listenable&lt;T&gt;</code> 以对应任何类型的属性，它内部再实现监听系统即可。当然，我们也让监听者支持泛型（<code>struct Listener&lt;T&gt;</code>）以便执行 action 时可以传递任意类型的参数。还有少许细节不同，例如 UserInfo 里直接使用 static 变量更方便，不需要用一个单独的单例再访问其属性。</p>
+<p>===============</p>
+<p>欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条 Tweet <a href="https://twitter.com/nixzhu/status/593600214688141313" target="_blank" rel="external">https://twitter.com/nixzhu/status/593600214688141313</a> 或微博 <a href="http://weibo.com/2076580237/CfDByqmL6" target="_blank" rel="external">http://weibo.com/2076580237/CfDByqmL6</a>  以分享此文！</p>
+<p>如果你认为这篇文章不错，也有闲钱，那你可以用支付宝扫描下方二维码随便捐助一点，以慰劳作者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+<p>真的到了最后，来个小广告：如果你喜欢围棋，喜欢偶尔阅读大师们的对局谱，那我推荐我自写自用的<a href="https://appsto.re/cn/Cfc1M.i" target="_blank" rel="external">围棋谱</a>。</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

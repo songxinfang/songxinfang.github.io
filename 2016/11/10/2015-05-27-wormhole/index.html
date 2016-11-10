@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      再造虫洞：一次 Objective-C 到 Swift 的改写之旅 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="既然 Swift 是未来，那手工将一些 Objective-C 的代码转成 Swift 就挺有必要。但如果只是简单的改写，而不使用 Swift 的特点，这个过程就会变得乏味。改写应当是一种再思考、再设计的过程。
+作者：@nixzhu
+=================================
+我第一次知道有个叫 MMWormhole 的项目时，这个名字让我很是激动。又了解到它主要用于 iO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再造虫洞：一次 Objective-C 到 Swift 的改写之旅 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2015-05-27-wormhole/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="既然 Swift 是未来，那手工将一些 Objective-C 的代码转成 Swift 就挺有必要。但如果只是简单的改写，而不使用 Swift 的特点，这个过程就会变得乏味。改写应当是一种再思考、再设计的过程。
+作者：@nixzhu
+=================================
+我第一次知道有个叫 MMWormhole 的项目时，这个名字让我很是激动。又了解到它主要用于 iO">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:25:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="再造虫洞：一次 Objective-C 到 Swift 的改写之旅 | songxinfang's blog">
+<meta name="twitter:description" content="既然 Swift 是未来，那手工将一些 Objective-C 的代码转成 Swift 就挺有必要。但如果只是简单的改写，而不使用 Swift 的特点，这个过程就会变得乏味。改写应当是一种再思考、再设计的过程。
+作者：@nixzhu
+=================================
+我第一次知道有个叫 MMWormhole 的项目时，这个名字让我很是激动。又了解到它主要用于 iO">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">再造虫洞：一次 Objective-C 到 Swift 的改写之旅</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>既然 Swift 是未来，那手工将一些 Objective-C 的代码转成 Swift 就挺有必要。但如果只是简单的改写，而不使用 Swift 的特点，这个过程就会变得乏味。改写应当是一种再思考、再设计的过程。</p>
+<p>作者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>=================================</p>
+<p>我第一次知道有个叫 <a href="https://github.com/mutualmobile/MMWormhole" target="_blank" rel="external">MMWormhole</a> 的项目时，这个名字让我很是激动。又了解到它主要用于 iOS 扩展与主应用的实时通信，更让这个名字十分合理。因为物理上的虫洞就是一种能让我们不受空间的限制，远距离传递信息的超空间通道。</p>
+<p>于是我去看它的代码，奇怪的是它为何用 Objective-C 写成。按理说，Swift 的发布也有一段时间了。这个项目又是用于扩展和主应用的通信，而且主要是为 WATCH 和对应 iPhone 应用的通信，用 Swift 来写不是更具有未来感吗？</p>
+<p>因此我想到去改写，并看看用 Swift 去实现它是否会遇到困难。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>MMWormhole 的主要代码不过 300 行，看起来很容易，因此先分析一下它的 API</p>
+<p>首先是初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (instancetype)initWithApplicationGroupIdentifier:(NSString *)identifier</div><div class="line">                                 optionalDirectory:(NSString *)directory</div></pre></td></tr></table></figure>
+<p>它接收一个 App Group ID 和一个可选的目录名，表明了虫洞的实现需要 App Group 的支持。这很好理解，因为 iOS 应用的扩展和主应用并不在同一个沙盒内，要让它们通信，只能用 App Group，或者网络。</p>
+<p>有了虫洞，就可以往里面传递消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (void)passMessageObject:(id &lt;NSCoding&gt;)messageObject</div><div class="line">               identifier:(NSString *)identifier;</div></pre></td></tr></table></figure>
+<p>它需要消息的名字，以及一个满足 NSCoding 协议的对象。具其文档解释，是因为它使用了 NSKeyedArchiver 来作为序列化媒介来将 messageObject 存储于 App Group 所在的文件系统里，以便虫洞的另一端读取。在实现上，为了及时性，它会使用 Darwin Notify Center 来发送一个名为 identifier 的通知。这种通知作用于整个系统范围，因此可以在 Extension 与 Container App 之间通信，但接收端必须处于 awake 状态。</p>
+<p>有了传递，自然就有接收：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (void)listenForMessageWithIdentifier:(NSString *)identifier</div><div class="line">                              listener:(void (^)(id messageObject))listener;</div></pre></td></tr></table></figure>
+<p>这个方法监听特定的消息，并在听到时执行一个 block，很好理解。而且很明显，我们可以为一种消息增加多个监听者。只要多调用这个方法几次即可。</p>
+<p>有了监听，就该有取消监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)stopListeningForMessageWithIdentifier:(NSString *)identifier;</div></pre></td></tr></table></figure>
+<p>但很遗憾，这个方法会移除所有监听此消息的监听者，而不能单个的移除。如果我们要用 Swift 改写，这该是一个可以改进的地方。</p>
+<p>另外还有三个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (id)messageWithIdentifier:(NSString *)identifier;</div><div class="line"></div><div class="line">- (void)clearMessageContentsForIdentifier:(NSString *)identifier;</div><div class="line"></div><div class="line">- (void)clearAllMessageContents;</div></pre></td></tr></table></figure>
+<p>分别用于根据消息的 ID 获取消息对象（在初始化时很有用，可以获取“过去”的消息），以及从文件系统中清除消息对象（单个，或全部）</p>
+<h2 id="改写"><a href="#改写" class="headerlink" title="改写"></a>改写</h2><p>先定 API 如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">init</span>(appGroupIdentifier: <span class="type">String</span>, messageDirectoryName: <span class="type">String</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">passMessage</span><span class="params">(message: Message?, withIdentifier identifier: String)</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">bindListener</span><span class="params">(listener: Listener, forMessageWithIdentifier identifier: String)</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">removeListener</span><span class="params">(listener: Listener, forMessageWithIdentifier identifier: String)</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">removeListenerByName</span><span class="params">(name: String, forMessageWithIdentifier identifier: String)</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">removeAllListenersForMessageWithIdentifier</span><span class="params">(identifier: String)</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">messageWithIdentifier</span><span class="params">(identifier: String)</span></span> -&gt; <span class="type">Message</span>?</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">destroyMessageWithIdentifier</span><span class="params">(identifier: String)</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">destroyAllMessages</span><span class="params">()</span></span></div></pre></td></tr></table></figure>
+<p>除了 API 的命名外，并无太大区别。只是现在我们可以为某个消息移除单个 Listener 了。至于具体的实现，首先是一些类型定义：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typealias</span> <span class="type">Message</span> = <span class="type">NSCoding</span></div></pre></td></tr></table></figure>
+<p>将 Message 作为 NSCoding 的别名，非常直观。然后是 Listener：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Listener</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">typealias</span> <span class="type">Action</span> = <span class="type">Message</span>? -&gt; <span class="type">Void</span></div><div class="line"></div><div class="line">    <span class="keyword">let</span> name: <span class="type">String</span></div><div class="line">    <span class="keyword">let</span> action: <span class="type">Action</span></div><div class="line"></div><div class="line">    <span class="keyword">init</span>(name: <span class="type">String</span>, action: <span class="type">Action</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.name = name</div><div class="line">        <span class="keyword">self</span>.action = action</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Listener 有一个名字和一个操作。这也是有别于 MMWormhole 的地方，它的 listener 只是一个 block，相当于这里的 action，而没有名字，因此无法单独移除。</p>
+<p>接下来我们实现 passMessage：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">passMessage</span><span class="params">(message: Message?, withIdentifier identifier: String)</span></span> &#123;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> identifier.isEmpty &#123;</div><div class="line">        <span class="built_in">fatalError</span>(<span class="string">"ERROR: Message need identifier"</span>)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> message = message &#123;</div><div class="line">        <span class="keyword">var</span> success = <span class="literal">false</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> filePath = filePathForIdentifier(identifier) &#123;</div><div class="line">            <span class="keyword">let</span> data = <span class="type">NSKeyedArchiver</span>.archivedDataWithRootObject(message)</div><div class="line">            success = data.writeToFile(filePath, atomically: <span class="literal">true</span>)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> success &#123;</div><div class="line">            <span class="keyword">if</span> <span class="keyword">let</span> center = <span class="type">CFNotificationCenterGetDarwinNotifyCenter</span>() &#123;</div><div class="line">                <span class="type">CFNotificationCenterPostNotification</span>(center, identifier, <span class="literal">nil</span>, <span class="literal">nil</span>, <span class="number">1</span>)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> center = <span class="type">CFNotificationCenterGetDarwinNotifyCenter</span>() &#123;</div><div class="line">            <span class="type">CFNotificationCenterPostNotification</span>(center, identifier, <span class="literal">nil</span>, <span class="literal">nil</span>, <span class="number">1</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>也很简单，首先确保消息的 identifier 不为空，不然接收端没办法区别不同的消息。然后根据消息主体的有无（有时候我们只需要 identifier 即可）来决定 CFNotificationCenterPostNotification 的时机，如有，就生成一个 filePath 并用 NSKeyedArchiver 将消息压缩为 NSData 在写入文件，在保证成功的前提下发送通知；如无，直接发送通知。</p>
+<p>然后是实现 bindListener，这是真正的考验，因为 CFNotificationCenterAddObserver</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">CFNotificationCenterAddObserver</span> <span class="params">(</span></span></div><div class="line">   CFNotificationCenterRef center,</div><div class="line">   <span class="keyword">const</span> <span class="keyword">void</span> *observer,</div><div class="line">   CFNotificationCallback callBack,</div><div class="line">   CFStringRef name,</div><div class="line">   <span class="keyword">const</span> <span class="keyword">void</span> *object,</div><div class="line">   CFNotificationSuspensionBehavior suspensionBehavior</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>需要的参数中的第三个 CFNotificationCallback 是函数指针，而 Swift (1.2) 还不能创建函数指针。基本上，这就会强制你写 Objective-C 代码，这也解决了之前的疑惑，为何 MMWormhole 用 Objective-C 来写。很明显，既然具体的实现离不开 Objective-C，那不妨全部用 Objective-C 来写。</p>
+<p>但是（是的，世界上充满了但是）我还不打算放弃，因为在 Swift 中依然可以使用 Objective-C 的运行时。通过它，也许我们不需要显式的 Objective-C 代码就能构造出一个函数指针来。</p>
+<p>根据<a href="http://www.charlessoft.com/hacks/using_c_function_pointers_in_swift.html" target="_blank" rel="external">这篇文章</a>提到的一种 hack 方法（也就意味着有风险），我们可以将一个 Swift 的闭包转换为一个某个对象的 IMP，而 IMP 正是函数指针的一个别名。因此，bindListener 的实现如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">bindListener</span><span class="params">(listener: Listener, forMessageWithIdentifier identifier: String)</span></span> &#123;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">let</span> center = <span class="type">CFNotificationCenterGetDarwinNotifyCenter</span>() &#123;</div><div class="line"></div><div class="line">        <span class="keyword">let</span> messageListener = <span class="type">MessageListener</span>(messageIdentifier: identifier, listener: listener)</div><div class="line">        messageListenerSet.insert(messageListener)</div><div class="line"></div><div class="line">        <span class="keyword">let</span> block: <span class="meta">@objc</span>_block (<span class="type">CFNotificationCenter</span>!, <span class="type">UnsafeMutablePointer</span>&lt;<span class="type">Void</span>&gt;, <span class="type">CFString</span>!, <span class="type">UnsafePointer</span>&lt;<span class="type">Void</span>&gt;, <span class="type">CFDictionary</span>!) -&gt; <span class="type">Void</span> = &#123; <span class="number">_</span>, <span class="number">_</span>, <span class="number">_</span>, <span class="number">_</span>, <span class="number">_</span> <span class="keyword">in</span></div><div class="line"></div><div class="line">            <span class="keyword">if</span> <span class="keyword">self</span>.messageListenerSet.<span class="built_in">contains</span>(messageListener) &#123;</div><div class="line">                messageListener.listener.action(<span class="keyword">self</span>.messageWithIdentifier(identifier))</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">let</span> imp: <span class="type">COpaquePointer</span> = imp_implementationWithBlock(<span class="built_in">unsafeBitCast</span>(block, <span class="type">AnyObject</span>.<span class="keyword">self</span>))</div><div class="line">        <span class="keyword">let</span> callBack: <span class="type">CFNotificationCallback</span> = <span class="built_in">unsafeBitCast</span>(imp, <span class="type">CFNotificationCallback</span>.<span class="keyword">self</span>)</div><div class="line"></div><div class="line">        <span class="type">CFNotificationCenterAddObserver</span>(center, <span class="built_in">unsafeAddressOf</span>(<span class="keyword">self</span>), callBack, identifier, <span class="literal">nil</span>, <span class="type">CFNotificationSuspensionBehavior</span>.<span class="type">DeliverImmediately</span>)</div><div class="line"></div><div class="line"></div><div class="line">        <span class="comment">// Try fire Listener's action for first time</span></div><div class="line"></div><div class="line">        listener.action(messageWithIdentifier(identifier))</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>之所以一定要实现这个 callBack，是因为我们必须在这个 callBack 里调用我们的 Listener 的 Action 闭包以便执行使用此消息的一些操作。另外请注意 block 的形式参数都是 <code>_, _, _, _, _，</code> 一半原因是我的实现不需要使用到它们，另一半原因是这终究是一种 hack 的方法，也许有失效的一天，而不使用其参数可能减轻不利影响。</p>
+<p>需要注意的是，在 Wormhole 内部，我增加了一个 MessageListener：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> ==<span class="params">(lhs: Wormhole.MessageListener, rhs: Wormhole.MessageListener)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> lhs.hashValue == rhs.hashValue</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MessageListener</span>: <span class="title">Hashable</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">let</span> messageIdentifier: <span class="type">String</span></div><div class="line">    <span class="keyword">let</span> listener: <span class="type">Listener</span></div><div class="line"></div><div class="line">    <span class="keyword">var</span> hashValue: <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">return</span> (messageIdentifier + <span class="string">"&lt;nixzhu.Wormhole&gt;"</span> + listener.name).hashValue</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用于封装 Listener 和 messageIdentifier。而且它满足 Hashable 协议，这样用集合 <code>var messageListenerSet = Set&lt;MessageListener&gt;()</code> 来装载所有的 MessageListener 就能带来好处：方便判断 Listener 的有效性，自动更新监听同一个 Message 的同名 Listener，也可以单独移除某一个 Listener。</p>
+<p>除了 removeListener 外，其它的 API 就只是基本的改写，并无介绍的必要，有兴趣的读者请自行阅读代码，地址为：<a href="https://github.com/nixzhu/Wormhole" target="_blank" rel="external">https://github.com/nixzhu/Wormhole</a>。</p>
+<p>如果你最近要开发 WatchKit 应用，需要使用到 Wormhole 所提供的功能，那可以用 pod 安装它：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">source <span class="string">'https://github.com/CocoaPods/Specs.git'</span></div><div class="line">platform <span class="symbol">:ios</span>, <span class="string">'8.0'</span></div><div class="line">use_frameworks!</div><div class="line"></div><div class="line">pod <span class="string">'Wormhole'</span></div></pre></td></tr></table></figure>
+<p>===============</p>
+<p>欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条 Tweet <a href="https://twitter.com/nixzhu/status/603433116263272448" target="_blank" rel="external">https://twitter.com/nixzhu/status/603433116263272448</a> 或微博 <a href="http://weibo.com/2076580237/CjLoYuQgR" target="_blank" rel="external">http://weibo.com/2076580237/CjLoYuQgR</a>  以分享此文！</p>
+<p>如果你认为这篇文章不错，也有闲钱，那你可以用支付宝扫描下方二维码随便捐助一点，以慰劳作者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      研究 UIActivityViewController | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自 http://nshipster.com/uiactivityviewcontroller/
+原作者：Mattt Thompson
+译者：@nixzhu
+==========================================
+数据与代码的关系一直都让人好奇。
+特定的编程语言，如 Lisp、lo 和 Mathematica 都是同像性的（homoiconic），意味着它们的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="研究 UIActivityViewController | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-04-22-ui-activity-viewcontroller/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自 http://nshipster.com/uiactivityviewcontroller/
+原作者：Mattt Thompson
+译者：@nixzhu
+==========================================
+数据与代码的关系一直都让人好奇。
+特定的编程语言，如 Lisp、lo 和 Mathematica 都是同像性的（homoiconic），意味着它们的">
+<meta property="og:image" content="http://nshipster.s3.amazonaws.com/uiactivityviewcontroller.png">
+<meta property="og:image" content="http://nshipster.s3.amazonaws.com/jony-ive-unstache.png">
+<meta property="og:image" content="http://nshipster.s3.amazonaws.com/jony-ive-mustache.png">
+<meta property="og:image" content="https://raw.github.com/intentkit/IntentKit/master/example.gif">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:28:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="研究 UIActivityViewController | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自 http://nshipster.com/uiactivityviewcontroller/
+原作者：Mattt Thompson
+译者：@nixzhu
+==========================================
+数据与代码的关系一直都让人好奇。
+特定的编程语言，如 Lisp、lo 和 Mathematica 都是同像性的（homoiconic），意味着它们的">
+<meta name="twitter:image" content="http://nshipster.s3.amazonaws.com/uiactivityviewcontroller.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">研究 UIActivityViewController</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自 <a href="http://nshipster.com/uiactivityviewcontroller/" target="_blank" rel="external">http://nshipster.com/uiactivityviewcontroller/</a></p>
+<p>原作者：<a href="http://mattt.me/" target="_blank" rel="external">Mattt Thompson</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>==========================================</p>
+<p>数据与代码的关系一直都让人好奇。</p>
+<p>特定的编程语言，如 <a href="http://en.wikipedia.org/wiki/Lisp_programming_language" target="_blank" rel="external">Lisp</a>、<a href="http://en.wikipedia.org/wiki/Io_%28programming_language%29" target="_blank" rel="external">lo</a> 和 <a href="http://en.wikipedia.org/wiki/Mathematica" target="_blank" rel="external">Mathematica</a> 都是<a href="http://en.wikipedia.org/wiki/Homoiconicity" target="_blank" rel="external">同像性的（homoiconic）</a>，意味着它们的代码可作为数据原语呈现，也就是说它们自身就可在代码中被操纵。许多其他语言，包括 Objective-C ，就不同了，它们在这两者之间建立了严格的界限，回避 <code>eval()</code> 和其它潜在的动态指示加载方法，以回避风险。</p>
+<p>当问题里的数据过大或难以表示为除了字节流之外的其他东西时，那么代码与数据的这种紧张关系就达到了一个新的高度。关于“如何编码、解码以及解释图像、文档和媒体的二进制表示”的问题从最早的操作系统开始就一直存在着。</p>
+<p>OS X 的 <code>Core Services 框架</code>与 iOS 的<code>移动 Core Services 框架</code>都提供函数通过<a href="http://en.wikipedia.org/wiki/Uniform_Type_Identifier" target="_blank" rel="external">通用类型标识符（Universal Type Identifiers，即UTI）</a>来根据文件扩展和<a href="http://en.wikipedia.org/wiki/Internet_media_type" target="_blank" rel="external">MIME类型</a>识别和分类数据类型。UTI提供了可扩展和可继承的分类系统，它能给予开发人员极大的灵活性，即使是处理最奇特的文件类型。例如，一个 Ruby 源代码文件（.rb）被分类为 Ruby 源代码 &gt; 源代码 &gt; 文本 &gt; 内容 &gt; 数据；一个 QuickTime 电影文件（.mov）被分类为视频 &gt; 电影 &gt; 试听内容 &gt; 内容 &gt; 数据；</p>
+<p>在桌面文件系统抽象里，UTI工作得相当好。然而，在一个移动范式里，文件和目录对于用户来说都被隐藏了，于是这很快就失效了。而且，更重要的是，云服务和社交媒体的兴起已经让远程实体比本地文件具有更重要的地位。因此，UTI和URL之间出现了紧张关系。</p>
+<p>很明显我们需要其它的某种东西。那 UIActivityViewController 能成为我们拼命追求的解决办法吗？</p>
+<p>====</p>
+<p>UIActivityViewController ，出现于 iOS 6，在应用里为分享和操作数据提供了一个统一的服务接口。</p>
+<p>给出一个可操作数据的集合，那一个 UIActivityViewController 实例就可如下创建：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">NSString *string = ...;</div><div class="line">NSURL *URL = ...;</div><div class="line"></div><div class="line">UIActivityViewController *activityViewController =</div><div class="line">  [[UIActivityViewController alloc] initWithActivityItems:@[string, URL]</div><div class="line">                                    applicationActivities:nil];</div><div class="line">[navigationController presentViewController:activityViewController</div><div class="line">                                      animated:YES</div><div class="line">                                    completion:^&#123;</div><div class="line">  // ...</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>这将在屏幕的底部呈现如下所示的东西：</p>
+<p><img src="http://nshipster.s3.amazonaws.com/uiactivityviewcontroller.png" alt="UIActivityViewController"></p>
+<p>默认情况下，UIActivityViewController 将显示所有可用于所提供内容的服务，但我们也可以排除特定的 Activity 类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">activityViewController.excludedActivityTypes = @[UIActivityTypePostToFacebook];</div></pre></td></tr></table></figure>
+<p>Activity 类型又分为“操作”和“分享”两大类：</p>
+<h4 id="UIActivityCategoryAction"><a href="#UIActivityCategoryAction" class="headerlink" title="UIActivityCategoryAction"></a>UIActivityCategoryAction</h4><ul>
+<li>UIActivityTypePrint</li>
+<li>UIActivityTypeCopyToPasteboard</li>
+<li>UIActivityTypeAssignToContact</li>
+<li>UIActivityTypeSaveToCameraRoll</li>
+<li>UIActivityTypeAddToReadingList</li>
+<li>UIActivityTypeAirDrop</li>
+</ul>
+<h4 id="UIActivityCategoryShare"><a href="#UIActivityCategoryShare" class="headerlink" title="UIActivityCategoryShare"></a>UIActivityCategoryShare</h4><ul>
+<li>UIActivityTypeMessage</li>
+<li>UIActivityTypeMail</li>
+<li>UIActivityTypePostToFacebook</li>
+<li>UIActivityTypePostToTwitter</li>
+<li>UIActivityTypePostToFlickr</li>
+<li>UIActivityTypePostToVimeo</li>
+<li>UIActivityTypePostToTencentWeibo</li>
+<li>UIActivityTypePostToWeibo</li>
+</ul>
+<p>每个 Activity 类型都支持好多种不同的数据类型。例如，一条 Tweet 可能由 NSString 以及一个附加的图像 和/或 URL 所组成。</p>
+<h3 id="不同的-Activity-类型所支持的数据类型"><a href="#不同的-Activity-类型所支持的数据类型" class="headerlink" title="不同的 Activity 类型所支持的数据类型"></a>不同的 Activity 类型所支持的数据类型</h3><table><br>  <thead><br>    <tr><br>      <th><br>        Activity 类型<br>      </th><br>      <th><br>        字符串<br>      </th><br>      <th><br>        属性字符串<br>      </th><br>      <th><br>        URL<br>      </th><br>      <th><br>        Data<br>      </th><br>      <th><br>        图像<br>      </th><br>      <th><br>        Asset<br>      </th><br>      <th><br>        其它<br>      </th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <td><br>        发布到 Facebook<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        发布到 Twitter<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        发布到 Weibo<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        信息<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<em><br>      </em></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓*<br>      </td><br>      <td><br>        <tt>sms://</tt> <tt>NSURL</tt><br>      </td><br>    </tr><br>    <tr><br>      <td><br>        邮件<br>      </td><br>      <td><br>        ✓+<br>      </td><br>      <td><br>        ✓+<br>      </td><br>      <td><br>        ✓+<br>      </td><br>      <td></td><br>      <td></td><br>      <td></td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        打印<br>      </td><br>      <td></td><br>      <td></td><br>      <td></td><br>      <td><br>        ✓+<br>      </td><br>      <td><br>        ✓+<br>      </td><br>      <td></td><br>      <td><br>        <tt>UIPrintPageRenderer</tt>,<br>        <tt>UIPrintFormatter</tt>, &amp;<br>        <tt>UIPrintInfo</tt><br>      </td><br>    </tr><br>    <tr><br>      <td><br>        拷贝到剪贴板<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        <tt>UIColor</tt>, <tt>NSDictionary</tt><br>      </td><br>    </tr><br>    <tr><br>      <td><br>        添加到联系人<br>      </td><br>      <td></td><br>      <td></td><br>      <td></td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        保存到相机胶卷<br>      </td><br>      <td></td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        添加到阅读列表<br>      </td><br>      <td></td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td></td><br>      <td></td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        发布到 Flickr<br>      </td><br>      <td></td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        发布到 Vimeo<br>      </td><br>      <td></td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        发布到腾讯微博<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>    </tr><br>    <tr><br>      <td><br>        AirDrop<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>      <td><br>        ✓<br>      </td><br>      <td><br>        ✓<br>      </td><br>      <td></td><br>    </tr><br>  </tbody><br></table>
+
+<h2 id="lt-UIActivityItemSource-gt-amp-UIActivityProvider"><a href="#lt-UIActivityItemSource-gt-amp-UIActivityProvider" class="headerlink" title="&lt;UIActivityItemSource&gt; &amp; UIActivityProvider"></a>&lt;UIActivityItemSource&gt; &amp; UIActivityProvider</h2><p>类似于一个<a href="https://developer.apple.com/library/mac/documentation/cocoa/reference/NSPasteboardItem_Class/Reference/Reference.html" target="_blank" rel="external">剪贴板条目</a>只在必要时才提供数据，为了避免过多的内存分配或处理时间， Activity 条目可以是自定义类型。</p>
+<h3 id="lt-UIActivityItemSource-gt"><a href="#lt-UIActivityItemSource-gt" class="headerlink" title="&lt;UIActivityItemSource&gt;"></a>&lt;UIActivityItemSource&gt;</h3><p>获取数据项</p>
+<ul>
+<li>activityViewControllerPlaceholderItem:</li>
+<li>activityViewController:itemForActivityType:</li>
+</ul>
+<p>提供数据项信息</p>
+<ul>
+<li>activityViewController:subjectForActivityType:</li>
+<li>activityViewController:dataTypeIdentifierForActivityType:</li>
+<li>activityViewController:thumbnailImageForActivityType:suggestedSize:</li>
+</ul>
+<p>一个关于这些方法如何使用的例子是自定义一个消息，其根据是否要分享到 Facebook 或 Twitter 分别定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (id)activityViewController:(UIActivityViewController *)activityViewController</div><div class="line">         itemForActivityType:(NSString *)activityType</div><div class="line">&#123;</div><div class="line">    if ([activityType isEqualToString:UIActivityTypePostToFacebook]) &#123;</div><div class="line">        return NSLocalizedString(@&quot;Like this!&quot;);</div><div class="line">    &#125; else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) &#123;</div><div class="line">        return NSLocalizedString(@&quot;Retweet this!&quot;);</div><div class="line">    &#125; else &#123;</div><div class="line">        return nil;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="创建一个自定义-UIActivity"><a href="#创建一个自定义-UIActivity" class="headerlink" title="创建一个自定义 UIActivity"></a>创建一个自定义 UIActivity</h2><p>除了上述系统提供的 Activity ，你也可以自己创建 Activity。</p>
+<p>作为例子，让我们创建一个自定义 Activity 类型，它能接受一个图片 URL 并使用 <a href="http://mustache.me/" target="_blank" rel="external">mustache.me</a> 为其安上一瞥胡子。</p>
+<p><img src="http://nshipster.s3.amazonaws.com/jony-ive-unstache.png" alt="Jony Ive Before">之前</p>
+<p><img src="http://nshipster.s3.amazonaws.com/jony-ive-mustache.png" alt="Jony Ive After">之后</p>
+<p>首先，我们为 Activity 类型定义一个<a href="http://en.wikipedia.org/wiki/Reverse_domain_name_notation" target="_blank" rel="external">反向DNS标识符（reverse-DNS identifier）</a>，指定类别为 UIActivityCategoryAction ，然后提供一个本地化的标题和一个合适于iOS版本的图像：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">static NSString * const HIPMustachifyActivityType = @&quot;com.nshipster.activity.Mustachify&quot;;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">#pragma mark - UIActivity</div><div class="line"></div><div class="line">+ (UIActivityCategory)activityCategory &#123;</div><div class="line">    return UIActivityCategoryAction;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (NSString *)activityType &#123;</div><div class="line">    return HIPMustachifyActivityType;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (NSString *)activityTitle &#123;</div><div class="line">    return NSLocalizedString(@&quot;Mustachify&quot;, nil);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (UIImage *)activityImage &#123;</div><div class="line">    if (NSFoundationVersionNumber &gt; NSFoundationVersionNumber_iOS_6_1) &#123;</div><div class="line">        return [UIImage imageNamed:@&quot;MustachifyUIActivity7&quot;];</div><div class="line">    &#125; else &#123;</div><div class="line">        return [UIImage imageNamed:@&quot;MustachifyUIActivity&quot;];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来，我们创建一个帮助函数，HIPMatchingURLsInActivityItems，它返回一个由任何所支持类型的图像 URL 组成的数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">static NSArray * HIPMatchingURLsInActivityItems(NSArray *activityItems) &#123;</div><div class="line">    return [activityItems filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:</div><div class="line">    ^BOOL(id item, __unused NSDictionary *bindings) &#123;</div><div class="line">        if ([item isKindOfClass:[NSURL class]] &amp;&amp;</div><div class="line">            ![(NSURL *)item isFileURL]) &#123;</div><div class="line">            return [[(NSURL *)item pathExtension] caseInsensitiveCompare:@&quot;jpg&quot;] == NSOrderedSame ||</div><div class="line">            [[(NSURL *)item pathExtension] caseInsensitiveCompare:@&quot;png&quot;] == NSOrderedSame;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return NO;</div><div class="line">    &#125;]];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个函数用于 <code>-canPerformWithActivityItems:</code> 和 <code>prepareWithActivityItems:</code> 以取得第一个 PNG 或 JPEG 的加了胡子的图像 URL，如果有的话。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems &#123;</div><div class="line">    return [HIPMatchingURLsInActivityItems(activityItems) count] &gt; 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)prepareWithActivityItems:(NSArray *)activityItems &#123;</div><div class="line">    static NSString * const HIPMustachifyMeURLFormatString = @&quot;http://mustachify.me/%d?src=%@&quot;;</div><div class="line"></div><div class="line">    self.imageURL = [NSURL URLWithString:[NSString stringWithFormat:HIPMustachifyMeURLFormatString, self.mustacheType, [HIPMatchingURLsInActivityItems(activityItems) firstObject]]];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们的网络服务提供了好几种胡子选项，它们定义在一个 NS_ENUM 中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">typedef NS_ENUM(NSInteger, HIPMustacheType) &#123;</div><div class="line">    HIPMustacheTypeEnglish,</div><div class="line">    HIPMustacheTypeHorseshoe,</div><div class="line">    HIPMustacheTypeImperial,</div><div class="line">    HIPMustacheTypeChevron,</div><div class="line">    HIPMustacheTypeNatural,</div><div class="line">    HIPMustacheTypeHandlebar,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>最终，我们提供一个 UIViewController 来显示图像。在这个例子里，一个简单的 UIWebView 控制器就够了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@interface HIPMustachifyWebViewController : UIViewController &lt;UIWebViewDelegate&gt;</div><div class="line">@property (readonly, nonatomic, strong) UIWebView *webView;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- (UIViewController *)activityViewController &#123;</div><div class="line">    HIPMustachifyWebViewController *webViewController = [[HIPMustachifyWebViewController alloc] init];</div><div class="line"></div><div class="line">    NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];</div><div class="line">    [webViewController.webView loadRequest:request];</div><div class="line"></div><div class="line">    return webViewController;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>要使用我们全新的胡子 Activity，我们简单地将其传递给一个 UIActivityViewController 的初始化函数即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">HIPMustachifyActivity *mustacheActivity = [[HIPMustachifyActivity alloc] init];</div><div class="line">UIActivityViewController *activityViewController =</div><div class="line">  [[UIActivityViewController alloc] initWithActivityItems:@[imageURL]</div><div class="line">                                    applicationActivities:@[mustacheActivity];</div></pre></td></tr></table></figure>
+<h2 id="手动调用操作"><a href="#手动调用操作" class="headerlink" title="手动调用操作"></a>手动调用操作</h2><p>现在正是回忆起 “UIActivityViewController 允许用户执行它们选择的操作” 的好时机，但当情况需要时，分享依然可以手动调用。</p>
+<p>为了完整性，下面就来介绍手动执行这些操作的步骤：</p>
+<h3 id="打开-URL"><a href="#打开-URL" class="headerlink" title="打开 URL"></a>打开 URL</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NSURL *URL = [NSURL URLWithString:@&quot;http://nshipster.com&quot;];</div><div class="line">[[UIApplication sharedApplication] openURL:URL];</div></pre></td></tr></table></figure>
+<p>系统支持的 URL scheme 包括：mailto://、tel://、sms://、and maps://。</p>
+<h3 id="添加到-Safari-阅读列表"><a href="#添加到-Safari-阅读列表" class="headerlink" title="添加到 Safari 阅读列表"></a>添加到 Safari 阅读列表</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@import SafariServices;</div><div class="line"></div><div class="line">NSURL *URL = [NSURL URLWithString:@&quot;http://nshipster.com/uiactivityviewcontroller&quot;];</div><div class="line">[[SSReadingList defaultReadingList] addReadingListItemWithURL:URL</div><div class="line">                                                        title:@&quot;NSHipster&quot;</div><div class="line">                                                  previewText:@&quot;...&quot;</div><div class="line">                                                        error:nil];</div></pre></td></tr></table></figure>
+<h3 id="保存到相册"><a href="#保存到相册" class="headerlink" title="保存到相册"></a>保存到相册</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">UIImage *image = ...;</div><div class="line">id completionTarget = self;</div><div class="line">SEL completionSelector = @selector(didWriteToSavedPhotosAlbum);</div><div class="line">void *contextInfo = NULL;</div><div class="line">UIImageWriteToSavedPhotosAlbum(image, completionTarget, completionSelector, contextInfo);</div></pre></td></tr></table></figure>
+<h3 id="发送短信"><a href="#发送短信" class="headerlink" title="发送短信"></a>发送短信</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@import MessageUI;</div><div class="line"></div><div class="line">MFMessageComposeViewController *messageComposeViewController = [[MFMessageComposeViewController alloc] init];</div><div class="line">messageComposeViewController.delegate = self;</div><div class="line">messageComposeViewController.recipients = @[@&quot;mattt@nshipster•com&quot;];</div><div class="line">messageComposeViewController.body = @&quot;Lorem ipsum dolor sit amet&quot;;</div><div class="line">[navigationController presentViewController:messageComposeViewController animated:YES completion:^&#123;</div><div class="line">    // ...</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h3 id="发送邮件"><a href="#发送邮件" class="headerlink" title="发送邮件"></a>发送邮件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@import MessageUI;</div><div class="line"></div><div class="line">MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];</div><div class="line">[mailComposeViewController setToRecipients:@[@&quot;mattt@nshipster•com&quot;]];</div><div class="line">[mailComposeViewController setSubject:@&quot;Hello&quot;];</div><div class="line">[mailComposeViewController setMessageBody:@&quot;Lorem ipsum dolor sit amet&quot;</div><div class="line">                                   isHTML:NO];</div><div class="line">[navigationController presentViewController:mailComposeViewController animated:YES completion:^&#123;</div><div class="line">    // ...</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h3 id="发送推文"><a href="#发送推文" class="headerlink" title="发送推文"></a>发送推文</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@import Twitter;</div><div class="line"></div><div class="line">TWTweetComposeViewController *tweetComposeViewController =</div><div class="line">    [[TWTweetComposeViewController alloc] init];</div><div class="line">[tweetComposeViewController setInitialText:@&quot;Lorem ipsum dolor sit amet.&quot;];</div><div class="line">[self.navigationController presentViewController:tweetComposeViewController</div><div class="line">                                        animated:YES</div><div class="line">                                      completion:^&#123;</div><div class="line">    //...</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h2 id="IntentKit"><a href="#IntentKit" class="headerlink" title="IntentKit"></a>IntentKit</h2><p>虽然所有这些都让人影响深刻也很有用，但在与 Android 上的丰富的 Intent 模型对比之下，iOS 的 Activity 范式中还是有一些特殊的缺失。</p>
+<p>在 Android 上，应用可以注册不同的 Intent，以表面它们可用于地图或作为浏览器，而且能被选择为相关 Activity 的默认应用，例如导航或将某个URL加入书签。</p>
+<p>虽然 iOS 缺少可扩展的基础架构来支持这些，但一个第三方的库，叫做 IntentKit，由 <a href="https://github.com/lazerwalker" target="_blank" rel="external">@lazerwalker </a>(有着 <a href="http://goshdarnblocksyntax.com/" target="_blank" rel="external">f*ingblocksyntax.com</a> 的声誉) 编写，它是一个有趣的关于我们如何缩小差距的例子。</p>
+<p><img src="https://raw.github.com/intentkit/IntentKit/master/example.gif" alt="IntentKit"></p>
+<p>正常情况下，在一开始一个开发者就要做许多工作，例如查询某个特定的应用是否已被安装，以及构造一个 URL 以支持某个特定的 Activity 等。</p>
+<p>IntentKit 合并了连接到这些最流行的服务（如 Web、地图、邮件、Twitter、Facebook以及Google+这些客户端）的逻辑，而且它的 UI 非常类似 UIActivityViewController。</p>
+<p>任何想将其应用的分享体验提高一个层次的人都应该研究一下它。</p>
+<p>还有一个要发出的有力争论是，关于 iOS 平台的长期生存能力取决于如 UIActivityViewController 这样的分享机制。俗话说，“信息需要自由”。而任何阻挡人民联盟的事物终将输给那些不阻挡联盟的事物。</p>
+<p>公开的 <a href="http://oleb.net/blog/2012/10/remote-view-controllers-in-ios-6/" target="_blank" rel="external">远程视图控制器（remote view controller）</a> API 的未来前景给了我关于iOS上分享的未来希望。虽然对现在来说，我们当然可以做得比 UIActivityViewController 更差。（译者注：是这个意思吗？ For now, though, we could certainly do much worse than UIActivityViewController.）</p>
+<p>===============</p>
+<p>译者注：欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B0VJyuBJ7" target="_blank" rel="external">http://weibo.com/2076580237/B0VJyuBJ7</a> 以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

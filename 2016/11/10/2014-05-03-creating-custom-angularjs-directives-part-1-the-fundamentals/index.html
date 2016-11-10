@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      创建自定义 AngularJS 指令，第一部分，基础知识 | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自 http://weblogs.asp.net/dwahlin/archive/2014/04/29/creating-custom-angularjs-directives-part-i-the-fundamentals.aspx
+原作者：@DanWahlin
+译者：@nixzhu
+==========================================
+AngularJS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建自定义 AngularJS 指令，第一部分，基础知识 | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-05-03-creating-custom-angularjs-directives-part-1-the-fundamentals/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自 http://weblogs.asp.net/dwahlin/archive/2014/04/29/creating-custom-angularjs-directives-part-i-the-fundamentals.aspx
+原作者：@DanWahlin
+译者：@nixzhu
+==========================================
+AngularJS">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:27:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="创建自定义 AngularJS 指令，第一部分，基础知识 | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自 http://weblogs.asp.net/dwahlin/archive/2014/04/29/creating-custom-angularjs-directives-part-i-the-fundamentals.aspx
+原作者：@DanWahlin
+译者：@nixzhu
+==========================================
+AngularJS">
+<meta name="twitter:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">创建自定义 AngularJS 指令，第一部分，基础知识</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自 <a href="http://weblogs.asp.net/dwahlin/archive/2014/04/29/creating-custom-angularjs-directives-part-i-the-fundamentals.aspx" target="_blank" rel="external">http://weblogs.asp.net/dwahlin/archive/2014/04/29/creating-custom-angularjs-directives-part-i-the-fundamentals.aspx</a></p>
+<p>原作者：<a href="https://twitter.com/DanWahlin" target="_blank" rel="external">@DanWahlin</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>==========================================</p>
+<p><a href="http://www.angularjs.org" target="_blank" rel="external">AngularJS</a> 提供了很多指令（Directive）用于操作 DOM、将事件路由到事件处理器、执行数据绑定、关联控制器/scope到View上，等等很多。例如 <strong>ng-click</strong>、 <strong>ng-show/ng-hide</strong>、 <strong>ng-repeat</strong> ，以及许多其它能在 AngularJS 核心代码里找到的指令能让我们非常轻松地开始使用这一框架。</p>
+<p>尽管內建指令已经覆盖了许多不同的场景，但可能有好几次你发现自己还是需要自定义指令，却不清楚如何开始编写它们。在本系列教程中，我会一步一步地提供一个研究指令如何工作以及你如何开始使用它们的方法。总体目标是慢慢前进并提供简单、易消化的指令示例，且随着本系列的进展不断深入。</p>
+<p>我假设你已经知道指令是什么并懂得如何使用它们。如果你完全不知道指令是什么，看看我制作的 <a href="http://weblogs.asp.net/dwahlin/archive/2013/08/15/angularjs-in-60-ish-minutes-the-ebook.aspx" target="_blank" rel="external">60 分钟 AngularJS 视频教程 (或者获取 eBook 版本)</a> 或我新写的 <a href="http://weblogs.asp.net/dwahlin/archive/2014/03/24/the-angularjs-jumpstart-video-training-course-has-been-released.aspx" target="_blank" rel="external">AngularJS JumpStart</a> 课程。</p>
+<h2 id="编写自定义指令很容易吗？"><a href="#编写自定义指令很容易吗？" class="headerlink" title="编写自定义指令很容易吗？"></a>编写自定义指令很容易吗？</h2><p>在你第一次看到 AngularJS 指令的时候，它们可能会吓着你。它们具有不同的选项，还有一些神秘功能（而“神秘”是我的政治正确术语，表示“他们到底在想什么？”），所以初次看到确实是个挑战。然而，一旦你明白一些片段并知道它们如何结合在一起，你就会发现它们并没有那么糟糕。我将其和学习一种乐器做比较。你第一次弹钢琴或吉他时，你的表现不会很好，而且听起来完全不对劲。然而，投入必要的时间去练习后，最终你能相当不错地处理更复杂的音乐。对于指令来说也一样——它们需要一些练习，而一旦你掌握了它们的诀窍，你就能做出许多强大的东西。我期待着某一天 <a href="http://www.polymer-project.org/" target="_blank" rel="external">Polymer</a> 项目和 <a href="http://w3c.github.io/webcomponents/explainer/" target="_blank" rel="external">Web Components</a> spec 中的特性能取代我们今天编写的指令。如果你想一窥指令的未来发展方向，就看看这些链接。</p>
+<h2 id="开始自定义指令"><a href="#开始自定义指令" class="headerlink" title="开始自定义指令"></a>开始自定义指令</h2><p>你为什么想写一个自定义指令呢？比方说你一直负责将一个客户集合转换为某些类型的网格以显示在视图里。虽然你确实可以通过添加 DOM 的方式来处理这个问题，但这样做会很难测试，也打破了分离原则——你不应该在 AngularJS 里这样做。相反，这种类型的功能应该用一个自定义指令来实现。在其它情况下你可能有一些数据绑定用于好几个视图，而且你想重用数据绑定表达式。使用 ng-include 加载的一个子视图就可以被使用，指令同样能很好的工作在这样的情况下。还有其它许多方式可以使用自定义指令，这些例子还只是冰山一角而已。</p>
+<p>让我们从一个非常基本的 AngularJS 指令的例子开始。假设我们在应用里定义了如下模块和控制器（我也会在将来的文章里提到这些模块和控制器）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> app = angular.module(<span class="string">'directivesModule'</span>, []);</div><div class="line"></div><div class="line">app.controller(<span class="string">'CustomersController'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$scope</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> counter = <span class="number">0</span>;</div><div class="line">    $scope.customer = &#123;</div><div class="line">        <span class="attr">name</span>: <span class="string">'David'</span>,</div><div class="line">        <span class="attr">street</span>: <span class="string">'1234 Anywhere St.'</span></div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    $scope.customers = [</div><div class="line">        &#123;</div><div class="line">            <span class="attr">name</span>: <span class="string">'David'</span>,</div><div class="line">            <span class="attr">street</span>: <span class="string">'1234 Anywhere St.'</span></div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            <span class="attr">name</span>: <span class="string">'Tina'</span>,</div><div class="line">            <span class="attr">street</span>: <span class="string">'1800 Crest St.'</span></div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            <span class="attr">name</span>: <span class="string">'Michelle'</span>,</div><div class="line">            <span class="attr">street</span>: <span class="string">'890 Main St.'</span></div><div class="line">        &#125;</div><div class="line">    ];</div><div class="line"></div><div class="line">    $scope.addCustomer = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        counter++;</div><div class="line">        $scope.customers.push(&#123;</div><div class="line">            <span class="attr">name</span>: <span class="string">'New Customer'</span> + counter,</div><div class="line">            <span class="attr">street</span>: counter + <span class="string">' Cedar Point St.'</span></div><div class="line">        &#125;);</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    $scope.changeData = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        counter++;</div><div class="line">        $scope.customer = &#123;</div><div class="line">            <span class="attr">name</span>: <span class="string">'James'</span>,</div><div class="line">            <span class="attr">street</span>: counter + <span class="string">' Cedar Point St.'</span></div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line">&#125;]);</div></pre></td></tr></table></figure>
+<p>假设我们发现自己一遍又一遍的在应用的视图中写下类似下面的数据绑定表达式：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Name: &#123;&#123;customer.name&#125;&#125;</div><div class="line"><span class="tag">&lt;<span class="name">br</span> /&gt;</span></div><div class="line">Street: &#123;&#123;customer.street&#125;&#125;</div></pre></td></tr></table></figure>
+<p>一个能促进重用的技术是将数据绑定模版放在一个子视图里（我称其为 <strong>myChildView.html</strong> ）并在父视图里使用 <strong>ng-include</strong> 指令来引用它。这将使得 <strong>myChildView.html</strong> 在整个应用里都可以在需要的地方被重用。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-include</span>=<span class="string">"'myChildView.html'"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>虽然这能搞定事情，但还有另外一个可用的技术是将数据绑定表达式放入一个指令里。要创建一个指令，你首先定位到指令会被放入的目标模块，并调用它的 <strong>directive()</strong> 函数。这个 <strong>directive()</strong> 函数接受指令的名字和一个函数。下面是一个简单的嵌入数据绑定表达式的指令：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'directivesModule'</span>).directive(<span class="string">'mySharedScope'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">template</span>: <span class="string">'Name: &#123;&#123;customer.name&#125;&#125;&lt;br /&gt; Street: &#123;&#123;customer.street&#125;&#125;'</span></div><div class="line">    &#125;;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这给我们带来了比使用 <strong>ng-include</strong> 指令加载子视图更多的东西吗？目前还没有。然而，指令能够通过添加一点点代码来做到更多事情，而且它们能够让元素轻易地附上功能。一个将 <strong>mySharedScope</strong> 指令附加到一个 <strong>&lt;div&gt;</strong> 的例子如下所示：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">my-shared-scope</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>当指令运行时，它会基于之前展示的控制器里的数据输出下面的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Name: David  </div><div class="line">Street: 1234 Anywhere St.</div></pre></td></tr></table></figure>
+<p>你会注意到的第一个情况是 <strong>mySharedScope</strong> 指令在视图里是用 <strong>my-shared-scope</strong> 来引用的。为什么是这个格式？答案是指令名以驼峰语法定义。例如，当你使用 <strong>ngRepeat</strong> 指令时你使用的是连字符版的 <strong>ng-repeat</strong> 。</p>
+<p>另一个有趣的情况是它默认从视图继承了 scope 。如果之前展示的控制器（CustomersController）被绑定到视图，那么  <strong>$scope</strong>  的 <strong>customer</strong> 属性就被关联到指令了。这被称为 <strong>shared scope</strong> 并且非常适合你知道许多 parent scope 信息的情况。在你想重用指令的情况下，你不能依赖于知道该 scope 的属性，虽然可能会使用称为 <strong>isolate scope</strong> 的东西。我会下一篇教程里提供更多 isolate scope 的细节。</p>
+<h2 id="指令属性"><a href="#指令属性" class="headerlink" title="指令属性"></a>指令属性</h2><p>在前一个 <strong>mySharedScope</strong> 指令中有一个单独的属性叫做 <strong>template</strong> ，它被定义在从函数返回的对象中。这个属性负责定义模版代码（目前是一个数据绑定表达式）用于生成 HTML 。还有什么其它可用的属性呢？</p>
+<p>自定义指令通常会返回一个对象，它负责定义指令所需的属性，例如模版、控制器（如果使用了）、负责 DOM 操作的代码，还有更多。有不同的几种属性可以使用（你可以<a href="http://docs.angularjs.org/api/ng/service/$compile" target="_blank" rel="external">在此找到它们的完整列表</a>）。下面看看一些你可能遇到的关键属性，以及一个使用它们的实例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'moduleName'</span>)</div><div class="line">    .directive(<span class="string">'myDirective'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">restrict</span>: <span class="string">'EA'</span>, <span class="comment">//E = element（元素）, A = attribute（属性）, C = class, M = comment         </span></div><div class="line">        scope: &#123;</div><div class="line">            <span class="comment">//@ reads the attribute value, = provides two-way binding, &amp; works with functions</span></div><div class="line">            <span class="comment">//@ 读取属性值， = 提供双向绑定， &amp; 以函数一起工作</span></div><div class="line">            title: <span class="string">'@'</span>         &#125;,</div><div class="line">        <span class="attr">template</span>: <span class="string">'&lt;div&gt;&#123;&#123; myVal &#125;&#125;&lt;/div&gt;'</span>,</div><div class="line">        <span class="attr">templateUrl</span>: <span class="string">'mytemplate.html'</span>,</div><div class="line">        <span class="attr">controller</span>: controllerFunction, <span class="comment">//Embed a custom controller in the directive 在指令中嵌入一个自定义控制器</span></div><div class="line">        link: <span class="function"><span class="keyword">function</span> (<span class="params">$scope, element, attrs</span>) </span>&#123; &#125; <span class="comment">//DOM manipulation DOM 操作</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>每个属性的简短说明如下所示：</p>
+<table cellspacing="0" cellpadding="2" width="500" border="1"><tbody><br>  <tr><br>    <td valign="top" width="128"><strong>属性</strong></td><br><br>    <td valign="top" width="372"><strong>描述</strong></td><br>  </tr><br><br>  <tr><br>    <td valign="top" width="128">restrict</td><br><br>    <td valign="top" width="372">决定一个指令可如何被使用（例如元素、属性、CSS class 或 注释）。</td><br>  </tr><br><br>  <tr><br>    <td valign="top" width="128">scope</td><br><br>    <td valign="top" width="372">用于创建一个子 scope  或孤立的 scope 。</td><br>  </tr><br><br>  <tr><br>    <td valign="top" width="128">template</td><br><br>    <td valign="top" width="372">定义指令的输出内容。可以包含 HTML 、数据绑定表达式，甚至是其它指令。</td><br>  </tr><br><br>  <tr><br>    <td valign="top" width="128">templateUrl</td><br><br>    <td valign="top" width="372">提供指令所用模版的路径。如果模版被定义在 &lt;script&gt; 内，那它可以包含一个 DOM 元素的 id 。</td><br>  </tr><br><br>  <tr><br>    <td valign="top" width="128">controller</td><br><br>    <td valign="top" width="372">用于定义和指令模版关联的控制器。 </td><br>  </tr><br><br>  <tr><br>    <td valign="top" width="128">link</td><br><br>    <td valign="top" width="372">用于 DOM 操作任务的函数</td><br>  </tr><br></tbody></table>
+
+
+<h2 id="操作-DOM"><a href="#操作-DOM" class="headerlink" title="操作 DOM"></a>操作 DOM</h2><p>除了在模版上执行数据绑定操作（我会在将来的文章里讲到更多相关的情况）外，指令同样可用于操作 DOM 。即通过之前提到的 link 函数来做。</p>
+<p>link 函数通常接受 3 个参数（虽然某些情况下还可以传递其它参数），包括 scope 、与指令关联的元素，以及目标元素的属性（attribute）。下面是指令如何处理某个元素上 click、mouseenter，以及 mouseleave 事件的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">app.directive(<span class="string">'myDomDirective'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">link</span>: <span class="function"><span class="keyword">function</span> (<span class="params">$scope, element, attrs</span>) </span>&#123;</div><div class="line">            element.bind(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                element.html(<span class="string">'You clicked me!'</span>);</div><div class="line">            &#125;);</div><div class="line">            element.bind(<span class="string">'mouseenter'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                element.css(<span class="string">'background-color'</span>, <span class="string">'yellow'</span>);</div><div class="line">            &#125;);</div><div class="line">            element.bind(<span class="string">'mouseleave'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                element.css(<span class="string">'background-color'</span>, <span class="string">'white'</span>);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>要使用此指令，只需将如下代码添加到视图：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">my-dom-directive</span>&gt;</span>Click Me!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>当鼠标进入或离开时，背景色会在黄色和白色之间切换（本例使用的是嵌入式样式，但 CSS 类形式的样式一样可以工作）。当目标元素被点击，内部的 HTML 就会变成 “You clicked me!” 。当然了，对于 DOM 的操作，还有非常非常多的事情可以做，这里只是简单地帮助你开始而已。</p>
+<h2 id="构造-AngularJS-指令代码"><a href="#构造-AngularJS-指令代码" class="headerlink" title="构造 AngularJS 指令代码"></a>构造 AngularJS 指令代码</h2><p>虽然 <strong>mySharedScope</strong> 和 <strong>myDomDirective</strong> 指令能很好的工作，但在定义指令和其它 AngularJS 组件时，我会遵循一个特定的模式。下面是一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> directive = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line"></div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    angular.module(<span class="string">'moduleName'</span>)</div><div class="line">        .directive(<span class="string">'directiveName'</span>, directive);</div><div class="line"></div><div class="line">&#125;());</div></pre></td></tr></table></figure>
+<p>这些代码是用一个会立即执行的函数包装了所有的东西，以将这些东西拉到全局 scope 之外。然后它在函数内定义了一个指令功能函数并将其分配给  <strong>directive</strong> 变量。最后，调用模块的 <strong>directive()</strong> 函数并传递  <strong>directive</strong> 变量。还有其它几种技术可用于构造代码（看看我关于本主题的<a href="http://weblogs.asp.net/dwahlin/archive/2013/12/01/structuring-angularjs-code.aspx" target="_blank" rel="external">旧文章</a>），但这就是我通常会遵循的模式。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在这关于 AngularJS 指令的第一篇文章中，你了解了一些基础知识，并学会了如何创建两个基本的指令。但我们还只是懂了一点儿皮毛而已。在下一篇文章中我会讨论孤立 scope 和一些不同的属性（它们被称为 <strong>局部 scope 属性</strong> ，可用于数据绑定等更多情况上）。</p>
+<p>===============</p>
+<p>译者注：欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B2Bs62jQG" target="_blank" rel="external">http://weibo.com/2076580237/B2Bs62jQG</a> 以分享给更多人。</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      iOS 应用的国际化（2014） | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="本文翻译自 http://www.raywenderlich.com/64401/internationalization-tutorial-for-ios-2014
+原作者：Ali Hafizji
+译者：@nixzhu
+==========================================
+2014 年 4 月 23 日更新：本文最初由 Sean Berry 编写， 因为 iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 应用的国际化（2014） | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/11/10/2014-04-24-internationalization-tutorial-for-ios-2014/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="本文翻译自 http://www.raywenderlich.com/64401/internationalization-tutorial-for-ios-2014
+原作者：Ali Hafizji
+译者：@nixzhu
+==========================================
+2014 年 4 月 23 日更新：本文最初由 Sean Berry 编写， 因为 iOS">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/03/starter_project_screenshot.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/03/Screen-Shot-2014-03-07-at-4.30.35-pm-700x471.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/localization_steps-700x457.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/03/select_files_to_localize-700x470.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/03/project_structure.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/Localize_button-700x457.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/03/select_spanish_button.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/03/localization_files.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/03/espanol_version-308x500.png">
+<meta property="og:image" content="http://cdn5.raywenderlich.com/wp-content/uploads/2014/03/number_formatted-308x500.png">
+<meta property="og:image" content="http://cdn3.raywenderlich.com/wp-content/uploads/2014/03/spanish_region_format-308x500.png">
+<meta property="og:image" content="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/spain_number_formatting-308x500.png">
+<meta property="og:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/03/megusta.png">
+<meta property="og:image" content="http://cdn4.raywenderlich.com/wp-content/uploads/2014/03/spanish_image-308x500.png">
+<meta property="og:image" content="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png">
+<meta property="og:updated_time" content="2016-11-10T01:27:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 应用的国际化（2014） | songxinfang's blog">
+<meta name="twitter:description" content="本文翻译自 http://www.raywenderlich.com/64401/internationalization-tutorial-for-ios-2014
+原作者：Ali Hafizji
+译者：@nixzhu
+==========================================
+2014 年 4 月 23 日更新：本文最初由 Sean Berry 编写， 因为 iOS">
+<meta name="twitter:image" content="http://cdn2.raywenderlich.com/wp-content/uploads/2014/03/starter_project_screenshot.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">iOS 应用的国际化（2014）</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-11-10" class="post-meta__date date">2016-11-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>本文翻译自 <a href="http://www.raywenderlich.com/64401/internationalization-tutorial-for-ios-2014" target="_blank" rel="external">http://www.raywenderlich.com/64401/internationalization-tutorial-for-ios-2014</a></p>
+<p>原作者：<a href="http://www.raywenderlich.com/u/ali.hafizji" target="_blank" rel="external">Ali Hafizji</a></p>
+<p>译者：<a href="https://twitter.com/nixzhu" target="_blank" rel="external">@nixzhu</a></p>
+<p>==========================================</p>
+<p>2014 年 4 月 23 日更新：本文最初由 <a href="http://twitter.com/regularberry" target="_blank" rel="external">Sean Berry</a> 编写， 因为 iOS 7，现在由 <a href="http://www.raywenderlich.com/u/ali.hafizji" target="_blank" rel="external">Ali Hafizji</a> 将此文全面更新。</p>
+<p>创造出色应用算得上是不小的壮举，除开伟大的代码、华丽的设计以及直观的交互外，还有更多要做的事。要爬上 App Store 的排行榜需要适时的产品营销、跟随着用户群不断扩大的能力，以及利用工具和技术尽可能广泛地达到越多的受众越好。</p>
+<p>国际市场对许多开发者来说是事后考虑，但感谢由 App Store 所提供的无痛的全球分发系统，任何 iOS 开发者要将他们的应用在超过 150 个国家的市场发布，只需要一个简单的点击。亚洲和欧洲分别代表着一个不断增长的潜在客户群，他们中的大多数人都不以英语为母语，但为了充分发掘你的应用在全球市场的潜力，你至少要将应用的国际化语言做好。</p>
+<p>本教程将对一个叫做 <code>iLikeIt</code> 的简单应用添加国际化支持来引导你学一遍国际化的基本内容。这个简单的应用有一个 Label 和一个 <code>You Like?</code> Button。无论用户何时点击 <code>You Like?</code> ，一些乐观的销售数据和对应的图片就在按钮下以淡入的方式出现。</p>
+<p>但目前，这个应用还只支持英文—— os vamos a traducir!</p>
+<blockquote>
+<p>Note：国际化的另一个重要方面是使用 Auto Layout 去处理文字大小的变化。然而，为了保持本教程的简单，我们不会专注于 Auto Layout ，但我们为其准备有<a href="http://www.raywenderlich.com/64392/video-tutorial-beginning-auto-layout" target="_blank" rel="external">另外的教程</a>。</p>
+</blockquote>
+<h2 id="国际化-vs-本地化"><a href="#国际化-vs-本地化" class="headerlink" title="国际化 vs 本地化"></a>国际化 vs 本地化</h2><p>在你开始本教程之前，明白国际化与本地化的区别非常重要，而这些内容常常让人困惑。</p>
+<p>简单地说，国际化是为国际化能力而设计你的应用的过程。举例来说：</p>
+<ul>
+<li>以用户的母语处理文字地输入、输出。</li>
+<li>处理不同的日期、时间以及数字格式。</li>
+<li>利用适当的日历和时区来处理数据。</li>
+</ul>
+<p>国际化对于你（开发者）来说是一个小活动，即利用系统提供的 API 来增添或修改你的代码以使得你的应用在中文或阿拉伯语下同在英文下一样好。</p>
+<p>对比之下，本地化仅仅是将应用的用户界面和资源翻译至不同的语言，这是一些你能够且应该交给别人的事情，除非碰巧你精通你的应该所支持的每一种语言。:]</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>第一步就来<a href="http://cdn2.raywenderlich.com/wp-content/uploads/2014/03/StarterKit.zip" target="_blank" rel="external">下载</a> iLikeIt 启动项目，整篇教程里都会用到它。</p>
+<p>用 Xcode 5 打开项目，并在模拟器中运行。在按下 <code>You like?</code> 之后你会看到如下界面：</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/03/starter_project_screenshot.png" alt="Starter product screenshot"></p>
+<p>如你在截图中所见的，你需要本地化 4 个元素：</p>
+<ul>
+<li>UI 元素：<code>Hello</code> Label</li>
+<li>UI 元素：<code>You like?</code> Button</li>
+<li>销售数据文本：<code>Yesterday you sold 1000000 apps</code></li>
+<li>图像文本：<code>I LIKE IT</code></li>
+</ul>
+<p>花点时间浏览一下文件和目录，使自己熟悉项目结构。 <code>Main.storyboard</code> 包含一个单视图屏幕，它是 <code>ViewController</code> 类的实例。</p>
+<h2 id="从代码中分离文本"><a href="#从代码中分离文本" class="headerlink" title="从代码中分离文本"></a>从代码中分离文本</h2><p>目前，所有应用显示的文本都以硬编码的方式存放在 <code>Main.storyboard</code> 和 <code>ViewController</code> 里。为了本地化这些字符串，你就要将它们放在单独的文件中。为了避免将它们硬编码到你的方法里，你只需简单地从该文件引用这些字符串即可。</p>
+<p>Xcode 使用以 “.strings” 为扩展名的多个文件来存储和检索所有能用于应用的字符串，以支持多种语言。你的代码中的一个简单方法将会根据当前 iOS 设备的语言去查找并返回所需要的字符串。</p>
+<p>那就让我们来试试看。打开菜单 <code>File &gt; New &gt; File</code>，选择 Resource 下 <code>Strings Fils</code> ，如下所示：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/03/Screen-Shot-2014-03-07-at-4.30.35-pm-700x471.png" alt="Choose strings file"></p>
+<p>点击 <code>Next</code> ，将文件命名为 <code>Localizable.strings</code> ，然后点击 <code>Save</code>。</p>
+<blockquote>
+<p>注意：<code>Localizable.strings</code> 是 iOS 用于本地化文本的默认文件名。请忍耐将其改名的冲动，否则你将在每次引用本地化字符串时都要去输入一遍你的 .strings 文件名。</p>
+</blockquote>
+<p>现在，你已经创建了 <code>Localizable.strings</code> 文件，你需要添加所有目前硬编码在应用里的文本。你将按照如下简单的特定规则来做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;KEY&quot; = &quot;CONTENT&quot;;</div></pre></td></tr></table></figure>
+<p>这些 键/内容 对（key/content pairs） 就像一个 NSDictionary ，而惯例是使用默认语言的翻译作为内容的键值，例如对于 <code>You Like?</code> ，你就这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;You like?&quot; = &quot;You like?&quot;;</div></pre></td></tr></table></figure>
+<p>键/内容 对 同样可以包含格式化字符串：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;Yesterday you sold %@ apps&quot; = &quot;Yesterday you sold %@ apps&quot;;</div></pre></td></tr></table></figure>
+<p>现在切换到 <code>ViewController.m</code> ，找到 <code>viewDidLoad</code> 方法。目前应用如下设置 likeButton 和 salesCountLabel ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_salesCountLabel.text = [NSString stringWithFormat:@&quot;Yesterday you sold %@ apps&quot;, @(1000000)];</div><div class="line">[_likeButton setTitle:@&quot;You like?&quot; forState:UIControlStateNormal];</div></pre></td></tr></table></figure>
+<p>作为替代，你需要从 <code>Localizable.strings</code> 文件里读取字符串。那把这两行都用一个叫做 的 <code>NSLocalizedString</code> 宏进行修改，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_salesCountLabel.text = [NSString stringWithFormat:NSLocalizedString(@&quot;Yesterday you sold %@ apps&quot;, nil), @(1000000)];</div><div class="line">[_likeButton setTitle:NSLocalizedString(@&quot;You like?&quot;, nil) forState:UIControlStateNormal];</div></pre></td></tr></table></figure>
+<p>所谓宏，即它们包裹一个稍长的代码片段为更易管理的长度，并使用 <code>#define</code> 指令创建。</p>
+<p>如果你好奇 <code>NSLocalizedString</code> 宏在后面做了什么，按着 Control 在 <code>NSLocalizedString</code> 上点击，它的定义就会显示出来，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#define NSLocalizedString(key, comment)</div><div class="line">    [[NSBundle mainBundle] localizedStringForKey:(key) value:@&quot;&quot; table:nil]</div></pre></td></tr></table></figure>
+<p><code>NSLocalizedString</code> 宏根据当前的语言设置使用 <code>localizedStringForKey</code> 方法去查找给定键值的字符串。它传递 nil 给 table name，所以它使用默认的 strings 文件名（即 <code>Localizable.strings</code>）。对于完整细节，请看 Apple 的 <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSBundle_Class/Reference/Reference.html" target="_blank" rel="external">NSBundle Class Reference</a>。</p>
+<blockquote>
+<p>Note：这个宏接受一个注释作为参数，但似乎没什么用。这是因为除了亲手在 <code>Localizable.strings</code> 中键入每个 key/value pair 之外，你还可以使用 iOS SDK 提供的一个叫做 <code>genstrings</code> 的工具来自动做到这一点（这对于大型项目相当方便）。<br>如果你使用这个方法，你可以在每个字符串上放一个注释，它们会显示在默认字符串的旁边以作为翻译者的辅助。例如，你可以添加一个注释指明字符串被使用在怎样的上下文里。</p>
+</blockquote>
+<p>好，已经有了足够的背景信息——让我们开搞！</p>
+<p>编译并运行你的项目，它应该和之前一样在主屏幕上显示同样的文本，但西班牙语在哪里？现在你的应用已经设置好本地化，添加翻译不在话下。</p>
+<h2 id="添加西班牙语本地化"><a href="#添加西班牙语本地化" class="headerlink" title="添加西班牙语本地化"></a>添加西班牙语本地化</h2><p>要支持另外一种语言，点击左边窗格里蓝色的 iLikeIt 项目文件夹，在右边的窗格里选择 <code>Project</code>（注意不是 Target），然后在 info 标签下你将看到一个 <code>Localizations</code> 分段。点击 <code>+</code> 然后选择 <code>Spanish (es)</code> 。</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/localization_steps-700x457.png" alt="Adding Spanish"></p>
+<p>之后出现的屏幕会询问你哪些文件需要做本地化。让它们全部保持选中状态，然后单击 <code>Finish</code> 。注意：<code>Localizable.strings</code> 没有显示在这个列表里，先不要慌张！</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/03/select_files_to_localize-700x470.png" alt="Select files to localize"></p>
+<p>在这个点上，Xcode 已经在后面设置好一些目录，它们包含有不同版本的 <code>InfoPlist.strings</code> 和 <code>Main.storyboard</code> 以适合你所选择的语言。你可以打开项目文件夹自己看看，大概如下所示：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/03/project_structure.png" alt="New project structure"></p>
+<p>看到 <code>en.lproj</code> 和 <code>es.lproj</code> 了吗？它们包含有特定语言版本的文件。</p>
+<p><code>en</code> 是 English 的本地化代号， <code>es</code> 就是 Spanish 的本地化代号。请看一个这个<a href="http://www.loc.gov/standards/iso639-2/php/English_list.php" target="_blank" rel="external">完整的语言代号列表</a>，以获取其他语言的代号。</p>
+<p>从现在开始，当你的应用想要得到英语版的某个文件，它就会去 <code>en.lproj</code> 找，而当它想要西班牙语版的某个文件，它就会去 <code>es.lproj</code> 找。</p>
+<p>就是这么简单！将你的资源文件放在合适的文件夹里，iOS 就会负责剩下的事情。</p>
+<p>但先等一下，<code>Localizable.strings</code> 呢？要让 Xcode 知道你想让它本地化，在左窗格里选中这个文件，然后在右边窗格里打开 <code>File Inspector</code>。你会看到一个叫做 <code>Localize</code> 的按钮，点击它，选择英语（因为它目前就只有英语），最后点击 <code>Localize</code>。</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/Localize_button-700x457.png" alt="Localize button"></p>
+<p>现在 <code>File Inspector</code> 窗格会显示这个文件属于哪些语言。目前，如你所见，这个文件只有英文的本地化。点击 <code>Spanish</code> 左边的 box 就可以添加西班牙语的本地化了。</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/03/select_spanish_button.png" alt="Select spanish button"></p>
+<p>回到左边窗格并点击 <code>Localizable.strings</code> 前面的小箭头，就会显示出子元素。你会看到有两个版本的文件：一个是为英语准备的，另一个是为西班牙语准备的：</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/03/localization_files.png" alt="Localization files"></p>
+<p>要修改西班牙语的文本，选择 <code>Localizable.strings (Spanish)</code> 并用下面显示的文体替换它的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&quot;Yesterday you sold %@ apps&quot; = &quot;Ayer le vendi&amp;oacute; %@ aplicaciones&quot;;</div><div class="line">&quot;You like?&quot; = &quot;~Es bueno?~&quot;;</div></pre></td></tr></table></figure>
+<p>恭喜恭喜！你的应用现在支持双语了！</p>
+<p>为了测试一切工作正常，更改你的模拟器/设备的显示语言为西班牙语，打开 <code>设置(Settings)</code> 应用：通用-&gt;多语言环境-&gt;语言-&gt;Espanol</p>
+<p>如果你还在运行 Xcode debugger ，先 <code>Stop</code> ，再重新编译并运行应用，你将看到：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/03/espanol_version-308x500.png" alt="Spanish version"></p>
+<h2 id="语言环境-vs-语言"><a href="#语言环境-vs-语言" class="headerlink" title="语言环境 vs 语言"></a>语言环境 vs 语言</h2><p>1 百万是个相当不错的销售数字；让我们为其添加一点格式，使之看起来更棒！</p>
+<p>打开 <code>ViewController.m</code> 并将设置 <code>_salesCountLabel</code> 的那些行用下列语句替换：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];</div><div class="line">[numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];</div><div class="line">NSString *numberString = [numberFormatter stringFromNumber:@(1000000)];</div><div class="line">_salesCountLabel.text = [NSString stringWithFormat:NSLocalizedString(@&quot;Yesterday you sold %@ apps&quot;, nil), numberString];</div></pre></td></tr></table></figure>
+<p>编译并运行应用，现在数字看起来更加易读了：</p>
+<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2014/03/number_formatted-308x500.png" alt="Number formatted"></p>
+<p>这在美国人看了很棒，但在西班牙 1 百万写作 “1.000.000″ 而不是 “1,000,000″ 。在西班牙语下运行应用，你就会看到分隔0的还是逗号。因为在 iOS 中，数字的格式化基于地区/国家，而不是语言，所以为了观察西班牙的某个人会看到怎样的销售数字，打开 <code>设置（Settings.app）</code> 通过导航到 <code>通用General -&gt; 多语言环境International -&gt;区域格式Region Format -&gt; Spanish -&gt; Spain</code> 来修改语言环境：</p>
+<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2014/03/spanish_region_format-308x500.png" alt="Spanish region format"></p>
+<p>再次编译并运行应用，你就会看到格式正确的数字：</p>
+<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2014/03/spain_number_formatting-308x500.png" alt="Spain number formatting"></p>
+<p>额外的说明，<code>NSNumberFormatter</code> 自动地以合适的区域格式化你的数字。只要有可能，请抗拒重新发明轮子的冲动，因为在 iOS 上，按着 Apple 的方式做事才有回报。</p>
+<h2 id="国际化-Storyboard"><a href="#国际化-Storyboard" class="headerlink" title="国际化 Storyboard"></a>国际化 Storyboard</h2><p>你的 Storyboard 中的 UI 元素，例如 Label、Button 以及图片可以用代码设置，也可以直接在 Storyboard 里设置。你已经学了如何用编程的方式设置文本以支持多种语言，但屏幕顶部的 “Hello” Label 没有 <code>IBOutlet</code> 只能在 <code>Main.storyboard</code> 中设置他的文本。</p>
+<p>当然你可以添加一个 IBOutlet 将其连接到 <code>Main.storyboard</code> 中的 Label 上，然后使用 <code>NSLocalizedString</code> 设置它的 text 属性，就像 <code>likeButton</code> 和 <code>salesCountLabel</code> 那样。但这里还有一个更加简单的方式能本地化 Storyboard 元素，而不需要任何代码。</p>
+<p>点击  Main.storyboard 左边的小三角形，你就会看到 <code>Main.storyboard (Base)</code> 和 <code>Main.storyboard (Spanish)</code> 。点击 <code>Main.storyboard (Spanish)</code> 打开 编辑器可以看到本地化文本。你已有了一个 Hello Label 的入口，它看起来如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/* Class = &quot;IBUILabel&quot;; text = &quot;Hello&quot;; ObjectID = &quot;pUp-yc-27W&quot;; */</div><div class="line">&quot;pUp-yc-27W.text&quot; = &quot;Hello&quot;;</div></pre></td></tr></table></figure>
+<p>用西班牙语翻译 “Hola” 替换其中的两个 “Hello” ，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/* Class = &quot;IBUILabel&quot;; text = &quot;Hola&quot;; ObjectID = &quot;pUp-yc-27W&quot;; */</div><div class="line">&quot;pUp-yc-27W.text&quot; = &quot;Hola&quot;;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Note：永远不要直接修改自动生成的 ObjectID。同样，不要直接复制粘贴上面的代码，因为你的 Label 的 ObjectID 很可能跟上面的不一样。</p>
+</blockquote>
+<h2 id="图片的国际化"><a href="#图片的国际化" class="headerlink" title="图片的国际化"></a>图片的国际化</h2><p>因为应用使用的一个图像包含有英文字符，所以你还需要本地化它。如果西班牙语应用里有一些英文片段不止是看起来很业余，同时也有损于它的整体可用性和市场潜力。</p>
+<p>要本地化图片，首先下载这个西班牙语的图片（在大多数浏览器上都是：右键－&gt;存储图像为…）</p>
+<p><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/03/megusta.png" alt="Me Gusta"></p>
+<p>打开 <code>Images.xcassets</code> 并通过拖动将刚下载的这个 <code>megusta.png</code> 到左边的图片列表以添加到资产目录（asset catalog）。资产目录不能被国际化，所以你需要使用一个简单的解决办法来本地化这个图像。</p>
+<p>打开 <code>Localizable.strings (English)</code> 并添加下面一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;imageName&quot; = &quot;ilike&quot;;</div></pre></td></tr></table></figure>
+<p>类似地，添加下面一行到 <code>Localizable.strings (Spanish)</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;imageName&quot; = &quot;megusta&quot;;</div></pre></td></tr></table></figure>
+<p>从现在开始，你将使用 <code>imageName</code> 作为 key 来检索本地化版本的图像。打开 ViewController.m 并添加如下一行代码到 <code>viewDidLoad</code> 方法中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[_imageView setImage:[UIImage imageNamed:NSLocalizedString(@&quot;imageName&quot;, nil)]];</div></pre></td></tr></table></figure>
+<p>译者注：这样使用资源目录真的好吗？</p>
+<p>如果有必要，将 模拟器/设备 切换到西班牙语，然后编译并运行，你就会看到本地化版本的图像显示出来了。</p>
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/03/spanish_image-308x500.png" alt="Spanish image"></p>
+<p>恭喜！你已经拥有了能本地化应用到多种不同语言的全部工具。</p>
+<blockquote>
+<p>Note：这种方法，适用于每个语言都有不同的文件名。一个更好的方法可能是本地化一个资源文件夹，如<a href="http://stackoverflow.com/questions/13921833/how-can-i-localize-a-folder-of-images-for-ios" target="_blank" rel="external">此文</a>所描述的。</p>
+</blockquote>
+<p>译者注：果然有更好的方法！</p>
+<h2 id="无偿奖励"><a href="#无偿奖励" class="headerlink" title="无偿奖励"></a>无偿奖励</h2><p>作为最后的奖励，让我们本地化应用的名字吧。你的 <code>Info.plist</code> 有一个特殊的文件（<code>InfoPlist.strings</code>），为了适用不同的语言，你可以在它里面以设置一个字符串去覆盖原本的名字设定。要在西班牙语下给应用一个不同的名字，打开 <code>Supporting Files &gt; InfoPlist.strings (Spanish)</code> 并插入下面一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;CFBundleDisplayName&quot; = &quot;Me Gusta&quot;;</div></pre></td></tr></table></figure>
+<h2 id="练习：国际化音频文件"><a href="#练习：国际化音频文件" class="headerlink" title="练习：国际化音频文件"></a>练习：国际化音频文件</h2><p>如果你已经走到这么远，那么你应该对国际化的基本知识比较熟悉了。这是个简单的练习，通过处理这两个不同的音频文件，你可以测试一下自己新掌握的知识。这两个音频文件一个是英语的，另一个是西班牙语的。根据用户选择的语言播放合适的文件即可。</p>
+<p>下面是必要步骤的简短描述：</p>
+<ol>
+<li>下载音频文件。</li>
+<li>先拷贝 <code>box-en.wav</code> 到项目中。</li>
+<li>打开音频文件的 file inspector 并点击 localize 按钮，确保你选择了英语和西班牙语作为支持的语言。</li>
+<li>重命名第二个音频文件（box-es.wav），使其和第一个的名字（box-en.wav）一样，然后将其拷贝到 <code>es.Iproj</code> 文件夹中。</li>
+<li>确保在 Finder 提示时选择 “替换文件”</li>
+</ol>
+<h2 id="下一步该怎么走？"><a href="#下一步该怎么走？" class="headerlink" title="下一步该怎么走？"></a>下一步该怎么走？</h2><p>这里是<a href="http://cdn2.raywenderlich.com/wp-content/uploads/2014/03/Final-Project.zip" target="_blank" rel="external">最终的项目</a>，包含有上面的教程中你所编写的所有代码。</p>
+<p>现在你知道了国际化一个 iPhone 应用的基本技术，那就为你的某个旧应用或在设计下一个应用时添加一门外语吧。正如你所看到的，这几乎不花时间，而且能将应用推给更广泛、更多样化的受众，那些不会英语的受众会因此而感激你！</p>
+<p>对于具体的翻译，你也许可以使用 Google 在 <a href="http://www.google.com/translate" target="_blank" rel="external">http://www.google.com/translate</a> 提供的免费翻译服务，但它的结果可能有错误。如果你能花上一点钱，那有好几个 <a href="https://developer.apple.com/internationalization/" target="_blank" rel="external">列在苹果公司的国际化和本地化页面底部的第三方供应商</a> 可以选择。不同的供应商的价格稍有差异，但基本上都少于每个单词 10 美分。</p>
+<p>如果你有任何问题，或有关于国际化的建议，请加入下面的讨论！</p>
+<p>===============</p>
+<p>译者注：欢迎转载，但请一定注明出处！ <a href="https://github.com/nixzhu/dev-blog" target="_blank" rel="external">https://github.com/nixzhu/dev-blog</a></p>
+<p>欢迎转发此条微博 <a href="http://weibo.com/2076580237/B1fcVd0rF" target="_blank" rel="external">http://weibo.com/2076580237/B1fcVd0rF</a> 以分享给更多人！</p>
+<p>如果你认为这篇翻译不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳译者的辛苦：</p>
+<p><img src="https://github.com/nixzhu/dev-blog/raw/master/images/nixzhu_alipay.png" alt="nixzhu的支付宝二维码"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
