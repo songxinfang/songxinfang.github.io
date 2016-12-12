@@ -24,7 +24,7 @@
 <meta property="og:site_name" content="songxinfang's blog">
 <meta property="og:description" content="背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了
 需求分析那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全">
-<meta property="og:updated_time" content="2016-12-12T09:22:23.000Z">
+<meta property="og:updated_time" content="2016-12-12T09:41:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="多target工程搭建及批量打包ipa | songxinfang's blog">
 <meta name="twitter:description" content="背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了
@@ -187,7 +187,7 @@ classes that you can use:
 <li>后期版本迭代提出的需求会要求所有App一致更新</li>
 </ol>
 </blockquote>
-<p>从这些相同点可以总结出，工程代码基本是可以全套服用的</p>
+<p>从这些相同点可以总结出，工程代码基本是可以全套复用的</p>
 <h4 id="应用差异点"><a href="#应用差异点" class="headerlink" title="应用差异点"></a>应用差异点</h4><blockquote>
 <ol>
 <li>AppName、AppBundleId</li>
@@ -202,7 +202,7 @@ classes that you can use:
 <li>每个target的general Identity配置AppName、AppBundleId</li>
 <li>每个target配置general下App Icon and Launch Images选择正确的Assets文件夹</li>
 <li>project专门管理一个plist文件，根据不同的App配置相关的文案、URL、key等</li>
-<li>相同功用的切图、db用一样的名称，放在自己target命名下的文件夹里，也就是每个图片路径不同，然后分别在每个target配置build Phases下的copy Bundle Resources只添加自己路径下的资源</li>
+<li>相同功用的切图、db用一样的名称，放在自己target命名下的文件夹里，也就是同类资源路径不同，然后分别在每个target配置build Phases下的copy Bundle Resources只添加自己路径下的资源</li>
 </ol>
 </blockquote>
 <h2 id="多target工程搭建"><a href="#多target工程搭建" class="headerlink" title="多target工程搭建"></a>多target工程搭建</h2><blockquote>
