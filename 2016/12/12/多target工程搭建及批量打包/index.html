@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+       | songxinfang&#39;s blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="songxinfang">
+    
+    
+
+    <meta name="description" content="多target工程搭建及批量打包ipa背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底">
+<meta property="og:type" content="article">
+<meta property="og:title" content=" | songxinfang's blog">
+<meta property="og:url" content="https://songxinfang.github.io/2016/12/12/多target工程搭建及批量打包/index.html">
+<meta property="og:site_name" content="songxinfang's blog">
+<meta property="og:description" content="多target工程搭建及批量打包ipa背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底">
+<meta property="og:updated_time" content="2016-12-12T08:02:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=" | songxinfang's blog">
+<meta name="twitter:description" content="多target工程搭建及批量打包ipa背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">songxinfang&#39;s blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          learning work communicate
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">首页</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title"></h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-12-12" class="post-meta__date date">2016-12-12</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h1 id="多target工程搭建及批量打包ipa"><a href="#多target工程搭建及批量打包ipa" class="headerlink" title="多target工程搭建及批量打包ipa"></a>多target工程搭建及批量打包ipa</h1><h2 id="背景前言"><a href="#背景前言" class="headerlink" title="背景前言"></a>背景前言</h2><h4 id="应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了"><a href="#应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了" class="headerlink" title="应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了"></a>应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了</h4><h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><h4 id="那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了"><a href="#那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了" class="headerlink" title="那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了"></a>那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了</h4><h3 id="应用相同点"><a href="#应用相同点" class="headerlink" title="应用相同点"></a>应用相同点</h3><ul>
+<li>整个业务流程、核心功能完全一样</li>
+<li>UI布局甚至用色都完全一致，即工程配置的大部分切图都是同一套</li>
+<li>后期版本迭代提出的需求会要求所有App一致更新<h6 id="从这些相同点可以总结出，工程代码基本是可以全套服用的"><a href="#从这些相同点可以总结出，工程代码基本是可以全套服用的" class="headerlink" title="从这些相同点可以总结出，工程代码基本是可以全套服用的"></a>从这些相同点可以总结出，工程代码基本是可以全套服用的</h6></li>
+</ul>
+<h3 id="应用差异点"><a href="#应用差异点" class="headerlink" title="应用差异点"></a>应用差异点</h3><ul>
+<li>AppName、AppBundleId</li>
+<li>AppIcon、LaunchImage</li>
+<li>少量文案、URL、第三方key</li>
+<li>少量切图、数据库db等资源文件<h6 id="以上不同的差异需要不同的方案来解决，下面我讲根据相同的顺序给出我的解决方式"><a href="#以上不同的差异需要不同的方案来解决，下面我讲根据相同的顺序给出我的解决方式" class="headerlink" title="以上不同的差异需要不同的方案来解决，下面我讲根据相同的顺序给出我的解决方式"></a>以上不同的差异需要不同的方案来解决，下面我讲根据相同的顺序给出我的解决方式</h6></li>
+</ul>
+<h3 id="差异点配置方案"><a href="#差异点配置方案" class="headerlink" title="差异点配置方案"></a>差异点配置方案</h3><ul>
+<li>每个target的general Identity配置AppName、AppBundleId</li>
+<li>每个target配置general下App Icon and Launch Images选择正确的Assets文件夹</li>
+<li>project专门管理一个plist文件，根据不同的App配置相关的文案、URL、key等</li>
+<li>相同功用的切图、db用一样的名称，放在自己target命名下的文件夹里，也就是每个图片路径不同，然后分别在每个target配置build Phases下的copy Bundle Resources只添加自己路径下的资源</li>
+</ul>
+<h2 id="多target工程搭建"><a href="#多target工程搭建" class="headerlink" title="多target工程搭建"></a>多target工程搭建</h2><p>1、完善核心功能核心代码，生产出第一个完整的App<br>2、duplicate多target，配置关键内容<br>3、每duplicate出一个target就会对应的多出一个scheme,但是名称是自动生成的，我们可以通过duplicate方式修改scheme的名称与target名称一致或者关联</p>
+<h2 id="自动化批量打包ipa"><a href="#自动化批量打包ipa" class="headerlink" title="自动化批量打包ipa"></a>自动化批量打包ipa</h2><h6 id="多target工程当然可以使用xcode逐个打包，但是出于好奇以及未来可能会实用的一项技术，我还是花时间去研究了自动化批量打包技术，最后终于写出了自己的第一份有实际意义的shell脚本😄"><a href="#多target工程当然可以使用xcode逐个打包，但是出于好奇以及未来可能会实用的一项技术，我还是花时间去研究了自动化批量打包技术，最后终于写出了自己的第一份有实际意义的shell脚本😄" class="headerlink" title="多target工程当然可以使用xcode逐个打包，但是出于好奇以及未来可能会实用的一项技术，我还是花时间去研究了自动化批量打包技术，最后终于写出了自己的第一份有实际意义的shell脚本😄"></a>多target工程当然可以使用xcode逐个打包，但是出于好奇以及未来可能会实用的一项技术，我还是花时间去研究了自动化批量打包技术，最后终于写出了自己的第一份有实际意义的shell脚本😄</h6><h6 id="记录一下整个研究过程，首先了解几个简单命令"><a href="#记录一下整个研究过程，首先了解几个简单命令" class="headerlink" title="记录一下整个研究过程，首先了解几个简单命令"></a>记录一下整个研究过程，首先了解几个简单命令</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#打印工程目录下的targets、workspace下的schemes等信息</div><div class="line">xcodebuild -list</div><div class="line"></div><div class="line">#清空编译文件</div><div class="line">/usr/bin/xcodebuild -target targetName clean</div><div class="line"></div><div class="line">#build the target</div><div class="line">/usr/bin/xcodebuild -target targetName</div><div class="line"></div><div class="line">#导出ipa包</div><div class="line">/usr/bin/xcrun -sdk iphoneos PackageApplication -v build/Release-iphoneos/AppName.app -o path/AppName.ipa</div><div class="line"></div><div class="line">#workspace archive方式生成xcarchive文件</div><div class="line">xcodebuild archive -workspace workspace.xcworkspace -scheme schemeName -archivePath path/AppName.xcarchive</div><div class="line"></div><div class="line">#workspace archive方式导出ipa没有签名无法安装真机</div><div class="line">/usr/bin/xcrun -sdk iphoneos PackageApplication -v  path/AppName.xcarchive/Products/Applications/AppName.app -o path/AppName.ipa</div><div class="line"></div><div class="line">#签名并打包ipa可以安装到真机</div><div class="line">xcodebuild -exportArchive -archivePath path/AppName.xcarchive -exportPath path/AppName -exportFormat ipa -exportProvisioningProfile &quot;iOS Team Provisioning Profile: com.xywy.xxxxxxxx&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li>1、生成只能打一个包的脚本</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#方式1</span></div><div class="line">/usr/bin/xcodebuild -target targetName clean</div><div class="line">/usr/bin/xcodebuild -target targetName</div><div class="line">/usr/bin/xcrun -sdk iphoneos PackageApplication -v build/Release-iphoneos/AppName.app -o path/AppName.ipa</div><div class="line"></div><div class="line"><span class="comment">#或者方式2</span></div><div class="line">xcodebuild archive -workspace workspace.xcworkspace -scheme schemeName -archivePath path/AppName.xcarchive</div><div class="line">/usr/bin/xcrun -sdk iphoneos PackageApplication -v  path/AppName.xcarchive/Products/Applications/AppName.app -o path/AppName.ipa</div></pre></td></tr></table></figure>
+<ul>
+<li>2、生成打多个包的脚本：手动输入所有schemes并打包</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">project_path=$(<span class="built_in">pwd</span>)</div><div class="line"></div><div class="line">scheme_name[0]=DoctorBuestionBank</div><div class="line">scheme_name[1]=NewDoctorBuestionBank</div><div class="line"></div><div class="line"><span class="keyword">for</span> scheme_name <span class="keyword">in</span> <span class="variable">$&#123;scheme_name[*]&#125;</span></div><div class="line"><span class="keyword">do</span></div><div class="line"><span class="built_in">echo</span> <span class="variable">$&#123;scheme_name&#125;</span></div><div class="line"></div><div class="line"><span class="comment">#clean 工程</span></div><div class="line">/usr/bin/xcodebuild -target <span class="variable">$&#123;scheme_name&#125;</span> clean</div><div class="line"><span class="comment">#生产xcarchive</span></div><div class="line">xcodebuild archive -workspace DoctorBuestionBank.xcworkspace -scheme <span class="variable">$&#123;scheme_name&#125;</span> -archivePath <span class="variable">$&#123;project_path&#125;</span>/<span class="variable">$&#123;scheme_name&#125;</span>.xcarchive</div><div class="line"><span class="comment">#生产ipa</span></div><div class="line">/usr/bin/xcrun -sdk iphoneos PackageApplication -v  <span class="variable">$&#123;project_path&#125;</span>/<span class="variable">$&#123;scheme_name&#125;</span>.xcarchive/Products/Applications/<span class="variable">$&#123;scheme_name&#125;</span>.app -o <span class="variable">$&#123;project_path&#125;</span>/<span class="variable">$&#123;scheme_name&#125;</span>.ipa</div><div class="line"></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+<ul>
+<li>3、自动化批量打包：自动读取schemes并打包</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># author:songxinfang</span></div><div class="line"><span class="comment">#读取工程配置所有的targets,然后编译打包</span></div><div class="line"></div><div class="line">xcodebuild -list &gt; file1</div><div class="line"></div><div class="line">i=0</div><div class="line"><span class="keyword">while</span> <span class="built_in">read</span> line</div><div class="line"><span class="keyword">do</span></div><div class="line">  <span class="keyword">if</span> [[ <span class="variable">$line</span> = <span class="string">"Targets:"</span> ]];</div><div class="line">  <span class="keyword">then</span></div><div class="line">    tag=1</div><div class="line"></div><div class="line">  <span class="keyword">elif</span> [[ <span class="variable">$tag</span> == 1 &amp;&amp; <span class="variable">$&#123;#line&#125;</span> == 0 ]];</div><div class="line">  <span class="keyword">then</span></div><div class="line">    <span class="built_in">break</span></div><div class="line"></div><div class="line">  <span class="keyword">elif</span> [[ <span class="variable">$tag</span> == 1 ]];</div><div class="line">   <span class="keyword">then</span></div><div class="line">     scheme_array[<span class="variable">$i</span>]=<span class="variable">$line</span></div><div class="line">     <span class="built_in">let</span> i=i+1</div><div class="line">  <span class="keyword">fi</span></div><div class="line"><span class="keyword">done</span>&lt;file1</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="variable">$&#123;scheme_array&#125;</span></div><div class="line"></div><div class="line">project_path=$(<span class="built_in">pwd</span>)</div><div class="line"></div><div class="line"><span class="keyword">for</span> scheme_name <span class="keyword">in</span> <span class="variable">$&#123;scheme_array[*]&#125;</span></div><div class="line"><span class="keyword">do</span></div><div class="line"></div><div class="line"><span class="comment">#clean 工程</span></div><div class="line">/usr/bin/xcodebuild -target <span class="variable">$&#123;scheme_name&#125;</span> clean</div><div class="line"><span class="comment">#生产xcarchive</span></div><div class="line">xcodebuild archive -workspace DoctorBuestionBank.xcworkspace -scheme <span class="variable">$&#123;scheme_name&#125;</span> -archivePath <span class="variable">$&#123;project_path&#125;</span>/<span class="variable">$&#123;scheme_name&#125;</span>.xcarchive</div><div class="line"><span class="comment">#生产ipa</span></div><div class="line">/usr/bin/xcrun -sdk iphoneos PackageApplication -v  <span class="variable">$&#123;project_path&#125;</span>/<span class="variable">$&#123;scheme_name&#125;</span>.xcarchive/Products/Applications/<span class="variable">$&#123;scheme_name&#125;</span>.app -o <span class="variable">$&#123;project_path&#125;</span>/<span class="variable">$&#123;scheme_name&#125;</span>.ipa</div><div class="line"></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
