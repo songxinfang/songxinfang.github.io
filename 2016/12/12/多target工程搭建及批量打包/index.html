@@ -7,7 +7,7 @@
     
 
     <title>
-       | songxinfang&#39;s blog 
+      多target工程搭建及批量打包ipa | songxinfang&#39;s blog 
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -16,16 +16,16 @@
     
     
 
-    <meta name="description" content="多target工程搭建及批量打包ipa背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底">
+    <meta name="description" content="背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复">
 <meta property="og:type" content="article">
-<meta property="og:title" content=" | songxinfang's blog">
+<meta property="og:title" content="多target工程搭建及批量打包ipa | songxinfang's blog">
 <meta property="og:url" content="https://songxinfang.github.io/2016/12/12/多target工程搭建及批量打包/index.html">
 <meta property="og:site_name" content="songxinfang's blog">
-<meta property="og:description" content="多target工程搭建及批量打包ipa背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底">
-<meta property="og:updated_time" content="2016-12-12T08:02:32.000Z">
+<meta property="og:description" content="背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复">
+<meta property="og:updated_time" content="2016-12-12T08:19:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=" | songxinfang's blog">
-<meta name="twitter:description" content="多target工程搭建及批量打包ipa背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底">
+<meta name="twitter:title" content="多target工程搭建及批量打包ipa | songxinfang's blog">
+<meta name="twitter:description" content="背景前言应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了需求分析那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复">
     
     
     
@@ -154,7 +154,7 @@ classes that you can use:
 
   <header class="post-header">
     
-    <h1 class="post-title"></h1>
+    <h1 class="post-title">多target工程搭建及批量打包ipa</h1>
 
     
 
@@ -175,7 +175,7 @@ classes that you can use:
   </header>
 
   <section id="post-content" class="article-content post">
-    <h1 id="多target工程搭建及批量打包ipa"><a href="#多target工程搭建及批量打包ipa" class="headerlink" title="多target工程搭建及批量打包ipa"></a>多target工程搭建及批量打包ipa</h1><h2 id="背景前言"><a href="#背景前言" class="headerlink" title="背景前言"></a>背景前言</h2><h4 id="应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了"><a href="#应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了" class="headerlink" title="应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了"></a>应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了</h4><h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><h4 id="那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了"><a href="#那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了" class="headerlink" title="那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了"></a>那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了</h4><h3 id="应用相同点"><a href="#应用相同点" class="headerlink" title="应用相同点"></a>应用相同点</h3><ul>
+    <h2 id="背景前言"><a href="#背景前言" class="headerlink" title="背景前言"></a>背景前言</h2><h4 id="应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了"><a href="#应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了" class="headerlink" title="应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了"></a>应产品需求要生产一批非常相似的考试学习工具App，虽然针对不同的人群或者职称职位去生产不同的App，但是核心功能与UI布局基本一致，只是可能会有细微的图标、文本标签的不同，这种情况下如果说全部搭建project复制大量的代码会非常不利于后期的维护与修改，所以采用苹果提供的多target方案是非常行之有效的最优方案了</h4><h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><h4 id="那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了"><a href="#那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了" class="headerlink" title="那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了"></a>那么每个App与App之间到底有哪些地方是完全没有差异的是可以完全复用的，又有哪些代码、资源是不同的需要一个怎样的方案去解决编码甚至提高效率的呢，下面需要具体分析了</h4><h3 id="应用相同点"><a href="#应用相同点" class="headerlink" title="应用相同点"></a>应用相同点</h3><ul>
 <li>整个业务流程、核心功能完全一样</li>
 <li>UI布局甚至用色都完全一致，即工程配置的大部分切图都是同一套</li>
 <li>后期版本迭代提出的需求会要求所有App一致更新<h6 id="从这些相同点可以总结出，工程代码基本是可以全套服用的"><a href="#从这些相同点可以总结出，工程代码基本是可以全套服用的" class="headerlink" title="从这些相同点可以总结出，工程代码基本是可以全套服用的"></a>从这些相同点可以总结出，工程代码基本是可以全套服用的</h6></li>
